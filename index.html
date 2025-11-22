@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,21 +13,6 @@
     }
     canvas {
       display: block;
-    }
-    .title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #38f2af;
-      font-family: "IBM Plex Mono", "JetBrains Mono", "Space Mono", monospace;
-      font-size: clamp(22px, 3vw, 48px);
-      z-index: 10;
-      pointer-events: none;
-      text-align: center;
-      text-shadow:
-        0 0 18px rgba(56, 242, 175, 0.35),
-        0 0 28px rgba(56, 242, 175, 0.15);
     }
     .footer-links {
       position: absolute;
@@ -51,24 +35,10 @@
       opacity: 1;
       text-decoration: underline;
     }
-    body.viulenza {
-      animation: shake 0.15s infinite;
-    }
-    body.glitch-flash canvas {
-      filter: contrast(400%) brightness(200%) invert(1);
-    }
-    @keyframes shake {
-      0% { transform: translate(1px, 1px); }
-      25% { transform: translate(-1px, 1px); }
-      50% { transform: translate(-1px, -1px); }
-      75% { transform: translate(1px, -1px); }
-      100% { transform: translate(1px, 1px); }
-    }
   </style>
 </head>
 <body>
   <canvas id="canvas"></canvas>
-  <audio id="glitchSound" src="glitch.mp3" preload="auto"></audio>
 
   <div class="footer-links">
     <a href="terms.html" target="_blank">Terms</a> |
@@ -82,10 +52,6 @@
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
-
-    const glitchSound = document.getElementById("glitchSound");
-    let viulenzaActive = false;
-    let lastGlitchTime = 0;
 
     const mouse = { x: -1000, y: -1000 };
     window.addEventListener('mousemove', e => {
@@ -116,15 +82,11 @@
       return (d1 < xZoneMargin || d2 < xZoneMargin);
     }
 
-    function randomHex() {
-      return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
-    }
-
     function randomMetrics() {
       return {
-        age: (Math.random() * 36 + 4).toFixed(1),          // 4.0–40.0 (por ejemplo días)
-        data: Math.floor(Math.random() * 240) + 20,        // 20–260 ms
-        protein: (Math.random() * 60 + 20).toFixed(1)      // 20.0–80.0 %
+        age: (Math.random() * 36 + 4).toFixed(1),
+        data: Math.floor(Math.random() * 240) + 20,
+        protein: (Math.random() * 60 + 20).toFixed(1)
       };
     }
 
@@ -140,11 +102,8 @@
         vx: (Math.random() - 0.5) * SPEED,
         vy: (Math.random() - 0.5) * SPEED,
         radius: 1.5,
-        baseColor: "white",
         color: "white",
         inX: false,
-        hasLaunched: false,
-        hexCode: randomHex(),
         metrics: randomMetrics()
       };
     }
@@ -161,7 +120,7 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 100) {
-            ctx.strokeStyle = `rgba(56,242,175,${1 - dist / 100})`; // verde biotech
+            ctx.strokeStyle = `rgba(56,242,175,${1 - dist / 100})`;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -172,51 +131,17 @@
       }
     }
 
-    function drawTriangleOverlay(now) {
-      const pulse = Math.sin(now * 0.01) * 10;
-      const baseY = height * 0.2;
-      const bottomY = height * 0.8;
-      const opacity = 0.05 + Math.random() * 0.2;
-      ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(width / 2, baseY + pulse);
-      ctx.lineTo(width * 0.3 - pulse, bottomY - pulse);
-      ctx.lineTo(width * 0.7 + pulse, bottomY - pulse);
-      ctx.closePath();
-      ctx.stroke();
-      ctx.font = "bold 20px monospace";
-      ctx.fillStyle = `rgba(255,255,255,${opacity})`;
-      ctx.textAlign = "center";
-      ctx.fillText("KINETIC GRID", width / 2, bottomY + 30);
-    }
-
-    function triggerGlitchFlash() {
-      document.body.classList.add("glitch-flash");
-      setTimeout(() => document.body.classList.remove("glitch-flash"), 150);
-      glitchSound.currentTime = 0;
-      glitchSound.play();
-    }
-
     function animate() {
       const now = performance.now();
       let inXCount = 0;
+
       for (const p of particles) {
         p.inX = inXZone(p.x, p.y);
         if (p.inX) inXCount++;
       }
 
-      ctx.fillStyle = inXCount >= 20 ? `rgba(255, 0, 0, ${Math.random() * 0.2 + 0.05})` : "black";
+      ctx.fillStyle = "black";
       ctx.fillRect(0, 0, width, height);
-
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(width, height);
-      ctx.moveTo(width, 0);
-      ctx.lineTo(0, height);
-      ctx.stroke();
 
       drawConnections();
 
@@ -224,6 +149,7 @@
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
+
         if (dist < 100) {
           const force = (100 - dist) * 0.007;
           p.vx += dx / dist * force;
@@ -232,53 +158,29 @@
 
         const wasInX = p.inX;
 
-        if (p.inX && !p.hasLaunched) {
-          const dx2 = width - p.x;
-          const dy2 = height - p.y;
-          const dist2 = Math.sqrt(dx2 * dx2 + dy2 * dy2) || 1;
-          p.vx += (dx2 / dist2) * 6;
-          p.vy += (dy2 / dist2) * 6;
-          p.hasLaunched = true;
-        }
-
-        p.color = (p.inX && inXCount >= 20) ? "red" : p.baseColor;
-
         if (p.inX) {
-          // dinámica dentro de la zona "X"
           p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
           p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
-          p.radius = 3.5 + Math.sin(now * 0.05 + p.x + p.y) * 1.5;
+          p.radius = 3.2
 
-          // actualización suave de métricas (simulación temporal)
           if (Math.random() < 0.25) {
             const m = p.metrics;
-            m.age = (parseFloat(m.age) + (Math.random() * 0.4)).toFixed(1);
-            m.data = Math.max(5, Math.min(300, m.data + Math.floor((Math.random() - 0.5) * 15)));
-            m.protein = Math.max(
-              5,
-              Math.min(99, parseFloat(m.protein) + (Math.random() - 0.5) * 2.5)
-            ).toFixed(1);
+            m.age = (parseFloat(m.age) + 0.1).toFixed(1);
           }
 
           ctx.font = "11px monospace";
-          ctx.fillStyle = "#38f2af";
+          ctx.fillStyle = "white";
           const m = p.metrics;
-          ctx.fillText(`age: ${m.age} d`,        p.x + 10, p.y - 10);
-          ctx.fillText(`data: ${m.data} ms`,     p.x + 10, p.y + 4);
+          ctx.fillText(`age: ${m.age} d`, p.x + 10, p.y - 10);
+          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 4);
           ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 18);
 
         } else {
-          if (wasInX) {
-            p.radius = 1.5;
-            p.hasLaunched = false;
-            p.metrics = randomMetrics(); // reset cuando sale de la zona
-          }
+          if (wasInX) p.radius = 1.5;
         }
 
         p.vx += (p.ox - p.x) * 0.002;
         p.vy += (p.oy - p.y) * 0.002;
-        p.vx += (Math.random() - 0.5) * 0.05;
-        p.vy += (Math.random() - 0.5) * 0.05;
 
         p.x += p.vx;
         p.y += p.vy;
@@ -295,35 +197,10 @@
         ctx.fill();
       }
 
-      if (inXCount >= 20) {
-        drawTriangleOverlay(now);
-        document.body.classList.add("viulenza");
-
-        if (!viulenzaActive) {
-          glitchSound.currentTime = 0;
-          glitchSound.play();
-          viulenzaActive = true;
-          lastGlitchTime = now;
-        } else if (now - lastGlitchTime > 3000) {
-          triggerGlitchFlash();
-          lastGlitchTime = now;
-        }
-      } else {
-        document.body.classList.remove("viulenza");
-        viulenzaActive = false;
-      }
-
       requestAnimationFrame(animate);
-    }
-
-    if (MOBILE_MODE) {
-      console.log("🧪 Modo móvil activado: 400 nodos, 4 conexiones máximas por nodo");
-    } else {
-      console.log("🧬 Modo escritorio activado: 2000 nodos, 10 conexiones máximas por nodo");
     }
 
     animate();
   </script>
 </body>
 </html>
-```
