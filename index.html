@@ -74,6 +74,11 @@
     const SPEED = 0.5;
     const xZoneMargin = 40;
 
+    // ciclo de vida aprox. tenebrio (días)
+    const LIFECYCLE_DAYS = 90;
+    const STAGE_IKADAV2_MAX = LIFECYCLE_DAYS * 0.33;
+    const STAGE_IKADAV3_MAX = LIFECYCLE_DAYS * 0.66;
+
     const particles = [];
 
     function inXZone(x, y) {
@@ -83,11 +88,27 @@
     }
 
     function randomMetrics() {
+      const initialAge = Math.random() * (LIFECYCLE_DAYS * 0.3);
       return {
-        age: (Math.random() * 36 + 4).toFixed(1),
+        age: initialAge.toFixed(1),
         data: Math.floor(Math.random() * 240) + 20,
         protein: (Math.random() * 60 + 20).toFixed(1)
       };
+    }
+
+    function getStage(age) {
+      if (age < STAGE_IKADAV2_MAX) return "larva";
+      if (age < STAGE_IKADAV3_MAX) return "pupa";
+      return "adult";
+    }
+
+    function getStageColor(stage) {
+      switch (stage) {
+        case "ikada v1":  return "#38f2af"; // verde biotech
+        case "ikada v2":   return "#facc15"; // amarillo suave
+        case "ikada v3":  return "#a855f7"; // violeta
+        default:       return "white";
+      }
     }
 
     function createParticle() {
@@ -96,15 +117,17 @@
         x = Math.random() * width;
         y = Math.random() * height;
       } while (inXZone(x, y));
+      const metrics = randomMetrics();
+      const stage = getStage(parseFloat(metrics.age));
       return {
         x, y,
         ox: x, oy: y,
         vx: (Math.random() - 0.5) * SPEED,
         vy: (Math.random() - 0.5) * SPEED,
         radius: 1.5,
-        color: "white",
+        color: getStageColor(stage),
         inX: false,
-        metrics: randomMetrics()
+        metrics
       };
     }
 
@@ -131,13 +154,25 @@
       }
     }
 
+    function respawnParticle(p) {
+      const fresh = createParticle();
+      p.x = fresh.x;
+      p.y = fresh.y;
+      p.ox = fresh.ox;
+      p.oy = fresh.oy;
+      p.vx = fresh.vx;
+      p.vy = fresh.vy;
+      p.radius = fresh.radius;
+      p.color = fresh.color;
+      p.inX = fresh.inX;
+      p.metrics = fresh.metrics;
+    }
+
     function animate() {
       const now = performance.now();
-      let inXCount = 0;
 
       for (const p of particles) {
         p.inX = inXZone(p.x, p.y);
-        if (p.inX) inXCount++;
       }
 
       ctx.fillStyle = "black";
@@ -161,24 +196,38 @@
         if (p.inX) {
           p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
           p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
-          p.radius = 3.2
+          p.radius = 3.2;
 
+          // avanzar ciclo de vida
           if (Math.random() < 0.25) {
             const m = p.metrics;
-            m.age = (parseFloat(m.age) + 0.1).toFixed(1);
+            let ageNum = parseFloat(m.age) + 0.6; // velocidad envejecimiento visual
+            if (ageNum >= LIFECYCLE_DAYS) {
+              respawnParticle(p);
+              continue;
+            }
+            m.age = ageNum.toFixed(1);
           }
+
+          const ageNow = parseFloat(p.metrics.age);
+          const stage = getStage(ageNow);
+          p.color = getStageColor(stage);
 
           ctx.font = "11px monospace";
           ctx.fillStyle = "white";
           const m = p.metrics;
-          ctx.fillText(`age: ${m.age} d`, p.x + 10, p.y - 10);
-          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 4);
-          ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 18);
+          ctx.fillText(`stage: ${stage}`,    p.x + 10, p.y - 22);
+          ctx.fillText(`age: ${m.age} d`,    p.x + 10, p.y - 8);
+          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 6);
+          ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 20);
 
         } else {
-          if (wasInX) p.radius = 1.5;
+          if (wasInX) {
+            p.radius = 1.5;
+          }
         }
 
+        // retorno suave al origen
         p.vx += (p.ox - p.x) * 0.002;
         p.vy += (p.oy - p.y) * 0.002;
 
