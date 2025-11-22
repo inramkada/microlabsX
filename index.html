@@ -71,16 +71,16 @@
     const MOBILE_MODE = isMobile();
     const NUM_PARTICLES = MOBILE_MODE ? 400 : 2000;
     const MAX_CONNECTIONS = MOBILE_MODE ? 4 : 10;
-    const SPEED = 0.5;
+    const SPEED = 0.9;        
     const xZoneMargin = 40;
 
-    // ciclo de vida aprox. tenebrio (días)
+   
     const LIFECYCLE_DAYS = 90;
     const STAGE_IKADAV2_MAX = LIFECYCLE_DAYS * 0.33;
     const STAGE_IKADAV3_MAX = LIFECYCLE_DAYS * 0.66;
 
     const particles = [];
-
+    const deathMarkers = []; 
     function inXZone(x, y) {
       const d1 = Math.abs(y - (x * height / width));
       const d2 = Math.abs(y - (height - x * height / width));
@@ -104,10 +104,10 @@
 
     function getStageColor(stage) {
       switch (stage) {
-        case "ikada v1":  return "#38f2af"; // verde biotech
-        case "ikada v2":   return "#facc15"; // amarillo suave
-        case "ikada v3":  return "#a855f7"; // violeta
-        default:       return "white";
+        case "ikada v1":  return "#38f2af"; 
+        case "ikada v2":  return "#facc15"; 
+        case "adult":     return "#a855f7"; 
+        default:          return "white";
       }
     }
 
@@ -168,6 +168,48 @@
       p.metrics = fresh.metrics;
     }
 
+    function addDeathMarker(x, y) {
+      deathMarkers.push({
+        x,
+        y,
+        createdAt: performance.now()
+      });
+    }
+
+    function drawDeathMarkers(now) {
+      const LIFETIME = 2000; 
+      for (let i = deathMarkers.length - 1; i >= 0; i--) {
+        const m = deathMarkers[i];
+        const age = now - m.createdAt;
+        if (age > LIFETIME) {
+          deathMarkers.splice(i, 1);
+          continue;
+        }
+        const t = age / LIFETIME;
+        const alpha = 1 - t;
+        const size = 14 + t * 8; 
+
+        ctx.save();
+        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+        ctx.lineWidth = 1.3;
+
+  
+        ctx.beginPath();
+        ctx.moveTo(m.x - size, m.y - size);
+        ctx.lineTo(m.x + size, m.y + size);
+        ctx.moveTo(m.x + size, m.y - size);
+        ctx.lineTo(m.x - size, m.y + size);
+        ctx.stroke();
+
+        
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 3 + t * 3, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
     function animate() {
       const now = performance.now();
 
@@ -179,34 +221,45 @@
       ctx.fillRect(0, 0, width, height);
 
       drawConnections();
+      drawDeathMarkers(now);
 
       for (const p of particles) {
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
+        
         if (dist < 100) {
-          const force = (100 - dist) * 0.007;
-          p.vx += dx / dist * force;
-          p.vy += dy / dist * force;
+          const force = (100 - dist) * 0.01;
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
         }
 
         const wasInX = p.inX;
 
         if (p.inX) {
-          p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
-          p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
+         
+          p.vx += Math.sin(now * 0.002 + p.x * 0.01) * 0.2;
+          p.vy += Math.cos(now * 0.002 + p.y * 0.01) * 0.2;
           p.radius = 3.2;
 
-          // avanzar ciclo de vida
-          if (Math.random() < 0.25) {
+          
+          if (Math.random() < 0.35) {
             const m = p.metrics;
-            let ageNum = parseFloat(m.age) + 0.6; // velocidad envejecimiento visual
+            let ageNum = parseFloat(m.age) + 0.8; 
+            const prevStage = getStage(parseFloat(m.age));
+            const nextStage = getStage(ageNum);
+
             if (ageNum >= LIFECYCLE_DAYS) {
+              if (prevStage === "adult") {
+                addDeathMarker(p.x, p.y);
+              }
               respawnParticle(p);
               continue;
             }
             m.age = ageNum.toFixed(1);
+
+      
           }
 
           const ageNow = parseFloat(p.metrics.age);
@@ -216,9 +269,9 @@
           ctx.font = "11px monospace";
           ctx.fillStyle = "white";
           const m = p.metrics;
-          ctx.fillText(`stage: ${stage}`,    p.x + 10, p.y - 22);
-          ctx.fillText(`age: ${m.age} d`,    p.x + 10, p.y - 8);
-          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 6);
+          ctx.fillText(`stage: ${stage}`,        p.x + 10, p.y - 22);
+          ctx.fillText(`age: ${m.age} d`,        p.x + 10, p.y - 8);
+          ctx.fillText(`data: ${m.data} ms`,     p.x + 10, p.y + 6);
           ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 20);
 
         } else {
@@ -227,15 +280,18 @@
           }
         }
 
-        // retorno suave al origen
+  
         p.vx += (p.ox - p.x) * 0.002;
         p.vy += (p.oy - p.y) * 0.002;
+        p.vx += (Math.random() - 0.5) * 0.02;
+        p.vy += (Math.random() - 0.5) * 0.02;
 
         p.x += p.vx;
         p.y += p.vy;
 
-        p.vx *= 0.97;
-        p.vy *= 0.97;
+     
+        p.vx *= 0.985;
+        p.vy *= 0.985;
 
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
