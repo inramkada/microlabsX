@@ -69,9 +69,10 @@
     }
 
     const MOBILE_MODE = isMobile();
-    const NUM_PARTICLES = MOBILE_MODE ? 400 : 2000;
-    const MAX_CONNECTIONS = MOBILE_MODE ? 4 : 10;
+    const NUM_PARTICLES = MOBILE_MODE ? 100 : 500;
+    const MAX_CONNECTIONS = MOBILE_MODE ? 3 : 5;
     const SPEED = 0.6;
+    const CONNECTION_DISTANCE = 130;
     const xZoneMargin = 40;
 
     const LIFECYCLE_DAYS = 90;
@@ -146,8 +147,8 @@
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
-          if (dist < 100) {
-            const alpha = 1 - dist / 100;
+          if (dist < CONNECTION_DISTANCE) {
+            const alpha = 1 - dist / CONNECTION_DISTANCE;
 
             ctx.save();
             ctx.globalAlpha = alpha;
@@ -203,6 +204,7 @@
           deathMarkers.splice(i, 1);
           continue;
         }
+
         const t = age / LIFETIME;
         const alpha = 1 - t;
         const size = 14 + t * 8;
@@ -256,10 +258,11 @@
           if (Math.random() < 0.35) {
             const m = p.metrics;
             let ageNum = parseFloat(m.age) + 0.8;
-            const prevStage = getStage(parseFloat(m.age));
 
+            const prevStage = getStage(parseFloat(m.age));
             if (ageNum >= LIFECYCLE_DAYS) {
               if (prevStage === "target") addDeathMarker(p.x, p.y);
+
               respawnParticle(p);
               continue;
             }
@@ -295,6 +298,7 @@
         p.vy *= 0.985;
 
         const stageNow = getStage(parseFloat(p.metrics.age));
+
         if (stageNow === "target") {
           ctx.shadowBlur = 15;
           ctx.shadowColor = "rgba(255,255,255,0.8)";
