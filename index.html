@@ -71,16 +71,15 @@
     const MOBILE_MODE = isMobile();
     const NUM_PARTICLES = MOBILE_MODE ? 400 : 2000;
     const MAX_CONNECTIONS = MOBILE_MODE ? 4 : 10;
-    const SPEED = 0.6;        
+    const SPEED = 0.6;
     const xZoneMargin = 40;
 
-  
     const LIFECYCLE_DAYS = 90;
     const STAGE_IKADAV2_MAX = LIFECYCLE_DAYS * 0.33;
     const STAGE_IKADAV3_MAX = LIFECYCLE_DAYS * 0.66;
 
     const particles = [];
-    const deathMarkers = []; 
+    const deathMarkers = [];
 
     function inXZone(x, y) {
       const d1 = Math.abs(y - (x * height / width));
@@ -100,14 +99,15 @@
     function getStage(age) {
       if (age < STAGE_IKADAV2_MAX) return "ikada v1";
       if (age < STAGE_IKADAV3_MAX) return "ikada v2";
-      return "adult";
+      return "target";
     }
 
     function getStageColor(stage) {
       switch (stage) {
-        case "ikada v1":  return "#38f2af"; 
-        case "ikada v2":  return "#facc15"; 
-        case "viulenza":  return "#a855f7"; 
+        case "ikada v1":  return "#38f2af";
+        case "ikada v2":  return "#facc15";
+        case "viulenza":  return "#a855f7";
+        case "target":    return "#ffffff";
         default:          return "white";
       }
     }
@@ -178,7 +178,7 @@
     }
 
     function drawDeathMarkers(now) {
-      const LIFETIME = 2000; // 2s
+      const LIFETIME = 2000;
       for (let i = deathMarkers.length - 1; i >= 0; i--) {
         const m = deathMarkers[i];
         const age = now - m.createdAt;
@@ -188,32 +188,18 @@
         }
         const t = age / LIFETIME;
         const alpha = 1 - t;
-        const size = 14 + t * 8; 
+        const size = 14 + t * 8;
 
         ctx.save();
-
-   
         ctx.strokeStyle = `rgba(255,0,0,${alpha})`;
         ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.arc(m.x, m.y, size + 4, 0, Math.PI * 2);
         ctx.stroke();
 
- 
-        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-        ctx.lineWidth = 1.3;
-        ctx.beginPath();
-        ctx.moveTo(m.x - size, m.y - size);
-        ctx.lineTo(m.x + size, m.y + size);
-        ctx.moveTo(m.x + size, m.y - size);
-        ctx.lineTo(m.x - size, m.y + size);
-        ctx.stroke();
-
-
         ctx.beginPath();
         ctx.arc(m.x, m.y, 3 + t * 3, 0, Math.PI * 2);
         ctx.stroke();
-
         ctx.restore();
       }
     }
@@ -236,7 +222,6 @@
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
-
         if (dist < 100) {
           const force = (100 - dist) * 0.01;
           p.vx += (dx / dist) * force;
@@ -246,19 +231,17 @@
         const wasInX = p.inX;
 
         if (p.inX) {
-
           p.vx += Math.sin(now * 0.002 + p.x * 0.01) * 0.2;
           p.vy += Math.cos(now * 0.002 + p.y * 0.01) * 0.2;
           p.radius = 3.2;
 
-
           if (Math.random() < 0.35) {
             const m = p.metrics;
-            let ageNum = parseFloat(m.age) + 0.8; 
+            let ageNum = parseFloat(m.age) + 0.8;
             const prevStage = getStage(parseFloat(m.age));
 
             if (ageNum >= LIFECYCLE_DAYS) {
-              if (prevStage === "adult") {
+              if (prevStage === "target") {
                 addDeathMarker(p.x, p.y);
               }
               respawnParticle(p);
@@ -293,7 +276,6 @@
         p.x += p.vx;
         p.y += p.vy;
 
-        // fricción
         p.vx *= 0.985;
         p.vy *= 0.985;
 
