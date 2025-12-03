@@ -1,26 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>microlabsX</title>
-<meta name="description" content="Artificial life simulation visualizing neural connections and data lifecycles.">
-<meta name="theme-color" content="#000000">
-<meta property="og:type" content="website">
-<meta property="og:title" content="microlabsX">
-<meta property="og:description" content="Generative bio-neural simulation.">
-<meta property="og:image" content="https://via.placeholder.com/1200x630/000000/ffffff?text=microlabsX">
-<meta property="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23ffffff%22/></svg>">
-<style>
-html,body{margin:0;padding:0;width:100%;height:100%;background:#000;background:radial-gradient(circle at center,#0b0c0d 0%,#000000 85%);overflow:hidden;font-family:'Courier New',monospace;-webkit-font-smoothing:antialiased;user-select:none}canvas{display:block;width:100%;height:100%}.ui{position:absolute;bottom:20px;width:100%;text-align:center;pointer-events:none;z-index:10}.lnk{display:inline-block;pointer-events:auto;background:rgba(0,0,0,0.4);padding:8px 20px;border-radius:20px;backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.1)}.lnk a{color:rgba(255,255,255,0.5);margin:0 12px;text-decoration:none;font-size:12px;letter-spacing:1px;transition:all .3s ease;text-transform:uppercase}.lnk a:hover{color:#fff;text-shadow:0 0 8px rgba(255,255,255,0.6)}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>microlabsX</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at center, #020304, #000000 70%);
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 45px;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer-bar a {
+      color: rgba(255,255,255,0.6);
+      margin: 0 18px;
+      text-decoration: none;
+      font-family: monospace;
+      font-size: 14px;
+      letter-spacing: .5px;
+      transition: .25s ease;
+    }
+
+    .footer-bar a:hover {
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255,255,255,0.6);
+    }
+
+  </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div class="ui"><div class="lnk"><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="cookies.html">Cookies</a><a href="legal.html">Legal</a></div></div>
-<script>
-(function(){var c=document.getElementById("c"),x=c.getContext("2d",{alpha:!1}),w,h,m={x:-9e4,y:-9e4},M=Math,r=M.random,f=M.floor,s=M.sin,k=M.cos,q=M.sqrt,P=[],D=[],C={m:/Mobi|Android/i.test(navigator.userAgent),s:.55,z:40,l:90,g:15};C.p=C.m?400:1500;C.c=2;C.d=C.m?85:100;var Q=C.d*C.d;function R(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}window.addEventListener("resize",R);window.addEventListener("mousemove",function(e){m.x=e.clientX;m.y=e.clientY});R();function I(a,b){var e=h/w,g=M.abs(b-(a*e)),l=M.abs(b-(h-a*e));return g<C.z||l<C.z}var S={A:{x:C.l*.33,c:"#38f2af"},B:{x:C.l*.66,c:"#facc15"},T:{c:"#fff"}};class O{constructor(a){this.i(a)}i(a){var b=!1;while(!b){this.x=r()*w;this.y=r()*h;b=!I(this.x,this.y)}this.ox=this.x;this.oy=this.y;this.vx=(r()-.5)*C.s;this.vy=(r()-.5)*C.s;this.r=1.5;this.a=a?0:r()*(C.l*.3);this.z=!1;this.d=f(r()*240+20);this.p=(r()*60+20).toFixed(1);this.u()}u(){if(this.a<S.A.x){this.st="ikada v1";this.c=S.A.c}else if(this.a<S.B.x){this.st="ikada v2";this.c=S.B.c}else{this.st="target";this.c=S.T.c}}}for(var i=0;i<C.p;i++)P.push(new O);function L(){var a=performance.now();x.fillStyle="#000";x.fillRect(0,0,w,h);for(var b=0;b<P.length;b++){var e=P[b],g=0;for(var l=b+1;l<P.length;l++){if(g>=C.c)break;var n=P[l],o=e.x-n.x,p=e.y-n.y,t=o*o+p*p;if(t<Q){var u=1-q(t)/C.d;x.globalAlpha=u;var v=x.createLinearGradient(e.x,e.y,n.x,n.y);v.addColorStop(0,e.c);v.addColorStop(1,n.c);x.strokeStyle=v;x.beginPath();x.moveTo(e.x,e.y);x.lineTo(n.x,n.y);x.stroke();g++}}}x.globalAlpha=1;for(var b=D.length-1;b>=0;b--){var y=D[b],z=a-y.t;if(z>2e3){D.splice(b,1);continue}var A=z/2e3,B=1-A,E=14+A*10;x.strokeStyle="rgba(255,30,30,"+B+")";x.lineWidth=1.5;x.beginPath();x.moveTo(y.x-E,y.y-E);x.lineTo(y.x+E,y.y+E);x.moveTo(y.x+E,y.y-E);x.lineTo(y.x-E,y.y+E);x.stroke();x.beginPath();x.arc(y.x,y.y,4+A*5,0,M.PI*2);x.stroke()}for(var e of P){var o=e.x-m.x,p=e.y-m.y,F=q(o*o+p*p);if(F<150){var G=(150-F)*.001;e.vx+=(o/F)*G;e.vy+=(p/F)*G}e.z=I(e.x,e.y);if(e.z){e.vx+=s(a*.005+e.y)*.15;e.vy+=k(a*.005+e.x)*.15;e.r=3.5;if(r()<.3){e.a+=.9;e.u();if(e.a>=C.l){if(e.st==="target")D.push({x:e.x,y:e.y,t:a});e.i(!0);continue}}x.font="10px monospace";x.fillStyle="#fff";x.fillText(e.st,e.x+12,e.y-20);x.fillText("age:"+e.a.toFixed(0),e.x+12,e.y-8);x.fillText("dat:"+e.d+"ms",e.x+12,e.y+4);x.fillText("prt:"+e.p+"%",e.x+12,e.y+16)}else{if(!e.z)e.r=1.5;e.vx+=(e.ox-e.x)*15e-4;e.vy+=(e.oy-e.y)*15e-4}e.vx+=(r()-.5)*.05;e.vy+=(r()-.5)*.05;e.x+=e.vx;e.y+=e.vy;e.vx*=.96;e.vy*=.96;if(e.x<0||e.x>w)e.vx*=-1;if(e.y<0||e.y>h)e.vy*=-1;if(e.st==="target"){x.shadowBlur=C.g;x.shadowColor="#fff"}x.fillStyle=e.c;x.beginPath();x.arc(e.x,e.y,e.r,0,M.PI*2);x.fill();x.shadowBlur=0}requestAnimationFrame(L)}L()})();
-</script>
+  <canvas id="canvas"></canvas>
+
+  <div class="footer-bar">
+    <a href="terms.html" target="_blank">Terms</a>
+    <a href="privacy.html" target="_blank">Privacy</a>
+    <a href="cookies.html" target="_blank">Cookies</a>
+    <a href="legal.html" target="_blank">Legal</a>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    function isMobile() {
+      return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+    }
+
+    const MOBILE_MODE = isMobile();
+    const NUM_PARTICLES = MOBILE_MODE ? 100 : 500;
+    const MAX_CONNECTIONS = MOBILE_MODE ? 3 : 5;
+    const SPEED = 0.6;
+    const CONNECTION_DISTANCE = 130;
+    const xZoneMargin = 40;
+
+    const LIFECYCLE_DAYS = 90;
+    const STAGE_IKADAV2_MAX = LIFECYCLE_DAYS * 0.33;
+    const STAGE_IKADAV3_MAX = LIFECYCLE_DAYS * 0.66;
+
+    const particles = [];
+    const deathMarkers = [];
+
+    function inXZone(x, y) {
+      const d1 = Math.abs(y - (x * height / width));
+      const d2 = Math.abs(y - (height - x * height / width));
+      return (d1 < xZoneMargin || d2 < xZoneMargin);
+    }
+
+    function randomMetrics() {
+      const initialAge = Math.random() * (LIFECYCLE_DAYS * 0.3);
+      return {
+        age: initialAge.toFixed(1),
+        data: Math.floor(Math.random() * 240) + 20,
+        protein: (Math.random() * 60 + 20).toFixed(1)
+      };
+    }
+
+    function getStage(age) {
+      if (age < STAGE_IKADAV2_MAX) return "ikada v1";
+      if (age < STAGE_IKADAV3_MAX) return "ikada v2";
+      return "target";
+    }
+
+    function getStageColor(stage) {
+      switch (stage) {
+        case "ikada v1":  return "#38f2af";
+        case "ikada v2":  return "#facc15";
+        case "viulenza":  return "#a855f7";
+        case "target":    return "#ffffff";
+        default:          return "white";
+      }
+    }
+
+    function createParticle() {
+      let x, y;
+      do {
+        x = Math.random() * width;
+        y = Math.random() * height;
+      } while (inXZone(x, y));
+
+      const metrics = randomMetrics();
+      const stage = getStage(parseFloat(metrics.age));
+
+      return {
+        x, y,
+        ox: x, oy: y,
+        vx: (Math.random() - 0.5) * SPEED,
+        vy: (Math.random() - 0.5) * SPEED,
+        radius: 1.5,
+        color: getStageColor(stage),
+        inX: false,
+        metrics
+      };
+    }
+
+    for (let i = 0; i < NUM_PARTICLES; i++) {
+      particles.push(createParticle());
+    }
+
+    function drawConnections() {
+      for (let i = 0; i < particles.length; i++) {
+        let connections = 0;
+        for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < CONNECTION_DISTANCE) {
+            const alpha = 1 - dist / CONNECTION_DISTANCE;
+
+            ctx.save();
+            ctx.globalAlpha = alpha;
+
+            const gradient = ctx.createLinearGradient(
+              particles[i].x, particles[i].y,
+              particles[j].x, particles[j].y
+            );
+            gradient.addColorStop(0, particles[i].color);
+            gradient.addColorStop(1, particles[j].color);
+
+            ctx.strokeStyle = gradient;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+            ctx.restore();
+
+            connections++;
+          }
+        }
+      }
+    }
+
+    function respawnParticle(p) {
+      const fresh = createParticle();
+      p.x = fresh.x;
+      p.y = fresh.y;
+      p.ox = fresh.ox;
+      p.oy = fresh.oy;
+      p.vx = fresh.vx;
+      p.vy = fresh.vy;
+      p.radius = fresh.radius;
+      p.color = fresh.color;
+      p.inX = fresh.inX;
+      p.metrics = fresh.metrics;
+    }
+
+    function addDeathMarker(x, y) {
+      deathMarkers.push({
+        x,
+        y,
+        createdAt: performance.now()
+      });
+    }
+
+    function drawDeathMarkers(now) {
+      const LIFETIME = 2000;
+      for (let i = deathMarkers.length - 1; i >= 0; i--) {
+        const m = deathMarkers[i];
+        const age = now - m.createdAt;
+        if (age > LIFETIME) {
+          deathMarkers.splice(i, 1);
+          continue;
+        }
+
+        const t = age / LIFETIME;
+        const alpha = 1 - t;
+        const size = 14 + t * 8;
+
+        ctx.save();
+        ctx.strokeStyle = `rgba(255,0,0,${alpha})`;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, size + 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 3 + t * 3, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    function animate() {
+      const now = performance.now();
+
+      for (const p of particles) {
+        p.inX = inXZone(p.x, p.y);
+      }
+
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, width, height);
+
+      drawConnections();
+      drawDeathMarkers(now);
+
+      for (const p of particles) {
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 100) {
+          const force = (100 - dist) * 0.01;
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
+        }
+
+        const wasInX = p.inX;
+
+        if (p.inX) {
+          p.vx += Math.sin(now * 0.002 + p.x * 0.01) * 0.2;
+          p.vy += Math.cos(now * 0.002 + p.y * 0.01) * 0.2;
+          p.radius = 3.2;
+
+          if (Math.random() < 0.35) {
+            const m = p.metrics;
+            let ageNum = parseFloat(m.age) + 0.8;
+
+            const prevStage = getStage(parseFloat(m.age));
+            if (ageNum >= LIFECYCLE_DAYS) {
+              if (prevStage === "target") addDeathMarker(p.x, p.y);
+
+              respawnParticle(p);
+              continue;
+            }
+            m.age = ageNum.toFixed(1);
+          }
+
+          const ageNow = parseFloat(p.metrics.age);
+          const stage = getStage(ageNow);
+          p.color = getStageColor(stage);
+
+          ctx.font = "11px monospace";
+          ctx.fillStyle = "white";
+
+          const m = p.metrics;
+          ctx.fillText(`stage: ${stage}`, p.x + 10, p.y - 22);
+          ctx.fillText(`age: ${m.age} d`, p.x + 10, p.y - 8);
+          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 6);
+          ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 20);
+
+        } else {
+          if (wasInX) p.radius = 1.5;
+        }
+
+        p.vx += (p.ox - p.x) * 0.002;
+        p.vy += (p.oy - p.y) * 0.002;
+        p.vx += (Math.random() - 0.5) * 0.02;
+        p.vy += (Math.random() - 0.5) * 0.02;
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+
+        const stageNow = getStage(parseFloat(p.metrics.age));
+
+        if (stageNow === "target") {
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = "rgba(255,255,255,0.8)";
+        } else {
+          ctx.shadowBlur = 0;
+        }
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
 </body>
 </html>
