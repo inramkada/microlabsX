@@ -43,10 +43,10 @@
       color: #fff;
       text-shadow: 0 0 6px rgba(255,255,255,0.6);
     }
-
   </style>
 </head>
 <body>
+
   <canvas id="canvas"></canvas>
 
   <div class="footer-bar">
@@ -78,10 +78,12 @@
     }
 
     const MOBILE_MODE = isMobile();
-    const NUM_PARTICLES = MOBILE_MODE ? 300 : 1200;
-    const MAX_CONNECTIONS = MOBILE_MODE ? 4 : 8;
+
+    const NUM_PARTICLES = MOBILE_MODE ? 180 : 650;
+    const MAX_CONNECTIONS = MOBILE_MODE ? 3 : 4;
+
     const SPEED = 0.6;
-    const CONNECTION_DISTANCE = 105;
+    const CONNECTION_DISTANCE = 95;
     const xZoneMargin = 40;
 
     const LIFECYCLE_DAYS = 90;
@@ -151,6 +153,7 @@
     function drawConnections() {
       for (let i = 0; i < particles.length; i++) {
         let connections = 0;
+
         for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
@@ -166,6 +169,7 @@
               particles[i].x, particles[i].y,
               particles[j].x, particles[j].y
             );
+
             gradient.addColorStop(0, particles[i].color);
             gradient.addColorStop(1, particles[j].color);
 
@@ -174,8 +178,8 @@
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
-            ctx.restore();
 
+            ctx.restore();
             connections++;
           }
         }
@@ -206,9 +210,11 @@
 
     function drawDeathMarkers(now) {
       const LIFETIME = 2000;
+
       for (let i = deathMarkers.length - 1; i >= 0; i--) {
         const m = deathMarkers[i];
         const age = now - m.createdAt;
+
         if (age > LIFETIME) {
           deathMarkers.splice(i, 1);
           continue;
@@ -228,7 +234,6 @@
         ctx.beginPath();
         ctx.arc(m.x, m.y, 3 + t * 3, 0, Math.PI * 2);
         ctx.stroke();
-
         ctx.restore();
       }
     }
@@ -269,12 +274,13 @@
             let ageNum = parseFloat(m.age) + 0.8;
 
             const prevStage = getStage(parseFloat(m.age));
+
             if (ageNum >= LIFECYCLE_DAYS) {
               if (prevStage === "target") addDeathMarker(p.x, p.y);
-
               respawnParticle(p);
               continue;
             }
+
             m.age = ageNum.toFixed(1);
           }
 
