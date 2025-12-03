@@ -172,12 +172,13 @@
       deathMarkers.push({
         x,
         y,
-        createdAt: performance.now()
+        createdAt: performance.now(),
+        angle: Math.random() * Math.PI * 2
       });
     }
 
     function drawDeathMarkers(now) {
-      const LIFETIME = 2000;
+      const LIFETIME = 700;
       for (let i = deathMarkers.length - 1; i >= 0; i--) {
         const m = deathMarkers[i];
         const age = now - m.createdAt;
@@ -187,25 +188,29 @@
         }
         const t = age / LIFETIME;
         const alpha = 1 - t;
-        const size = 14 + t * 8;
+        const rays = 4;
+        const lenMin = 3;
+        const lenMax = 10;
+        const len = lenMin + (lenMax - lenMin) * t;
 
         ctx.save();
-        ctx.strokeStyle = `rgba(255,0,0,${alpha})`;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, size + 4, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-        ctx.lineWidth = 1.3;
-        ctx.beginPath();
-        ctx.moveTo(m.x - size, m.y - size);
-        ctx.lineTo(m.x + size, m.y + size);
-        ctx.moveTo(m.x + size, m.y - size);
-        ctx.lineTo(m.x - size, m.y + size);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, 3 + t * 3, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
+        ctx.lineWidth = 0.8;
+
+        for (let k = 0; k < rays; k++) {
+          const a = m.angle + (Math.PI * 2 * k / rays);
+          const inner = 0;
+          const outer = len;
+          const x1 = m.x + Math.cos(a) * inner;
+          const y1 = m.y + Math.sin(a) * inner;
+          const x2 = m.x + Math.cos(a) * outer;
+          const y2 = m.y + Math.sin(a) * outer;
+          ctx.beginPath();
+          ctx.moveTo(x1, y1);
+          ctx.lineTo(x2, y2);
+          ctx.stroke();
+        }
+
         ctx.restore();
       }
     }
