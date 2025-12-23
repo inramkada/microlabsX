@@ -4,299 +4,673 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>microlabsX</title>
+
   <style>
+    :root{
+      /* microlabsX GREEN ACCENT */
+      --accent: #00ff66;
+      --accent-soft: rgba(0, 255, 102, 0.55);
+      --accent-glow: rgba(0, 255, 102, 0.35);
+      --accent-border: rgba(0, 255, 102, 0.33);
+      --accent-border-strong: rgba(0, 255, 102, 0.47);
+      --accent-x: rgba(0, 255, 102, 0.06);
+      --accent-text: #bfffd7;
+      --accent-text-dim: #7fffb5;
+      --accent-text-bright: #eafff3;
+      --hover-red: #ff3333;
+      --pulse-red: #ff0033;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
-      background: radial-gradient(circle at center, #020304, #000000 70%);
+      background: black;
       overflow: hidden;
-    }
-    canvas {
-      display: block;
-    }
-    .footer-links {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
       font-family: monospace;
-      font-size: 14px;
-      z-index: 20;
-      text-align: center;
     }
+
+    canvas { display: block; }
+
+    .ui-layer {
+      position: absolute;
+      z-index: 10;
+      color: white;
+      user-select: none;
+    }
+
+    .top-bar {
+      top: 0;
+      right: 0;
+      width: 100%;
+      background: black;
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px 26px;
+      box-sizing: border-box;
+    }
+
+    .menu { position: relative; }
+
+    .menu-dot {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      position: relative;
+      opacity: 0.85;
+      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+      transform: scale(1) rotate(0deg);
+      outline: none;
+    }
+
+    /* Accessibility: visible focus */
+    .menu-dot:focus-visible {
+      box-shadow: 0 0 0 2px var(--accent-soft), 0 0 14px var(--accent-glow);
+      opacity: 1;
+    }
+
+    @keyframes redPulse {
+      0% { box-shadow: 0 0 4px var(--hover-red), 0 0 8px var(--hover-red); }
+      100% { box-shadow: 0 0 10px var(--hover-red), 0 0 18px var(--hover-red); }
+    }
+
+    .menu-dot:hover:not(.active) {
+      background: var(--hover-red);
+      opacity: 1;
+      animation: redPulse 0.9s ease-in-out infinite alternate;
+    }
+
+    .menu-dot::before,
+    .menu-dot::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 2px;
+      height: 14px;
+      background: var(--accent);
+      transform-origin: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .menu-dot::before { transform: translate(-50%, -50%) rotate(45deg); }
+    .menu-dot::after  { transform: translate(-50%, -50%) rotate(-45deg); }
+
+    @keyframes xPulseDual {
+      0%   { background: var(--accent); box-shadow: 0 0 6px var(--accent), 0 0 14px var(--accent); }
+      50%  { background: var(--pulse-red); box-shadow: 0 0 8px var(--pulse-red), 0 0 20px var(--pulse-red); }
+      100% { background: var(--accent); box-shadow: 0 0 6px var(--accent), 0 0 14px var(--accent); }
+    }
+
+    .menu-dot.active {
+      background: transparent;
+      box-shadow: none;
+      opacity: 1;
+      transform: scale(1.1) rotate(0deg);
+      animation: none;
+    }
+
+    .menu-dot.active::before,
+    .menu-dot.active::after {
+      opacity: 1;
+      animation: xPulseDual 1.4s ease-in-out infinite;
+    }
+
+    .menu-dot.active.spin { transform: scale(1.1) rotate(180deg); }
+
+    @keyframes xShake {
+      0%   { transform: scale(1.1) translateX(0); }
+      25%  { transform: scale(1.1) translateX(-1.5px); }
+      50%  { transform: scale(1.1) translateX(1.5px); }
+      75%  { transform: scale(1.1) translateX(-1.5px); }
+      100% { transform: scale(1.1) translateX(0); }
+    }
+
+    .menu-dot.active.shake { animation: xShake 0.22s ease-in-out; }
+
+    .menu-dot.active.double::before,
+    .menu-dot.active.double::after {
+      box-shadow:
+        0 0 6px var(--accent),
+        0 0 14px var(--accent),
+        0 0 22px rgba(255, 0, 80, 0.95);
+    }
+
+    .menu-dropdown {
+      position: absolute;
+      top: 160%;
+      right: 0;
+      min-width: 190px;
+      border-radius: 6px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      background: rgba(0, 10, 20, 0.55);
+      border: 1px solid var(--accent-border);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 14px rgba(0,255,102,0.27);
+      transition: max-height 0.34s ease, opacity 0.25s ease;
+    }
+
+    .menu-dropdown.open { max-height: 420px; opacity: 1; }
+
+    .menu-dropdown a {
+      display: block;
+      padding: 10px 14px;
+      font-size: 15px;
+      color: var(--accent-text);
+      text-decoration: none;
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    .menu-dropdown a:hover {
+      background: rgba(0, 40, 60, 0.65);
+      color: #ffffff;
+    }
+
+    .menu-dropdown a.locations-link { padding-left: 28px; }
+
+    .menu-dropdown a.locations-link::after {
+      content: "◂";
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--accent-text-dim);
+    }
+
+    .menu-dropdown-sub {
+      position: absolute;
+      top: 0;
+      right: 100%;
+      margin-right: 14px;
+      min-width: 220px;
+      border-radius: 6px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      background: rgba(0, 8, 18, 0.95);
+      border: 1px solid var(--accent-border-strong);
+      border-left: 2px solid rgba(0, 255, 102, 0.5);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 22px rgba(0,255,102,0.35);
+      transition: max-height 0.3s ease, opacity 0.24s ease;
+      padding: 8px 0;
+    }
+
+    .menu-dropdown-sub.open { max-height: 500px; opacity: 1; }
+
+    .submenu-group { padding: 4px 18px 6px 16px; }
+
+    .submenu-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--accent-text-dim);
+      opacity: 0.85;
+      margin-bottom: 2px;
+    }
+
+    .submenu-link {
+      display: block;
+      font-size: 13px;
+      padding: 3px 0;
+      color: var(--accent-text-bright);
+      text-decoration: none;
+    }
+
+    .submenu-link:hover {
+      color: #ffffff;
+      text-shadow: 0 0 6px var(--accent);
+    }
+
+    .footer-bar {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 0 8px;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    .footer-links {
+      font-size: 15px;
+      pointer-events: auto;
+      margin-bottom: 6px;
+    }
+
     .footer-links a {
       color: white;
-      margin: 0 15px;
       text-decoration: none;
-      opacity: 0.6;
+      margin: 0 12px;
+      opacity: 0.85;
     }
+
     .footer-links a:hover {
       opacity: 1;
       text-decoration: underline;
     }
+
+    .copyright {
+      font-size: 9px;
+      letter-spacing: 1px;
+      opacity: 0.45;
+      pointer-events: auto;
+      text-align: center;
+      padding: 0 14px;
+      line-height: 1.35;
+    }
+
+    /* Respect reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      .menu-dot,
+      .menu-dot::before,
+      .menu-dot::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .menu-dot { width: 12px; height: 12px; }
+      .menu-dropdown a { font-size: 13px; }
+      .footer-links { font-size: 13px; }
+      .copyright { font-size: 8px; }
+      .menu-dropdown-sub { min-width: 190px; margin-right: 10px; }
+    }
   </style>
 </head>
+
 <body>
   <canvas id="canvas"></canvas>
 
-  <div class="footer-links">
-    <a href="terms.html" target="_blank">Terms</a> |
-    <a href="privacy.html" target="_blank">Privacy</a> |
-    <a href="cookies.html" target="_blank">Cookies</a> |
-    <a href="legal.html" target="_blank">Legal</a>
+  <div class="ui-layer top-bar">
+    <div class="menu">
+      <div
+        class="menu-dot"
+        id="menuToggle"
+        role="button"
+        tabindex="0"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="menuDropdown"
+      ></div>
+
+      <div class="menu-dropdown" id="menuDropdown" role="menu" aria-hidden="true">
+        <a href="#" class="locations-link" id="locationsLink" role="menuitem" aria-haspopup="true" aria-expanded="false">LOCATIONS</a>
+      </div>
+
+      <div class="menu-dropdown-sub" id="locationsSubmenu" aria-hidden="true">
+        <div class="submenu-group">
+          <div class="submenu-label">AFRICA</div>
+          <a class="submenu-link" data-node="TNG1" href="locations/tng1.html">TNG1</a>
+          <a class="submenu-link" data-node="NVA1" href="locations/nva1.html">NVA1</a>
+          <a class="submenu-link" data-node="IBD1" href="locations/ibd1.html">IBD1</a>
+        </div>
+        <div class="submenu-group">
+          <div class="submenu-label">AMERICA</div>
+          <a class="submenu-link" data-node="TXS1" href="locations/txs1.html">TXS1</a>
+          <a class="submenu-link" data-node="PNM1" href="locations/pnm1.html">PNM1</a>
+        </div>
+        <div class="submenu-group">
+          <div class="submenu-label">ASIA</div>
+          <a class="submenu-link" data-node="RAK1" href="locations/rak1.html">RAK1</a>
+          <a class="submenu-link" data-node="JVA1" href="locations/jva1.html">JVA1</a>
+          <a class="submenu-link" data-node="HPH1" href="locations/hph1.html">HPH1</a>
+        </div>
+        <div class="submenu-group">
+          <div class="submenu-label">AUSTRALIA</div>
+          <a class="submenu-link" data-node="DRW1" href="locations/drw1.html">DRW1</a>
+        </div>
+        <div class="submenu-group">
+          <div class="submenu-label">EUROPE</div>
+          <a class="submenu-link" data-node="BCN1" href="locations/bcn1.html">BCN1</a>
+          <a class="submenu-link" data-node="LPA1" href="locations/lpa1.html">LPA1</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
+  <div class="ui-layer footer-bar">
+    <div class="footer-links">
+      <a href="terms.html" target="_blank" rel="noopener">Terms</a> |
+      <a href="privacy.html" target="_blank" rel="noopener">Privacy</a> |
+      <a href="cookies.html" target="_blank" rel="noopener">Cookies</a> |
+      <a href="legal.html" target="_blank" rel="noopener">Legal</a>
+    </div>
 
-    const mouse = { x: -1000, y: -1000 };
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
+    <div class="copyright">
+      © 2023-2026 MICROLABSX — A MICRORETAILX GROUP COMPANY — ALL RIGHTS RESERVED<br/>
+    </div>
+  </div>
 
-    window.addEventListener('resize', () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    });
+<script>
+  // -------- Menu / UI (fixed logic + accessibility) --------
+  const menuToggle = document.getElementById("menuToggle");
+  const menuDropdown = document.getElementById("menuDropdown");
+  const locationsLink = document.getElementById("locationsLink");
+  const locationsSubmenu = document.getElementById("locationsSubmenu");
 
-    function isMobile() {
-      return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+  function setMenuOpen(open) {
+    menuDropdown.classList.toggle("open", open);
+    menuDropdown.setAttribute("aria-hidden", String(!open));
+    menuToggle.classList.toggle("active", open);
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+
+    if (!open) {
+      locationsSubmenu.classList.remove("open");
+      locationsSubmenu.setAttribute("aria-hidden", "true");
+      locationsLink.setAttribute("aria-expanded", "false");
+      menuToggle.classList.remove("spin", "shake", "double");
     }
+  }
 
-    const MOBILE_MODE = isMobile();
-    const NUM_PARTICLES = MOBILE_MODE ? 400 : 2000;
-    const MAX_CONNECTIONS = MOBILE_MODE ? 4 : 10;
-    const SPEED = 0.6;
-    const xZoneMargin = 40;
+  function toggleMenu() {
+    const open = menuDropdown.classList.contains("open");
+    setMenuOpen(!open);
+  }
 
-    const LIFECYCLE_DAYS = 90;
-    const STAGE_IKADAV2_MAX = LIFECYCLE_DAYS * 0.33;
-    const STAGE_IKADAV3_MAX = LIFECYCLE_DAYS * 0.66;
+  function setLocationsOpen(open) {
+    locationsSubmenu.classList.toggle("open", open);
+    locationsSubmenu.setAttribute("aria-hidden", String(!open));
+    locationsLink.setAttribute("aria-expanded", String(open));
+  }
 
-    const particles = [];
-    const deathMarkers = [];
+  menuToggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleMenu();
+  });
 
-    function inXZone(x, y) {
-      const d1 = Math.abs(y - (x * height / width));
-      const d2 = Math.abs(y - (height - x * height / width));
-      return (d1 < xZoneMargin || d2 < xZoneMargin);
+  menuToggle.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      toggleMenu();
     }
-
-    function randomMetrics() {
-      const initialAge = Math.random() * (LIFECYCLE_DAYS * 0.3);
-      return {
-        age: initialAge.toFixed(1),
-        data: Math.floor(Math.random() * 240) + 20,
-        protein: (Math.random() * 60 + 20).toFixed(1)
-      };
+    if (e.key === "Escape") {
+      setMenuOpen(false);
+      menuToggle.blur();
     }
+  });
 
-    function getStage(age) {
-      if (age < STAGE_IKADAV2_MAX) return "ikada v1";
-      if (age < STAGE_IKADAV3_MAX) return "ikada v2";
-      return "adult";
+  locationsLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (menuDropdown.classList.contains("open")) {
+      menuToggle.classList.add("shake", "double");
+      setTimeout(() => menuToggle.classList.remove("shake", "double"), 230);
     }
+    const isOpen = locationsSubmenu.classList.contains("open");
+    setLocationsOpen(!isOpen);
+  });
 
-    function getStageColor(stage) {
-      switch (stage) {
-        case "ikada v1":  return "#38f2af";
-        case "ikada v2":  return "#facc15";
-        case "viulenza":  return "#a855f7";
-        default:          return "white";
+  document.addEventListener("click", (e) => {
+    if (
+      !menuDropdown.contains(e.target) &&
+      !menuToggle.contains(e.target) &&
+      !locationsSubmenu.contains(e.target)
+    ) {
+      setMenuOpen(false);
+    }
+  });
+
+  menuDropdown.querySelectorAll("a").forEach(link => {
+    link.addEventListener("mouseenter", () => {
+      if (menuToggle.classList.contains("active")) {
+        menuToggle.classList.add("spin");
+        setTimeout(() => menuToggle.classList.remove("spin"), 400);
       }
-    }
+    });
+  });
 
-    function createParticle() {
-      let x, y;
-      do {
-        x = Math.random() * width;
-        y = Math.random() * height;
-      } while (inXZone(x, y));
-      const metrics = randomMetrics();
-      const stage = getStage(parseFloat(metrics.age));
-      return {
-        x, y,
-        ox: x, oy: y,
-        vx: (Math.random() - 0.5) * SPEED,
-        vy: (Math.random() - 0.5) * SPEED,
-        radius: 1.5,
-        color: getStageColor(stage),
-        inX: false,
-        metrics
-      };
-    }
+  document.querySelectorAll(".submenu-link").forEach(a => {
+    a.addEventListener("click", () => setMenuOpen(false));
+  });
 
-    for (let i = 0; i < NUM_PARTICLES; i++) {
-      particles.push(createParticle());
-    }
+  // -------- Canvas / Particles (auto-throttle + reduced-motion) --------
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d", { alpha: false });
 
-    function drawConnections() {
-      for (let i = 0; i < particles.length; i++) {
-        let connections = 0;
-        for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.strokeStyle = `rgba(56,242,175,${1 - dist / 100})`;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-            connections++;
-          }
-        }
-      }
-    }
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
 
-    function respawnParticle(p) {
-      const fresh = createParticle();
-      p.x = fresh.x;
-      p.y = fresh.y;
-      p.ox = fresh.ox;
-      p.oy = fresh.oy;
-      p.vx = fresh.vx;
-      p.vy = fresh.vy;
-      p.radius = fresh.radius;
-      p.color = fresh.color;
-      p.inX = fresh.inX;
-      p.metrics = fresh.metrics;
-    }
+  const mouse = { x: -1000, y: -1000 };
 
-    function addDeathMarker(x, y) {
-      deathMarkers.push({
-        x,
-        y,
-        createdAt: performance.now(),
-        angle: Math.random() * Math.PI * 2
-      });
-    }
+  function setPointer(x, y) { mouse.x = x; mouse.y = y; }
+  window.addEventListener("mousemove", e => setPointer(e.clientX, e.clientY), { passive: true });
+  window.addEventListener("touchmove", e => {
+    if (!e.touches || !e.touches[0]) return;
+    setPointer(e.touches[0].clientX, e.touches[0].clientY);
+  }, { passive: true });
 
-    function drawDeathMarkers(now) {
-      const LIFETIME = 700;
-      for (let i = deathMarkers.length - 1; i >= 0; i--) {
-        const m = deathMarkers[i];
-        const age = now - m.createdAt;
-        if (age > LIFETIME) {
-          deathMarkers.splice(i, 1);
-          continue;
-        }
-        const t = age / LIFETIME;
-        const alpha = 1 - t;
-        const rays = 4;
-        const lenMin = 3;
-        const lenMax = 10;
-        const len = lenMin + (lenMax - lenMin) * t;
+  window.addEventListener("resize", () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  });
 
-        ctx.save();
-        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
-        ctx.lineWidth = 0.8;
+  function isMobile() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+  }
 
-        for (let k = 0; k < rays; k++) {
-          const a = m.angle + (Math.PI * 2 * k / rays);
-          const inner = 0;
-          const outer = len;
-          const x1 = m.x + Math.cos(a) * inner;
-          const y1 = m.y + Math.sin(a) * inner;
-          const x2 = m.x + Math.cos(a) * outer;
-          const y2 = m.y + Math.sin(a) * outer;
+  const MOBILE_MODE = isMobile();
+  const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const CORES = navigator.hardwareConcurrency || 4;
+  const BASE_PARTICLES_DESKTOP = 1800;
+  const BASE_PARTICLES_MOBILE = 250;
+
+  const NUM_PARTICLES = REDUCED_MOTION
+    ? Math.min(220, MOBILE_MODE ? 140 : 220)
+    : (MOBILE_MODE ? BASE_PARTICLES_MOBILE : Math.min(BASE_PARTICLES_DESKTOP, CORES * 420));
+
+  const MAX_CONNECTIONS = REDUCED_MOTION ? 2 : (MOBILE_MODE ? 4 : 10);
+  const SPEED = REDUCED_MOTION ? 0.35 : 0.5;
+
+  const xZoneMargin = 42;
+  const X_SAT_THRESHOLD = MOBILE_MODE ? 30 : 80;
+
+  const particles = [];
+  const deathMarkers = [];
+
+  function inXZone(x, y) {
+    const d1 = Math.abs(y - (x * height / width));
+    const d2 = Math.abs(y - (height - x * height / width));
+    return (d1 < xZoneMargin || d2 < xZoneMargin);
+  }
+
+  function randomHex() {
+    return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, "0");
+  }
+
+  function createParticle() {
+    let x, y;
+    do {
+      x = Math.random() * width;
+      y = Math.random() * height;
+    } while (inXZone(x, y));
+
+    return {
+      x, y,
+      ox: x, oy: y,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      radius: 1.5,
+      baseColor: "white",
+      color: "white",
+      inX: false,
+      prevInX: false,
+      hexCode: randomHex()
+    };
+  }
+
+  for (let i = 0; i < NUM_PARTICLES; i++) particles.push(createParticle());
+
+  function drawConnections() {
+    const MAX_DIST = 100;
+    const MAX_DIST2 = MAX_DIST * MAX_DIST;
+
+    for (let i = 0; i < particles.length; i++) {
+      let connections = 0;
+      const pi = particles[i];
+      for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
+        const pj = particles[j];
+        const dx = pi.x - pj.x;
+        const dy = pi.y - pj.y;
+        const dist2 = dx * dx + dy * dy;
+        if (dist2 < MAX_DIST2) {
+          const dist = Math.sqrt(dist2);
+          ctx.strokeStyle = `rgba(0,255,102,${1 - dist / MAX_DIST})`;
           ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
+          ctx.moveTo(pi.x, pi.y);
+          ctx.lineTo(pj.x, pj.y);
           ctx.stroke();
+          connections++;
         }
-
-        ctx.restore();
       }
     }
+  }
 
-    function animate() {
-      const now = performance.now();
+  function addDeathMarker(x, y) {
+    deathMarkers.push({
+      x, y,
+      createdAt: performance.now(),
+      angle: Math.random() * Math.PI * 2
+    });
+  }
 
-      for (const p of particles) p.inX = inXZone(p.x, p.y);
+  function drawDeathMarkers(now) {
+    const LIFETIME = 650;
+    for (let i = deathMarkers.length - 1; i >= 0; i--) {
+      const m = deathMarkers[i];
+      const age = now - m.createdAt;
+      if (age > LIFETIME) {
+        deathMarkers.splice(i, 1);
+        continue;
+      }
+      const t = age / LIFETIME;
+      const alpha = 1 - t;
+      const rays = 4;
+      const len = 2 + (8 * t);
 
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, width, height);
+      ctx.save();
+      ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
+      ctx.lineWidth = 0.8;
 
-      drawConnections();
-      drawDeathMarkers(now);
-
-      for (const p of particles) {
-        const dx = p.x - mouse.x;
-        const dy = p.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 100) {
-          const force = (100 - dist) * 0.01;
-          p.vx += (dx / dist) * force;
-          p.vy += (dy / dist) * force;
-        }
-
-        const wasInX = p.inX;
-
-        if (p.inX) {
-          p.vx += Math.sin(now * 0.002 + p.x * 0.01) * 0.2;
-          p.vy += Math.cos(now * 0.002 + p.y * 0.01) * 0.2;
-          p.radius = 3.2;
-
-          if (Math.random() < 0.35) {
-            const m = p.metrics;
-            let ageNum = parseFloat(m.age) + 0.8;
-            const prevStage = getStage(parseFloat(m.age));
-
-            if (ageNum >= LIFECYCLE_DAYS) {
-              if (prevStage === "adult") addDeathMarker(p.x, p.y);
-              respawnParticle(p);
-              continue;
-            }
-            m.age = ageNum.toFixed(1);
-          }
-
-          const ageNow = parseFloat(p.metrics.age);
-          const stage = getStage(ageNow);
-          p.color = getStageColor(stage);
-
-          ctx.font = "11px monospace";
-          ctx.fillStyle = "white";
-          const m = p.metrics;
-          ctx.fillText(`stage: ${stage}`, p.x + 10, p.y - 22);
-          ctx.fillText(`age: ${m.age} d`, p.x + 10, p.y - 8);
-          ctx.fillText(`data: ${m.data} ms`, p.x + 10, p.y + 6);
-          ctx.fillText(`protein: ${m.protein}%`, p.x + 10, p.y + 20);
-
-        } else {
-          if (wasInX) p.radius = 1.5;
-        }
-
-        p.vx += (p.ox - p.x) * 0.002;
-        p.vy += (p.oy - p.y) * 0.002;
-        p.vx += (Math.random() - 0.5) * 0.02;
-        p.vy += (Math.random() - 0.5) * 0.02;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        p.vx *= 0.985;
-        p.vy *= 0.985;
-
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-
-        ctx.fillStyle = p.color;
+      for (let k = 0; k < rays; k++) {
+        const a = m.angle + (Math.PI * 2 * k / rays);
+        const x2 = m.x + Math.cos(a) * len;
+        const y2 = m.y + Math.sin(a) * len;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.moveTo(m.x, m.y);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
       }
+      ctx.restore();
+    }
+  }
 
-      requestAnimationFrame(animate);
+  function animate() {
+    const now = performance.now();
+    let inXCount = 0;
+
+    for (const p of particles) {
+      p.prevInX = p.inX;
+      p.inX = inXZone(p.x, p.y);
+      if (p.inX) inXCount++;
     }
 
-    animate();
-  </script>
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const saturated = inXCount >= X_SAT_THRESHOLD;
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, width, height);
+
+    // Draw the X (green)
+    ctx.strokeStyle = "rgba(0,255,102,0.06)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(width, height);
+    ctx.moveTo(width, 0);
+    ctx.lineTo(0, height);
+    ctx.stroke();
+
+    drawConnections();
+    if (!REDUCED_MOTION) drawDeathMarkers(now);
+
+    for (const p of particles) {
+      const dxm = p.x - mouse.x;
+      const dym = p.y - mouse.y;
+      const distm2 = dxm * dxm + dym * dym;
+      if (distm2 < 10000 && distm2 > 0.0001) {
+        const distm = Math.sqrt(distm2);
+        const force = (100 - distm) * 0.007;
+        p.vx += (dxm / distm) * force;
+        p.vy += (dym / distm) * force;
+      }
+
+      if (p.inX && !p.prevInX && !REDUCED_MOTION) addDeathMarker(p.x, p.y);
+
+      if (p.inX && saturated) {
+        const dx = p.x - centerX;
+        const dy = p.y - centerY;
+        const d = Math.sqrt(dx * dx + dy * dy) || 1;
+        p.vx += (dx / d) * 1.2;
+        p.vy += (dy / d) * 1.2;
+      }
+
+      p.color = p.baseColor;
+
+      if (p.inX && !REDUCED_MOTION) {
+        p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
+        p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
+        p.radius = 3.3 + Math.sin(now * 0.05 + p.x + p.y) * 1.4;
+        if (Math.random() < 0.4) p.hexCode = randomHex();
+        ctx.font = "12px monospace";
+        ctx.fillStyle = "white";
+        ctx.fillText(p.hexCode, p.x + 10, p.y + 6);
+      } else {
+        if (p.prevInX) {
+          p.radius = 1.5;
+          p.hexCode = randomHex();
+        }
+      }
+
+      p.vx += (p.ox - p.x) * 0.002;
+      p.vy += (p.oy - p.y) * 0.002;
+
+      if (!REDUCED_MOTION) {
+        p.vx += (Math.random() - 0.5) * 0.05;
+        p.vy += (Math.random() - 0.5) * 0.05;
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      p.vx *= 0.97;
+      p.vy *= 0.97;
+
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
+
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+
 </body>
 </html>
