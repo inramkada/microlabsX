@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>microlabsX · BCN1</title>
+
   <style>
     :root{
       --fg:#fff;
@@ -16,11 +17,28 @@
       --cyan:rgba(0,234,255,.22);
     }
 
-    html,body{height:100%;margin:0;background:#000;color:var(--fg);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+    html,body{
+      height:100%;
+      margin:0;
+      background:#000;
+      color:var(--fg);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    }
     body{overflow:hidden;}
     canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#000;}
 
-    .terms-wrap{position:relative;z-index:10;display:flex;justify-content:center;align-items:flex-start;height:100%;padding:18px 16px 92px;box-sizing:border-box;pointer-events:none;}
+    .terms-wrap{
+      position:relative;
+      z-index:10;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      height:100%;
+      padding:18px 16px 92px;
+      box-sizing:border-box;
+      pointer-events:none;
+    }
+
     .terms-panel{
       pointer-events:auto;
       width:min(980px,100%);
@@ -35,29 +53,58 @@
     }
 
     .terms-header{
-      position:sticky;top:0;z-index:5;
+      position:sticky;
+      top:0;
+      z-index:5;
       background:linear-gradient(180deg, rgba(0,8,18,.96), rgba(0,8,18,.78));
       border-bottom:1px solid rgba(255,255,255,.12);
       padding:12px 14px 10px;
       backdrop-filter: blur(12px);
     }
-    .terms-title{font-size:12px;letter-spacing:1.6px;text-transform:uppercase;opacity:.92;margin-bottom:6px;}
-    .terms-meta{font-size:12px;line-height:1.4;color:var(--dim);}
+
+    .terms-title{
+      font-size:12px;
+      letter-spacing:1.6px;
+      text-transform:uppercase;
+      opacity:.92;
+      margin-bottom:6px;
+    }
+
+    .terms-meta{
+      font-size:12px;
+      line-height:1.4;
+      color:var(--dim);
+    }
+
     .mono{opacity:.85}
 
     .terms-actions{
       margin-top:10px;
-      display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
     }
+
     .icon-btn{
-      width:38px;height:38px;border-radius:12px;
+      width:38px;
+      height:38px;
+      border-radius:12px;
       border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.06);
-      color:#fff;cursor:pointer;
-      display:inline-flex;align-items:center;justify-content:center;
+      color:#fff;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
       transition:transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .icon-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.24);}
+    .icon-btn:hover{
+      transform:translateY(-1px);
+      background:rgba(255,255,255,.10);
+      border-color:rgba(255,255,255,.24);
+    }
     .icon-btn svg{width:18px;height:18px;opacity:.95}
 
     .terms-body{
@@ -67,6 +114,7 @@
       font-size:13px;
       line-height:1.75;
     }
+
     .terms-body h2{
       font-size:12px;
       letter-spacing:1.2px;
@@ -79,579 +127,167 @@
       text-decoration-thickness:1px;
       text-decoration-color: rgba(255,255,255,.35);
     }
+
     .terms-body p{margin:8px 0;}
-    .terms-body ul{margin:8px 0 8px 18px;}
     .secno{margin-right:8px;}
 
     .footer-bar{
-      position:fixed;left:0;right:0;bottom:0;z-index:20;
+      position:fixed;
+      left:0;right:0;bottom:0;
+      z-index:20;
       background:rgba(0,0,0,.70);
       border-top:1px solid rgba(255,255,255,.10);
       backdrop-filter: blur(10px);
       padding:10px 10px 12px;
-      display:flex;flex-direction:column;gap:6px;
-      align-items:center;justify-content:center;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      align-items:center;
       text-align:center;
     }
 
-    .footer-links{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      align-items:center;
-      gap:0;
-      text-align:center;
-      padding:0 16px;
-      line-height:1.9;
-    }
     .footer-links a{
-      display:inline-block;
-      margin:4px 0;
-      padding:0 10px;
-      position:relative;
       color:#fff;
       text-decoration:none;
       opacity:.86;
       border-bottom:1px solid rgba(255,255,255,.18);
     }
-    .footer-links a:hover{opacity:1;border-bottom-color:rgba(255,255,255,.45);}
+    .footer-links a:hover{
+      opacity:1;
+      border-bottom-color:rgba(255,255,255,.45);
+    }
 
     .copyright{
       font-size:11px;
       color:var(--muted);
       letter-spacing:.8px;
-      opacity:.9;
-    }
-
-    .privacy-toast{
-      position: fixed;
-      left:50%;
-      bottom: 86px;
-      transform: translate(-50%, 10px);
-      max-width: min(720px, calc(100% - 36px));
-      background: rgba(0,8,18,.92);
-      border: 1px solid rgba(0,234,255,.22);
-      border-radius: 14px;
-      padding: 10px 12px;
-      color:#e8ffff;
-      font-size: 12px;
-      line-height: 1.35;
-      letter-spacing: .3px;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 9998;
-      backdrop-filter: blur(12px);
-      transition: opacity .18s ease, transform .18s ease;
-    }
-    .privacy-toast.show{ opacity: .96; transform: translate(-50%, 0); }
-
-    @media print{
-      body{ background:#fff !important; overflow:visible !important; }
-      canvas, .footer-bar, .privacy-toast{ display:none !important; }
-      .terms-wrap{ position:static !important; padding:0 !important; }
-      .terms-panel{
-        max-height:none !important;
-        overflow:visible !important;
-        border:none !important;
-        box-shadow:none !important;
-        background:#fff !important;
-        color:#000 !important;
-        text-shadow:none !important;
-      }
-      .terms-header{ position:static !important; border:none !important; background:#fff !important; margin:0 !important; padding:0 0 12px !important; }
-      .terms-meta, .terms-docmeta{ color:#000 !important; opacity:1 !important; }
-      .terms-body{ color:#000 !important; opacity:1 !important; }
-      .terms-body .secno{ color:#000 !important; opacity:1 !important; }
-      .terms-body h2{ text-decoration-color: #000 !important; text-decoration-thickness: 1px !important; }
-    }
-
-    @media (max-width: 600px){
-      .footer-links{ padding:0 12px; }
-      .footer-links a{ padding:0 10px; }
-      .terms-panel{ -webkit-overflow-scrolling: touch; scroll-padding-top: 140px; }
-      .terms-body h2{ scroll-margin-top: 140px; }
-      .terms-header{ position: sticky; top: 0; z-index: 5; }
     }
   </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
 
-  <div class="terms-wrap">
-    <div class="terms-panel" id="termsPanel">
-      <div class="terms-header">
-        <div class="terms-title">Target (GLOBAL)</div>
-        <div class="terms-meta">
-          microlabsX (Kingdom of Spain)<br/>
-          Strategic Global Operations Framework<br/>
-          <span class="mono">Last updated:</span> 2025-12-25 · <span class="mono">Effective date:</span> upon operational activation
-        </div>
+<canvas id="canvas"></canvas>
 
-        <div class="terms-actions compact">
-          <button class="icon-btn" id="printPDF" type="button" aria-label="Download (Print dialog)" title="Download (Print dialog)">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3v10m0 0l4-4m-4 4L8 9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M5 15v4h14v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-
-          <button class="icon-btn" id="ttsPlay" type="button" aria-label="Play audio" title="Play audio">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 5v14l11-7z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="icon-btn" id="ttsPause" type="button" aria-label="Pause" title="Pause" disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/>
-            </svg>
-          </button>
-          <button class="icon-btn" id="ttsStop" type="button" aria-label="Stop" title="Stop" disabled>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6 6h12v12H6z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <div class="terms-body" id="termsText">
-        <h2><span class="secno">1.</span>Node status</h2>
-        <p><strong>BCN1</strong> is a <strong>planned node</strong> published for conceptual planning and documentation purposes only. No facilities, personnel, projects, or commercial activity exist under this node at this time.</p>
-
-        <h2><span class="secno">2.</span>Assessment phase</h2>
-        <p>This page describes assumptions, constraints, and high-level feasibility signals. All references are non-binding and subject to change.</p>
-
-        <h2><span class="secno">3.</span>Non-operational disclaimer</h2>
-        <p>No products or services are offered, no orders are accepted, and no contractual relationship is formed through this page.</p>
+<div class="terms-wrap">
+  <div class="terms-panel">
+    <div class="terms-header">
+      <div class="terms-title">Target (GLOBAL)</div>
+      <div class="terms-meta">
+        microlabsX (Kingdom of Spain)<br/>
+        Strategic Global Operations Framework<br/>
+        <span class="mono">Last updated:</span> 2025-12-25 ·
+        <span class="mono">Effective date:</span> upon operational activation
       </div>
     </div>
+
+    <div class="terms-body">
+      <h2><span class="secno">1.</span>Node status</h2>
+      <p><strong>BCN1</strong> is a <strong>planned node</strong> published for conceptual planning only.</p>
+
+      <h2><span class="secno">2.</span>Assessment phase</h2>
+      <p>This page contains non-binding feasibility information.</p>
+
+      <h2><span class="secno">3.</span>Non-operational disclaimer</h2>
+      <p>No commercial or contractual activity is performed.</p>
+    </div>
   </div>
+</div>
 
-  <div class="footer-bar">
-    <div class="footer-links">
-        <a href="legal.html" target="_blank" rel="noopener">Legal</a>
-      </div>
-    <div class="copyright">© 2025 MicroretailX LLC · MicrolabsX is a project under development</div>
+<div class="footer-bar">
+  <div class="footer-links">
+    <a href="legal.html" target="_blank">Legal</a>
   </div>
+  <div class="copyright">
+    © 2025 MicroretailX LLC · MicrolabsX is a project under development
+  </div>
+</div>
 
-  <div class="privacy-toast" id="privacyToast" role="status" aria-live="polite"></div>
+<script>
+"use strict";
 
-  <script>
-    "use strict";
+/* ===== X GLOW BACKGROUND ===== */
 
-    const toastEl = document.getElementById("privacyToast");
-    function showToast(msg){
-      if (!toastEl) return;
-      toastEl.textContent = msg;
-      toastEl.classList.add("show");
-      clearTimeout(showToast._t);
-      showToast._t = setTimeout(()=>toastEl.classList.remove("show"), 1700);
-    }
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d",{alpha:false});
+let width,height;
+const PR=Math.min(2,window.devicePixelRatio||1);
 
-    function numberSections(){
-      const hs = document.querySelectorAll(".terms-body h2");
-      let n = 1;
-      hs.forEach(h=>{
-        if (!h.querySelector(".secno")){
-          const s = document.createElement("span");
-          s.className = "secno";
-          s.textContent = n + ".";
-          h.prepend(s);
-        }
-        n++;
-      });
-    }
-    numberSections();
+function resize(){
+  width=window.innerWidth;
+  height=window.innerHeight;
+  canvas.width=Math.floor(width*PR);
+  canvas.height=Math.floor(height*PR);
+  canvas.style.width=width+"px";
+  canvas.style.height=height+"px";
+  ctx.setTransform(PR,0,0,PR,0,0);
+}
+resize();
+window.addEventListener("resize",resize,{passive:true});
 
-    function printViaIframe(){
-      const content = document.getElementById("termsText")?.innerHTML || "";
-      const html = `<!doctype html><html><head><meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <title>microlabsX · BCN1</title>
-      <style>
-        body{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace; margin:32px; color:#000;}
-        h2{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;}
-        .wrap{max-width:980px;margin:0 auto;}
-        .meta{margin-bottom:16px;font-size:12px;opacity:.85;line-height:1.5;}
-        .secno{margin-right:8px;}
-      </style></head><body>
-      <div class="wrap">
-        <div class="meta">
-          <div><strong>microlabsX</strong></div>
-          <div>microlabsX – Global Operations Framework</div>
-          <div>Last updated: 2025-12-25 · Effective date: upon operational activation</div>
-        </div>
-        <div class="body">${content}</div>
-      </div>
-      </body></html>`;
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function lerp(a,b,t){return a+(b-a)*t}
+function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+function pulse(t){return .5-.5*Math.cos(Math.PI*clamp(t,0,1))}
 
-      const iframe = document.createElement("iframe");
-      iframe.style.position = "fixed";
-      iframe.style.right = "0";
-      iframe.style.bottom = "0";
-      iframe.style.width = "0";
-      iframe.style.height = "0";
-      iframe.style.border = "0";
-      iframe.style.opacity = "0";
-      iframe.setAttribute("aria-hidden", "true");
-      document.body.appendChild(iframe);
+function glow(x,y,r,a){
+  ctx.save();
+  ctx.globalCompositeOperation="lighter";
+  const g=ctx.createRadialGradient(x,y,0,x,y,r);
+  g.addColorStop(0,`rgba(0,234,255,${a})`);
+  g.addColorStop(.4,`rgba(0,234,255,${a*.4})`);
+  g.addColorStop(1,"rgba(0,234,255,0)");
+  ctx.fillStyle=g;
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
 
-      const doc = iframe.contentWindow.document;
-      doc.open(); doc.write(html); doc.close();
+function drawX(a){
+  ctx.strokeStyle=`rgba(0,234,255,${a})`;
+  ctx.lineWidth=1.7;
+  ctx.beginPath();
+  ctx.moveTo(0,0);ctx.lineTo(width,height);
+  ctx.moveTo(width,0);ctx.lineTo(0,height);
+  ctx.stroke();
+}
 
-      const w = iframe.contentWindow;
-      const cleanup = () => { try { document.body.removeChild(iframe); } catch(e){} };
-      const tryPrint = () => {
-        try { w.focus(); } catch(e){}
-        try { w.print(); } catch(e){ cleanup(); }
-      };
+const PHI=2.8,PHH=1.15,PHO=2.2,PHR=.55;
+const CYCLE=PHI+PHH+PHO+PHR;
+let t=0,last=performance.now();
 
-      w.onafterprint = cleanup;
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000);last=now;
+  t=(t+dt)%CYCLE;
+  ctx.fillStyle="#000";
+  ctx.fillRect(0,0,width,height);
 
-      if (doc.readyState === "complete") setTimeout(tryPrint, 50);
-      else {
-        iframe.onload = () => setTimeout(tryPrint, 50);
-        setTimeout(tryPrint, 200);
-      }
-    }
+  const cx=width/2,cy=height/2;
+  const ti=clamp(t/PHI,0,1);
+  const th=clamp((t-PHI)/PHH,0,1);
+  const to=clamp((t-PHI-PHH)/PHO,0,1);
 
-    const printBtn = document.getElementById("printPDF");
-    if (printBtn){
-      printBtn.addEventListener("mouseenter", ()=>showToast("Opens Print dialog (Save as PDF)."));
-      printBtn.addEventListener("click", ()=>printViaIframe());
-    }
+  let a=.05;
+  if(t<PHI) a+=.08*pulse(ti);
+  else if(t<PHI+PHH) a+=.18*pulse(th);
+  else if(t<PHI+PHH+PHO) a+=.14*(1-pulse(to));
 
-    // --- Canvas / Particles (unchanged from your original) ---
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d", { alpha:false });
+  drawX(a);
 
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+  if(t<PHI){
+    glow(lerp(0,cx,ease(ti)),lerp(0,cy,ease(ti)),60,.22);
+    glow(lerp(width,cx,ease(ti)),lerp(height,cy,ease(ti)),60,.22);
+  }else if(t<PHI+PHH){
+    glow(cx,cy,120,.35);
+    glow(cx,cy,78,.55);
+    glow(cx,cy,44,.75);
+  }
 
-    const PR = Math.min(2, window.devicePixelRatio || 1);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
 
-    function resizeHiDPI(){
-      canvas.width = Math.floor(window.innerWidth * PR);
-      canvas.height = Math.floor(window.innerHeight * PR);
-      canvas.style.width = window.innerWidth + "px";
-      canvas.style.height = window.innerHeight + "px";
-      ctx.setTransform(PR, 0, 0, PR, 0, 0);
-      width = window.innerWidth;
-      height = window.innerHeight;
-    }
-    resizeHiDPI();
-    window.addEventListener("resize", resizeHiDPI);
-
-    const mouse = { x: -1000, y: -1000 };
-    function setPointer(x, y) { mouse.x = x; mouse.y = y; }
-    window.addEventListener("mousemove", e => setPointer(e.clientX, e.clientY), { passive: true });
-    window.addEventListener("touchmove", e => {
-      if (!e.touches || !e.touches[0]) return;
-      setPointer(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-
-    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-    const MOBILE_MODE = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-    const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const CORES = navigator.hardwareConcurrency || 4;
-    const BASE_PARTICLES_DESKTOP = 1800;
-    const BASE_PARTICLES_MOBILE = 250;
-
-    const NUM_PARTICLES = REDUCED_MOTION
-      ? Math.min(220, MOBILE_MODE ? 140 : 220)
-      : (MOBILE_MODE ? BASE_PARTICLES_MOBILE : Math.min(BASE_PARTICLES_DESKTOP, CORES * 420));
-
-    const MAX_CONNECTIONS = REDUCED_MOTION ? 2 : (MOBILE_MODE ? 4 : 10);
-    const SPEED = REDUCED_MOTION ? 0.35 : 0.5;
-
-    const xZoneMargin = 42;
-    const X_SAT_THRESHOLD = MOBILE_MODE ? 30 : 80;
-
-    const particles = [];
-    const deathMarkers = [];
-
-    function inXZone(x, y) {
-      const d1 = Math.abs(y - (x * height / width));
-      const d2 = Math.abs(y - (height - x * height / width));
-      return (d1 < xZoneMargin || d2 < xZoneMargin);
-    }
-
-    function randomHex() {
-      return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, "0");
-    }
-
-    function createParticle() {
-      let x, y;
-      do {
-        x = Math.random() * width;
-        y = Math.random() * height;
-      } while (inXZone(x, y));
-
-      return {
-        x, y,
-        ox: x, oy: y,
-        vx: (Math.random() - 0.5) * SPEED,
-        vy: (Math.random() - 0.5) * SPEED,
-        radius: 1.5,
-        baseColor: "white",
-        color: "white",
-        inX: false,
-        prevInX: false,
-        hexCode: randomHex()
-      };
-    }
-
-    for (let i = 0; i < NUM_PARTICLES; i++) particles.push(createParticle());
-
-    function addDeathMarker(x, y) {
-      deathMarkers.push({ x, y, createdAt: performance.now(), angle: Math.random() * Math.PI * 2 });
-    }
-
-    function drawDeathMarkers(now) {
-      const LIFETIME = 650;
-      for (let i = deathMarkers.length - 1; i >= 0; i--) {
-        const m = deathMarkers[i];
-        const age = now - m.createdAt;
-        if (age > LIFETIME) { deathMarkers.splice(i, 1); continue; }
-        const t = age / LIFETIME;
-        const alpha = 1 - t;
-        const rays = 4;
-        const len = 2 + (8 * t);
-
-        ctx.save();
-        ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
-        ctx.lineWidth = 0.8;
-
-        for (let k = 0; k < rays; k++) {
-          const a = m.angle + (Math.PI * 2 * k / rays);
-          const x2 = m.x + Math.cos(a) * len;
-          const y2 = m.y + Math.sin(a) * len;
-          ctx.beginPath();
-          ctx.moveTo(m.x, m.y);
-          ctx.lineTo(x2, y2);
-          ctx.stroke();
-        }
-        ctx.restore();
-      }
-    }
-
-    function drawConnections() {
-      const MAX_DIST = 100;
-      const MAX_DIST2 = MAX_DIST * MAX_DIST;
-
-      for (let i = 0; i < particles.length; i++) {
-        let connections = 0;
-        const pi = particles[i];
-        for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
-          const pj = particles[j];
-          const dx = pi.x - pj.x;
-          const dy = pi.y - pj.y;
-          const dist2 = dx * dx + dy * dy;
-          if (dist2 < MAX_DIST2) {
-            const dist = Math.sqrt(dist2);
-            ctx.strokeStyle = `rgba(0,255,102,${1 - dist / MAX_DIST})`;
-            ctx.beginPath();
-            ctx.moveTo(pi.x, pi.y);
-            ctx.lineTo(pj.x, pj.y);
-            ctx.stroke();
-            connections++;
-          }
-        }
-      }
-    }
-
-    function animate() {
-      const now = performance.now();
-      let inXCount = 0;
-
-      for (const p of particles) {
-        p.prevInX = p.inX;
-        p.inX = inXZone(p.x, p.y);
-        if (p.inX) inXCount++;
-      }
-
-      const centerX = width / 2;
-      const centerY = height / 2;
-      const saturated = inXCount >= X_SAT_THRESHOLD;
-
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, width, height);
-
-      ctx.strokeStyle = "rgba(0,255,102,0.06)";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(0, 0); ctx.lineTo(width, height);
-      ctx.moveTo(width, 0); ctx.lineTo(0, height);
-      ctx.stroke();
-
-      drawConnections();
-      if (!REDUCED_MOTION) drawDeathMarkers(now);
-
-      for (const p of particles) {
-        const dxm = p.x - mouse.x;
-        const dym = p.y - mouse.y;
-        const distm2 = dxm * dxm + dym * dym;
-        if (distm2 < 10000 && distm2 > 0.0001) {
-          const distm = Math.sqrt(distm2);
-          const force = (100 - distm) * 0.007;
-          p.vx += (dxm / distm) * force;
-          p.vy += (dym / distm) * force;
-        }
-
-        if (p.inX && !p.prevInX && !REDUCED_MOTION) addDeathMarker(p.x, p.y);
-
-        if (p.inX && saturated) {
-          const dx = p.x - centerX;
-          const dy = p.y - centerY;
-          const d = Math.sqrt(dx * dx + dy * dy) || 1;
-          p.vx += (dx / d) * 1.2;
-          p.vy += (dy / d) * 1.2;
-        }
-
-        p.color = p.baseColor;
-
-        if (p.inX && !REDUCED_MOTION) {
-          p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
-          p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
-          p.radius = 3.3 + Math.sin(now * 0.05 + p.x + p.y) * 1.4;
-          if (Math.random() < 0.4) p.hexCode = randomHex();
-          ctx.font = "12px monospace";
-          ctx.fillStyle = "white";
-          ctx.fillText(p.hexCode, p.x + 10, p.y + 6);
-        } else {
-          if (p.prevInX) {
-            p.radius = 1.5;
-            p.hexCode = randomHex();
-          }
-        }
-
-        p.vx += (p.ox - p.x) * 0.002;
-        p.vy += (p.oy - p.y) * 0.002;
-
-        if (!REDUCED_MOTION) {
-          p.vx += (Math.random() - 0.5) * 0.05;
-          p.vy += (Math.random() - 0.5) * 0.05;
-        }
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        p.vx *= 0.97;
-        p.vy *= 0.97;
-
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // --- TTS (kept from your original logic pattern) ---
-    (function termsAudio(){
-      const playBtn = document.getElementById("ttsPlay");
-      const pauseBtn = document.getElementById("ttsPause");
-      const stopBtn = document.getElementById("ttsStop");
-      const termsEl = document.getElementById("termsText");
-      if (!playBtn || !pauseBtn || !stopBtn || !termsEl) return;
-
-      const synth = window.speechSynthesis;
-      const supported = !!(synth && window.SpeechSynthesisUtterance);
-      if (!supported){
-        playBtn.disabled = true;
-        pauseBtn.disabled = true;
-        stopBtn.disabled = true;
-        return;
-      }
-
-      function setState(state){
-        if (state === "idle"){
-          playBtn.disabled = false;
-          pauseBtn.disabled = true;
-          stopBtn.disabled = true;
-          pauseBtn.title = "Pause";
-        } else if (state === "speaking"){
-          playBtn.disabled = true;
-          pauseBtn.disabled = false;
-          stopBtn.disabled = false;
-          pauseBtn.title = "Pause";
-        } else {
-          playBtn.disabled = true;
-          pauseBtn.disabled = false;
-          stopBtn.disabled = false;
-          pauseBtn.title = "Resume";
-        }
-      }
-
-      function normalizeText(str){ return (str || "").replace(/\s+/g, " ").trim(); }
-
-      function chunkText(text, maxLen = 900){
-        const chunks = [];
-        let t = text;
-        while (t.length > maxLen){
-          let cut = t.lastIndexOf(". ", maxLen);
-          if (cut < 200) cut = t.lastIndexOf("; ", maxLen);
-          if (cut < 200) cut = t.lastIndexOf(", ", maxLen);
-          if (cut < 200) cut = maxLen;
-          chunks.push(t.slice(0, cut + 1).trim());
-          t = t.slice(cut + 1).trim();
-        }
-        if (t.length) chunks.push(t);
-        return chunks;
-      }
-
-      let queue = [];
-      let paused = false;
-
-      function cancelAll(){
-        try { synth.cancel(); } catch(_){}
-        queue = [];
-        paused = false;
-        setState("idle");
-      }
-
-      function speakQueue(){
-        if (!queue.length){ setState("idle"); return; }
-        const u = new SpeechSynthesisUtterance(queue.shift());
-        u.rate = 1;
-        u.pitch = 1;
-        u.onend = () => speakQueue();
-        u.onerror = () => setState("idle");
-        setState("speaking");
-        synth.speak(u);
-      }
-
-      playBtn.addEventListener("click", ()=>{
-        cancelAll();
-        const text = normalizeText(termsEl.innerText);
-        queue = chunkText(text);
-        speakQueue();
-      });
-
-      pauseBtn.addEventListener("click", ()=>{
-        if (!synth.speaking && !synth.paused) return;
-        if (synth.paused){
-          synth.resume();
-          paused = false;
-          setState("speaking");
-        } else {
-          synth.pause();
-          paused = true;
-          setState("paused");
-        }
-      });
-
-      stopBtn.addEventListener("click", cancelAll);
-
-      window.addEventListener("beforeunload", cancelAll);
-      setState("idle");
-    })();
-  </script>
 </body>
 </html>
