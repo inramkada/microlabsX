@@ -349,12 +349,11 @@
     </div>
 
     <div class="copyright">
-      © 2016–2026 MICROLABSX — A MICRORETAILX GROUP PROJECT — ALL RIGHTS RESERVED<br/>
+      © 2026 MICROLABSX — ALL RIGHTS RESERVED<br/>
     </div>
   </div>
 
 <script>
-  // -------- Menu / UI (fixed logic + accessibility) --------
   const menuToggle = document.getElementById("menuToggle");
   const menuDropdown = document.getElementById("menuDropdown");
   const locationsLink = document.getElementById("locationsLink");
@@ -435,7 +434,6 @@
     a.addEventListener("click", () => setMenuOpen(false));
   });
 
-  // -------- Canvas / Particles (auto-throttle + reduced-motion) --------
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d", { alpha: false });
 
@@ -594,7 +592,6 @@
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, width, height);
 
-    // Draw the X (green)
     ctx.strokeStyle = "rgba(0,255,102,0.06)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
