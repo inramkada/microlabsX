@@ -27,7 +27,7 @@ const REDUCED_MOTION = window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const CORES = navigator.hardwareConcurrency || 4;
-const BASE_PARTICLES_DESKTOP = 1000;
+const BASE_PARTICLES_DESKTOP = 1500;
 const BASE_PARTICLES_MOBILE = 350;
 
 const NUM_PARTICLES = REDUCED_MOTION
