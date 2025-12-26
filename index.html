@@ -21,6 +21,8 @@
       object-fit: cover;
       display: block;
       background: #000;
+
+      pointer-events: none;
     }
   </style>
 </head>
@@ -41,14 +43,31 @@
   <script>
     const v = document.getElementById("bg");
 
-    document.addEventListener("contextmenu", e => e.preventDefault(), { passive: false });
-    document.addEventListener("dragstart", e => e.preventDefault());
+    document.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }, { capture: true });
 
-    const preventPause = () => {
-      if (v.paused) v.play().catch(()=>{});
-    };
-    v.addEventListener("pause", preventPause);
-    v.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); });
+    document.addEventListener("dragstart", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, { capture: true });
+
+    document.addEventListener("keydown", (e) => {
+      const k = (e.key || "").toLowerCase();
+      const ctrl = e.ctrlKey || e.metaKey;
+
+      if (
+        k === "f12" ||
+        (ctrl && (k === "s" || k === "u" || k === "p")) ||
+        (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c"))
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    }, { capture: true });
 
     const enableAudio = async () => {
       try {
@@ -56,9 +75,6 @@
         v.volume = 1.0;
         await v.play();
       } catch {}
-      window.removeEventListener("pointerdown", enableAudio);
-      window.removeEventListener("keydown", enableAudio);
-      window.removeEventListener("touchstart", enableAudio);
     };
     window.addEventListener("pointerdown", enableAudio, { once: true });
     window.addEventListener("touchstart", enableAudio, { once: true, passive: true });
