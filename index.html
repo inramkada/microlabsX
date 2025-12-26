@@ -12,7 +12,9 @@
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
     }
+
     video {
       position: fixed;
       inset: 0;
@@ -21,64 +23,97 @@
       object-fit: cover;
       display: block;
       background: #000;
-
       pointer-events: none;
+    }
+
+    .sound {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 10;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+
+      padding: 10px 14px;
+      border-radius: 999px;
+
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.92);
+
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .2s ease;
+    }
+
+    .sound:hover {
+      transform: translateY(-1px);
+      background: rgba(0,0,0,0.60);
+      border-color: rgba(255,255,255,0.30);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 18px rgba(255,255,255,0.35);
+      flex: 0 0 auto;
+    }
+
+    .sound.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sound { transition: none; }
     }
   </style>
 </head>
 <body>
 
-  <video id="bg"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
+  <video id="bg" autoplay muted loop playsinline preload="auto"
     disablepictureinpicture
-    controlslist="nodownload noplaybackrate noremoteplayback"
-  >
+    controlslist="nodownload noplaybackrate noremoteplayback">
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
+  <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
+    <span class="dot" aria-hidden="true"></span>
+    Sound on
+  </button>
+
   <script>
     const v = document.getElementById("bg");
+    const btn = document.getElementById("soundBtn");
 
-    document.addEventListener("contextmenu", (e) => {
+    document.addEventListener("contextmenu", e => {
       e.preventDefault();
       e.stopPropagation();
       return false;
     }, { capture: true });
 
-    document.addEventListener("dragstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-    }, { capture: true });
-
-    document.addEventListener("keydown", (e) => {
-      const k = (e.key || "").toLowerCase();
-      const ctrl = e.ctrlKey || e.metaKey;
-
-      if (
-        k === "f12" ||
-        (ctrl && (k === "s" || k === "u" || k === "p")) ||
-        (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c"))
-      ) {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-      }
-    }, { capture: true });
-
-    const enableAudio = async () => {
+    async function enableSound() {
       try {
         v.muted = false;
-        v.volume = 1.0;
+        v.volume = 0.8;
         await v.play();
+        btn.classList.add("hidden");
+        setTimeout(() => btn.remove(), 250);
       } catch {}
-    };
-    window.addEventListener("pointerdown", enableAudio, { once: true });
-    window.addEventListener("touchstart", enableAudio, { once: true, passive: true });
-    window.addEventListener("keydown", enableAudio, { once: true });
+    }
+
+    btn.addEventListener("click", enableSound);
 
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) v.play().catch(()=>{});
