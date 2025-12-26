@@ -19,8 +19,8 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+      display: block;
       background: #000;
-      pointer-events: auto;
     }
   </style>
 </head>
@@ -32,9 +32,8 @@
     loop
     playsinline
     preload="auto"
-    controls="false"
-    controlslist="nodownload noplaybackrate noremoteplayback"
     disablepictureinpicture
+    controlslist="nodownload noplaybackrate noremoteplayback"
   >
     <source src="/CT.mp4" type="video/mp4">
   </video>
@@ -43,19 +42,13 @@
     const v = document.getElementById("bg");
 
     document.addEventListener("contextmenu", e => e.preventDefault(), { passive: false });
-
     document.addEventListener("dragstart", e => e.preventDefault());
 
-    document.addEventListener("keydown", e => {
-      if (
-        e.ctrlKey ||
-        e.metaKey ||
-        e.key === "s" ||
-        e.key === "S"
-      ) {
-        e.preventDefault();
-      }
-    });
+    const preventPause = () => {
+      if (v.paused) v.play().catch(()=>{});
+    };
+    v.addEventListener("pause", preventPause);
+    v.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); });
 
     const enableAudio = async () => {
       try {
@@ -67,9 +60,14 @@
       window.removeEventListener("keydown", enableAudio);
       window.removeEventListener("touchstart", enableAudio);
     };
-
     window.addEventListener("pointerdown", enableAudio, { once: true });
     window.addEventListener("touchstart", enableAudio, { once: true, passive: true });
     window.addEventListener("keydown", enableAudio, { once: true });
 
-    document.ad
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) v.play().catch(()=>{});
+    });
+  </script>
+
+</body>
+</html>
