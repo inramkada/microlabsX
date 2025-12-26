@@ -27,12 +27,12 @@ const REDUCED_MOTION = window.matchMedia &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const CORES = navigator.hardwareConcurrency || 4;
-const BASE_PARTICLES_DESKTOP = 1500;
+const BASE_PARTICLES_DESKTOP = 600;
 const BASE_PARTICLES_MOBILE = 350;
 
 const NUM_PARTICLES = REDUCED_MOTION
   ? Math.min(220, MOBILE_MODE ? 140 : 220)
-  : (MOBILE_MODE ? BASE_PARTICLES_MOBILE : Math.min(BASE_PARTICLES_DESKTOP, CORES * 800));
+  : (MOBILE_MODE ? BASE_PARTICLES_MOBILE : Math.min(BASE_PARTICLES_DESKTOP, CORES * 600));
 
 const MAX_CONNECTIONS = REDUCED_MOTION ? 2 : (MOBILE_MODE ? 4 : 10);
 const SPEED = REDUCED_MOTION ? 0.35 : 0.5;
