@@ -10,6 +10,8 @@
       height: 100%;
       background: #000;
       overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
     }
     video {
       position: fixed;
@@ -17,8 +19,8 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      display: block;
       background: #000;
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -30,6 +32,7 @@
     loop
     playsinline
     preload="auto"
+    controls="false"
     controlslist="nodownload noplaybackrate noremoteplayback"
     disablepictureinpicture
   >
@@ -39,15 +42,27 @@
   <script>
     const v = document.getElementById("bg");
 
-    document.addEventListener("contextmenu", (e) => e.preventDefault(), { passive: false });
+    document.addEventListener("contextmenu", e => e.preventDefault(), { passive: false });
+
+    document.addEventListener("dragstart", e => e.preventDefault());
+
+    document.addEventListener("keydown", e => {
+      if (
+        e.ctrlKey ||
+        e.metaKey ||
+        e.key === "s" ||
+        e.key === "S"
+      ) {
+        e.preventDefault();
+      }
+    });
 
     const enableAudio = async () => {
       try {
         v.muted = false;
         v.volume = 1.0;
         await v.play();
-      } catch (e) {
-      }
+      } catch {}
       window.removeEventListener("pointerdown", enableAudio);
       window.removeEventListener("keydown", enableAudio);
       window.removeEventListener("touchstart", enableAudio);
@@ -57,10 +72,4 @@
     window.addEventListener("touchstart", enableAudio, { once: true, passive: true });
     window.addEventListener("keydown", enableAudio, { once: true });
 
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) v.play().catch(() => {});
-    });
-  </script>
-
-</body>
-</html>
+    document.ad
