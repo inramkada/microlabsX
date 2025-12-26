@@ -18,9 +18,13 @@ window.addEventListener("resize", () => {
   height = canvas.height = window.innerHeight;
 });
 
-function isMobile() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent); }
+function isMobile() {
+  return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+}
+
 const MOBILE_MODE = isMobile();
-const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const REDUCED_MOTION = window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const CORES = navigator.hardwareConcurrency || 4;
 const BASE_PARTICLES_DESKTOP = 1800;
@@ -62,8 +66,6 @@ function createParticle() {
     vx: (Math.random() - 0.5) * SPEED,
     vy: (Math.random() - 0.5) * SPEED,
     radius: 1.5,
-    baseColor: "white",
-    color: "white",
     inX: false,
     prevInX: false,
     hexCode: randomHex()
