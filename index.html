@@ -26,7 +26,6 @@
       pointer-events: none;
     }
 
-    /* ---------- NODES + MENU (TOP RIGHT) ---------- */
     .nodes-wrap{
       position: fixed;
       top: 18px;
@@ -39,7 +38,7 @@
       position: relative;
       display: inline-block;
 
-      font-size: 20px;            /* 2px menos */
+      font-size: 22px;           
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -53,7 +52,7 @@
       will-change: transform, filter, text-shadow;
     }
 
-    /* capas glitch */
+    
     .nodes::before,
     .nodes::after{
       content: "NODES";
@@ -64,7 +63,6 @@
       mix-blend-mode: difference;
     }
 
-    /* Glitch SOLO 1s cuando hover */
     .nodes-wrap:hover .nodes{
       animation: nodesJitter 1s linear 1;
       filter: saturate(1.15) contrast(1.12);
@@ -118,7 +116,6 @@
       .nodes-wrap:hover .nodes::after { animation: none; }
     }
 
-    /* Menu desplegable tipo lista */
     .nodes-menu{
       position: absolute;
       top: calc(100% + 12px);
@@ -155,7 +152,7 @@
       font-size: 12px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: rgba(120, 255, 190, 0.85); /* toque “verde” pro */
+      color: rgba(120, 255, 190, 0.85); 
       margin: 0 0 6px 0;
     }
 
@@ -173,7 +170,6 @@
       line-height: 1.1;
     }
 
-    /* ---------- SOUND BUTTON ---------- */
     .sound {
       position: fixed;
       right: 24px;
@@ -214,7 +210,6 @@
       box-shadow: 0 0 18px rgba(255,255,255,0.35);
     }
 
-    /* ---------- FOOTER CENTER (ALWAYS VISIBLE) ---------- */
     .footer {
       position: fixed;
       left: 50%;
