@@ -2,81 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <style>
-    html,body{
-      margin:0;
-      width:100%;
-      height:100%;
-      background:#000;
-      overflow:hidden;
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
     }
-    .bg-video{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      z-index:-3;
-    }
-    .overlay{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:-1;
-      background:
-        radial-gradient(1200px at 50% 55%,
-          rgba(255,255,255,0.05),
-          rgba(0,0,0,0.70) 60%,
-          rgba(0,0,0,0.92) 100%);
-    }
-    .sound-btn{
-      position:fixed;
-      bottom:24px;
-      right:24px;
-      z-index:10;
-      background:rgba(0,0,0,0.5);
-      border:1px solid rgba(255,255,255,0.25);
-      color:#fff;
-      padding:10px 14px;
-      font-size:12px;
-      letter-spacing:0.12em;
-      cursor:pointer;
-      backdrop-filter:blur(6px);
-    }
-    .sound-btn:hover{
-      background:rgba(255,255,255,0.1);
+    video {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+      background: #000;
     }
   </style>
 </head>
 <body>
 
-  <video id="bg-video"
-    class="bg-video"
+  <video id="bg"
     autoplay
     muted
     loop
     playsinline
-    preload="metadata">
-    <source src="/assets/ct.webm" type="video/webm">
-    <source src="/assets/ct.mp4" type="video/mp4">
+    preload="auto"
+    controlslist="nodownload noplaybackrate noremoteplayback"
+    disablepictureinpicture
+  >
+    <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="overlay"></div>
-
-  <button id="sound" class="sound-btn">
-    SOUND ON
-  </button>
-
   <script>
-    const video = document.getElementById("bg-video");
-    const btn = document.getElementById("sound");
+    const v = document.getElementById("bg");
 
-    btn.addEventListener("click", () => {
-      video.muted = false;
-      video.volume = 0.4;
-      video.play();
-      btn.remove();
+    document.addEventListener("contextmenu", (e) => e.preventDefault(), { passive: false });
+
+    const enableAudio = async () => {
+      try {
+        v.muted = false;
+        v.volume = 1.0;
+        await v.play();
+      } catch (e) {
+      }
+      window.removeEventListener("pointerdown", enableAudio);
+      window.removeEventListener("keydown", enableAudio);
+      window.removeEventListener("touchstart", enableAudio);
+    };
+
+    window.addEventListener("pointerdown", enableAudio, { once: true });
+    window.addEventListener("touchstart", enableAudio, { once: true, passive: true });
+    window.addEventListener("keydown", enableAudio, { once: true });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) v.play().catch(() => {});
     });
   </script>
 
