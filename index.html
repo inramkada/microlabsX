@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
   <style>
     html, body {
       margin: 0;
@@ -27,29 +26,98 @@
       pointer-events: none;
     }
 
+    /* NODES — top right, más cuerpo */
     .nodes {
       position: fixed;
-      top: 24px;
-      left: 24px;
-      z-index: 7;
+      top: 22px;
+      right: 22px;
+      z-index: 20;
 
-      font-size: 12px;
-      letter-spacing: 0.32em;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
 
-      color: #fff;
-      opacity: 0.75;
+      color: rgba(255,255,255,0.88);
+      opacity: 0.92;
 
       mix-blend-mode: difference;
 
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: default;
+
+      will-change: transform, filter, text-shadow;
     }
 
+    /* Glitch on hover */
+    .nodes::before,
+    .nodes::after {
+      content: "NODES";
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: difference;
+    }
+
+    .nodes:hover {
+      animation: nodesJitter 160ms infinite linear;
+      filter: saturate(1.2) contrast(1.15);
+      text-shadow:
+        0 0 18px rgba(255,255,255,0.20),
+        0 0 44px rgba(255,255,255,0.12);
+    }
+
+    .nodes:hover::before {
+      opacity: 0.9;
+      transform: translate(-2px, 0);
+      text-shadow: -1px 0 rgba(255, 0, 120, 0.55);
+      animation: nodesGlitchA 280ms infinite steps(2, end);
+    }
+
+    .nodes:hover::after {
+      opacity: 0.9;
+      transform: translate(2px, 0);
+      text-shadow: 1px 0 rgba(0, 200, 255, 0.55);
+      animation: nodesGlitchB 220ms infinite steps(2, end);
+    }
+
+    @keyframes nodesJitter {
+      0%   { transform: translate(0, 0); }
+      25%  { transform: translate(-0.7px, 0.4px); }
+      50%  { transform: translate(0.5px, -0.6px); }
+      75%  { transform: translate(0.8px, 0.2px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes nodesGlitchA {
+      0%   { clip-path: inset(0 0 85% 0); }
+      25%  { clip-path: inset(20% 0 55% 0); }
+      50%  { clip-path: inset(65% 0 15% 0); }
+      75%  { clip-path: inset(10% 0 70% 0); }
+      100% { clip-path: inset(0 0 85% 0); }
+    }
+
+    @keyframes nodesGlitchB {
+      0%   { clip-path: inset(80% 0 5% 0); }
+      25%  { clip-path: inset(40% 0 35% 0); }
+      50%  { clip-path: inset(5% 0 75% 0); }
+      75%  { clip-path: inset(55% 0 20% 0); }
+      100% { clip-path: inset(80% 0 5% 0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .nodes:hover { animation: none; }
+      .nodes:hover::before,
+      .nodes:hover::after { animation: none; }
+    }
+
+    /* Botón sonido */
     .sound {
       position: fixed;
       right: 24px;
       bottom: 24px;
-      z-index: 10;
+      z-index: 30;
 
       display: inline-flex;
       align-items: center;
@@ -87,25 +155,22 @@
       box-shadow: 0 0 18px rgba(255,255,255,0.35);
     }
 
+    /* Footer centrado y siempre visible */
     .footer {
       position: fixed;
-      left: 24px;
+      left: 50%;
       bottom: 24px;
-      z-index: 6;
+      transform: translateX(-50%);
+      z-index: 25;
 
       font-size: 11px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
 
       color: rgba(255,255,255,0.42);
-      opacity: 0;
-      pointer-events: none;
-
-      transition: opacity 1s ease;
-    }
-
-    .footer.visible {
       opacity: 1;
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     .footer a {
@@ -133,14 +198,14 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="nodes">NODES</div>
+  <div class="nodes" aria-label="Nodes">NODES</div>
 
   <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
     <span class="dot"></span>
     Sound on
   </button>
 
-  <div id="footer" class="footer">
+  <div class="footer">
     © 2023–2025
     <a href="https://www.microretailx.com" target="_blank" rel="noopener">
       MICRORETAILX LLC
@@ -151,7 +216,6 @@
   <script>
     const video = document.getElementById("bg");
     const soundBtn = document.getElementById("soundBtn");
-    const footer = document.getElementById("footer");
 
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
@@ -167,13 +231,6 @@
         setTimeout(() => soundBtn.remove(), 300);
       } catch {}
     });
-
-    setInterval(() => {
-      footer.classList.add("visible");
-      setTimeout(() => {
-        footer.classList.remove("visible");
-      }, 3000);
-    }, 5000);
 
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) video.play().catch(()=>{});
