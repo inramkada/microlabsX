@@ -1,286 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>microlabsX</title>
 
   <style>
-    :root{
-      --accent: #00ff66;
-      --accent-soft: rgba(0, 255, 102, 0.55);
-      --accent-glow: rgba(0, 255, 102, 0.35);
-      --accent-border: rgba(0, 255, 102, 0.33);
-      --accent-border-strong: rgba(0, 255, 102, 0.47);
-      --accent-x: rgba(0, 255, 102, 0.06);
+    :root {
+      --bg: #020804;
+      --accent: rgba(0, 255, 102, 0.06);
       --accent-text: #bfffd7;
-      --accent-text-dim: #7fffb5;
-      --accent-text-bright: #eafff3;
-      --hover-red: #ff3333;
-      --pulse-red: #ff0033;
+      --text: #e8fef1;
     }
 
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      background: black;
-      overflow: hidden;
-      font-family: monospace;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Ubuntu, sans-serif;
     }
 
-    canvas { display: block; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
 
     .ui-layer {
-      position: absolute;
+      position: fixed;
+      width: 100%;
       z-index: 10;
-      color: white;
-      user-select: none;
+      pointer-events: none;
     }
 
     .top-bar {
       top: 0;
-      right: 0;
-      width: 100%;
-      background: black;
+      padding: 1.2rem 2rem;
       display: flex;
       justify-content: flex-end;
-      padding: 12px 26px;
-      box-sizing: border-box;
-    }
-
-    .menu { position: relative; }
-
-    .menu-dot {
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      background: white;
-      cursor: pointer;
-      position: relative;
-      opacity: 0.85;
-      transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
-      transform: scale(1) rotate(0deg);
-      outline: none;
-    }
-
-    .menu-dot:focus-visible {
-      box-shadow: 0 0 0 2px var(--accent-soft), 0 0 14px var(--accent-glow);
-      opacity: 1;
-    }
-
-    @keyframes redPulse {
-      0% { box-shadow: 0 0 4px var(--hover-red), 0 0 8px var(--hover-red); }
-      100% { box-shadow: 0 0 10px var(--hover-red), 0 0 18px var(--hover-red); }
-    }
-
-    .menu-dot:hover:not(.active) {
-      background: var(--hover-red);
-      opacity: 1;
-      animation: redPulse 0.9s ease-in-out infinite alternate;
-    }
-
-    .menu-dot::before,
-    .menu-dot::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 2px;
-      height: 14px;
-      background: var(--accent);
-      transform-origin: center;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-
-    .menu-dot::before { transform: translate(-50%, -50%) rotate(45deg); }
-    .menu-dot::after  { transform: translate(-50%, -50%) rotate(-45deg); }
-
-    @keyframes xPulseDual {
-      0%   { background: var(--accent); box-shadow: 0 0 6px var(--accent), 0 0 14px var(--accent); }
-      50%  { background: var(--pulse-red); box-shadow: 0 0 8px var(--pulse-red), 0 0 20px var(--pulse-red); }
-      100% { background: var(--accent); box-shadow: 0 0 6px var(--accent), 0 0 14px var(--accent); }
-    }
-
-    .menu-dot.active {
-      background: transparent;
-      box-shadow: none;
-      opacity: 1;
-      transform: scale(1.1) rotate(0deg);
-      animation: none;
-    }
-
-    .menu-dot.active::before,
-    .menu-dot.active::after {
-      opacity: 1;
-      animation: xPulseDual 1.4s ease-in-out infinite;
-    }
-
-    .menu-dot.active.spin { transform: scale(1.1) rotate(180deg); }
-
-    @keyframes xShake {
-      0%   { transform: scale(1.1) translateX(0); }
-      25%  { transform: scale(1.1) translateX(-1.5px); }
-      50%  { transform: scale(1.1) translateX(1.5px); }
-      75%  { transform: scale(1.1) translateX(-1.5px); }
-      100% { transform: scale(1.1) translateX(0); }
-    }
-
-    .menu-dot.active.shake { animation: xShake 0.22s ease-in-out; }
-
-    .menu-dot.active.double::before,
-    .menu-dot.active.double::after {
-      box-shadow:
-        0 0 6px var(--accent),
-        0 0 14px var(--accent),
-        0 0 22px rgba(255, 0, 80, 0.95);
-    }
-
-    .menu-dropdown {
-      position: absolute;
-      top: 160%;
-      right: 0;
-      min-width: 190px;
-      border-radius: 6px;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      background: rgba(0, 10, 20, 0.55);
-      border: 1px solid var(--accent-border);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 14px rgba(0,255,102,0.27);
-      transition: max-height 0.34s ease, opacity 0.25s ease;
-    }
-
-    .menu-dropdown.open { max-height: 420px; opacity: 1; }
-
-    .menu-dropdown a {
-      display: block;
-      padding: 10px 14px;
-      font-size: 15px;
-      color: var(--accent-text);
-      text-decoration: none;
-      letter-spacing: 1px;
-      position: relative;
-    }
-
-    .menu-dropdown a:hover {
-      background: rgba(0, 40, 60, 0.65);
-      color: #ffffff;
-    }
-
-    .menu-dropdown a.locations-link { padding-left: 28px; }
-
-    .menu-dropdown a.locations-link::after {
-      content: "◂";
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      color: var(--accent-text-dim);
-    }
-
-    .menu-dropdown-sub {
-      position: absolute;
-      top: 0;
-      right: 100%;
-      margin-right: 14px;
-      min-width: 220px;
-      border-radius: 6px;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      background: rgba(0, 8, 18, 0.95);
-      border: 1px solid var(--accent-border-strong);
-      border-left: 2px solid rgba(0, 255, 102, 0.5);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 22px rgba(0,255,102,0.35);
-      transition: max-height 0.3s ease, opacity 0.24s ease;
-      padding: 8px 0;
-    }
-
-    .menu-dropdown-sub.open { max-height: 500px; opacity: 1; }
-
-    .submenu-group { padding: 4px 18px 6px 16px; }
-
-    .submenu-label {
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--accent-text-dim);
-      opacity: 0.85;
-      margin-bottom: 2px;
-    }
-
-    .submenu-link {
-      display: block;
-      font-size: 13px;
-      padding: 3px 0;
-      color: var(--accent-text-bright);
-      text-decoration: none;
-    }
-
-    .submenu-link:hover {
-      color: #ffffff;
-      text-shadow: 0 0 6px var(--accent);
     }
 
     .footer-bar {
       bottom: 0;
-      left: 0;
-      width: 100%;
-      background: black;
+      padding: 1rem 2rem;
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 10px 0 8px;
-      box-sizing: border-box;
-      pointer-events: none;
-    }
-
-    .footer-links {
-      font-size: 15px;
-      pointer-events: auto;
-      margin-bottom: 6px;
-    }
-
-    .footer-links a {
-      color: white;
-      text-decoration: none;
-      margin: 0 12px;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       opacity: 0.85;
     }
 
-    .footer-links a:hover {
-      opacity: 1;
-      text-decoration: underline;
-    }
-
-    .copyright {
-      font-size: 9px;
-      letter-spacing: 1px;
-      opacity: 0.45;
+    .menu {
       pointer-events: auto;
-      text-align: center;
-      padding: 0 14px;
-      line-height: 1.35;
+      position: relative;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .menu-dot,
-      .menu-dot::before,
-      .menu-dot::after {
-        transition: none !important;
-        animation: none !important;
-      }
+    .menu-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-text);
+      cursor: pointer;
     }
 
-    @media (max-width: 600px) {
-      .menu-dot { width: 12px; height: 12px; }
-      .menu-dropdown a { font-size: 13px; }
-      .footer-links { font-size: 13px; }
-      .copyright { font-size: 8px; }
-      .menu-dropdown-sub { min-width: 190px; margin-right: 10px; }
+    .menu-dropdown,
+    .menu-dropdown-sub {
+      position: absolute;
+      top: 22px;
+      right: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      padding: 0.8rem 1.2rem;
+      display: none;
+      flex-direction: column;
+      gap: 0.6rem;
+      white-space: nowrap;
+    }
+
+    .menu-dropdown.open,
+    .menu-dropdown-sub.open {
+      display: flex;
+    }
+
+    .menu-dropdown a,
+    .menu-dropdown-sub a {
+      color: var(--accent-text);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+    }
+
+    .menu-dropdown-sub {
+      right: 140px;
+      top: 22px;
+    }
+
+    .footer-links a {
+      color: var(--accent-text);
+      text-decoration: none;
+    }
+
+    .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(1.8rem, 4vw, 3.5rem);
+      letter-spacing: 0.22em;
+      opacity: 0.85;
+      pointer-events: none;
+      text-transform: lowercase;
     }
   </style>
 </head>
@@ -290,380 +129,29 @@
 
   <div class="ui-layer top-bar">
     <div class="menu">
-      <div
-        class="menu-dot"
-        id="menuToggle"
-        role="button"
-        tabindex="0"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="menuDropdown"
-      ></div>
+      <div id="menuToggle" class="menu-dot" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="menuDropdown"></div>
 
-      <div class="menu-dropdown" id="menuDropdown" role="menu" aria-hidden="true">
-        <a href="#" class="locations-link" id="locationsLink" role="menuitem" aria-haspopup="true" aria-expanded="false">PLANNED NODES</a>
+      <div id="menuDropdown" class="menu-dropdown" role="menu" aria-hidden="true">
+        <a href="#" id="locationsLink" role="menuitem" aria-haspopup="true" aria-expanded="false">PLANNED NODES</a>
       </div>
 
-      <div class="menu-dropdown-sub" id="locationsSubmenu" aria-hidden="true">
-        <div class="submenu-group">
-          <div class="submenu-label">AFRICA</div>
-          <a class="submenu-link" data-node="TANG1" href="nodes/tang1.html">TANG1</a>
-          <a class="submenu-link" data-node="NAIV1" href="nodes/naiv1.html">NAIV1</a>
-          <a class="submenu-link" data-node="IBAD1" href="nodes/ibad1.html">IBAD1</a>
-        </div>
-        <div class="submenu-group">
-          <div class="submenu-label">AMERICA</div>
-          <a class="submenu-link" data-node="TEXS1" href="nodes/texs1.html">TEXS1</a>
-          <a class="submenu-link" data-node="PANM1" href="nodes/panm1.html">PANM1</a>
-        </div>
-        <div class="submenu-group">
-          <div class="submenu-label">ASIA</div>
-          <a class="submenu-link" data-node="KAEC1" href="nodes/kaec1.html">KAEC1</a>
-          <a class="submenu-link" data-node="RAK1" href="nodes/rak1.html">RAK1</a>
-          <a class="submenu-link" data-node="JAVA1" href="nodes/java1.html">JAVA1</a>
-          <a class="submenu-link" data-node="HPH1" href="nodes/hph1.html">HPH1</a>
-
-        </div>
-        <div class="submenu-group">
-          <div class="submenu-label">AUSTRALIA</div>
-          <a class="submenu-link" data-node="DRW1" href="nodes/darw1.html">DARW1</a>
-        </div>
-        <div class="submenu-group">
-          <div class="submenu-label">EUROPE</div>
-          <a class="submenu-link" data-node="BCN1" href="nodes/bcn1.html">BCN1</a>
-          <a class="submenu-link" data-node="LPA1" href="nodes/lpa1.html">LPA1</a>
-        </div>
+      <div id="locationsSubmenu" class="menu-dropdown-sub" aria-hidden="true">
+        <a href="#">BCN1</a>
+        <a href="#">MENA1</a>
+        <a href="#">LATAM1</a>
       </div>
     </div>
   </div>
+
+  <div class="center">microlabsx</div>
 
   <div class="ui-layer footer-bar">
     <div class="footer-links">
       <a href="legal.html" target="_blank" rel="noopener">Legal Notice</a>
     </div>
-
-    <div class="copyright">
-      © 2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT UNDER DEVELOPMENT<br/>
-    </div>
+    <div>© 2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT UNDER DEVELOPMENT</div>
   </div>
 
-<script>
-  const menuToggle = document.getElementById("menuToggle");
-  const menuDropdown = document.getElementById("menuDropdown");
-  const locationsLink = document.getElementById("locationsLink");
-  const locationsSubmenu = document.getElementById("locationsSubmenu");
-
-  function setMenuOpen(open) {
-    menuDropdown.classList.toggle("open", open);
-    menuDropdown.setAttribute("aria-hidden", String(!open));
-    menuToggle.classList.toggle("active", open);
-    menuToggle.setAttribute("aria-expanded", String(open));
-    menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-
-    if (!open) {
-      locationsSubmenu.classList.remove("open");
-      locationsSubmenu.setAttribute("aria-hidden", "true");
-      locationsLink.setAttribute("aria-expanded", "false");
-      menuToggle.classList.remove("spin", "shake", "double");
-    }
-  }
-
-  function toggleMenu() {
-    const open = menuDropdown.classList.contains("open");
-    setMenuOpen(!open);
-  }
-
-  function setLocationsOpen(open) {
-    locationsSubmenu.classList.toggle("open", open);
-    locationsSubmenu.setAttribute("aria-hidden", String(!open));
-    locationsLink.setAttribute("aria-expanded", String(open));
-  }
-
-  menuToggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleMenu();
-  });
-
-  menuToggle.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      toggleMenu();
-    }
-    if (e.key === "Escape") {
-      setMenuOpen(false);
-      menuToggle.blur();
-    }
-  });
-
-  locationsLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    if (menuDropdown.classList.contains("open")) {
-      menuToggle.classList.add("shake", "double");
-      setTimeout(() => menuToggle.classList.remove("shake", "double"), 230);
-    }
-    const isOpen = locationsSubmenu.classList.contains("open");
-    setLocationsOpen(!isOpen);
-  });
-
-  document.addEventListener("click", (e) => {
-    if (
-      !menuDropdown.contains(e.target) &&
-      !menuToggle.contains(e.target) &&
-      !locationsSubmenu.contains(e.target)
-    ) {
-      setMenuOpen(false);
-    }
-  });
-
-  menuDropdown.querySelectorAll("a").forEach(link => {
-    link.addEventListener("mouseenter", () => {
-      if (menuToggle.classList.contains("active")) {
-        menuToggle.classList.add("spin");
-        setTimeout(() => menuToggle.classList.remove("spin"), 400);
-      }
-    });
-  });
-
-  document.querySelectorAll(".submenu-link").forEach(a => {
-    a.addEventListener("click", () => setMenuOpen(false));
-  });
-
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext("2d", { alpha: false });
-
-  let width = canvas.width = window.innerWidth;
-  let height = canvas.height = window.innerHeight;
-
-  const mouse = { x: -1000, y: -1000 };
-
-  function setPointer(x, y) { mouse.x = x; mouse.y = y; }
-  window.addEventListener("mousemove", e => setPointer(e.clientX, e.clientY), { passive: true });
-  window.addEventListener("touchmove", e => {
-    if (!e.touches || !e.touches[0]) return;
-    setPointer(e.touches[0].clientX, e.touches[0].clientY);
-  }, { passive: true });
-
-  window.addEventListener("resize", () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
-
-  function isMobile() {
-    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-  }
-
-  const MOBILE_MODE = isMobile();
-  const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const CORES = navigator.hardwareConcurrency || 4;
-  const BASE_PARTICLES_DESKTOP = 1800;
-  const BASE_PARTICLES_MOBILE = 250;
-
-  const NUM_PARTICLES = REDUCED_MOTION
-    ? Math.min(220, MOBILE_MODE ? 140 : 220)
-    : (MOBILE_MODE ? BASE_PARTICLES_MOBILE : Math.min(BASE_PARTICLES_DESKTOP, CORES * 420));
-
-  const MAX_CONNECTIONS = REDUCED_MOTION ? 2 : (MOBILE_MODE ? 4 : 10);
-  const SPEED = REDUCED_MOTION ? 0.35 : 0.5;
-
-  const xZoneMargin = 42;
-  const X_SAT_THRESHOLD = MOBILE_MODE ? 30 : 80;
-
-  const particles = [];
-  const deathMarkers = [];
-
-  function inXZone(x, y) {
-    const d1 = Math.abs(y - (x * height / width));
-    const d2 = Math.abs(y - (height - x * height / width));
-    return (d1 < xZoneMargin || d2 < xZoneMargin);
-  }
-
-  function randomHex() {
-    return "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, "0");
-  }
-
-  function createParticle() {
-    let x, y;
-    do {
-      x = Math.random() * width;
-      y = Math.random() * height;
-    } while (inXZone(x, y));
-
-    return {
-      x, y,
-      ox: x, oy: y,
-      vx: (Math.random() - 0.5) * SPEED,
-      vy: (Math.random() - 0.5) * SPEED,
-      radius: 1.5,
-      baseColor: "white",
-      color: "white",
-      inX: false,
-      prevInX: false,
-      hexCode: randomHex()
-    };
-  }
-
-  for (let i = 0; i < NUM_PARTICLES; i++) particles.push(createParticle());
-
-  function drawConnections() {
-    const MAX_DIST = 100;
-    const MAX_DIST2 = MAX_DIST * MAX_DIST;
-
-    for (let i = 0; i < particles.length; i++) {
-      let connections = 0;
-      const pi = particles[i];
-      for (let j = i + 1; j < particles.length && connections < MAX_CONNECTIONS; j++) {
-        const pj = particles[j];
-        const dx = pi.x - pj.x;
-        const dy = pi.y - pj.y;
-        const dist2 = dx * dx + dy * dy;
-        if (dist2 < MAX_DIST2) {
-          const dist = Math.sqrt(dist2);
-          ctx.strokeStyle = `rgba(0,255,102,${1 - dist / MAX_DIST})`;
-          ctx.beginPath();
-          ctx.moveTo(pi.x, pi.y);
-          ctx.lineTo(pj.x, pj.y);
-          ctx.stroke();
-          connections++;
-        }
-      }
-    }
-  }
-
-  function addDeathMarker(x, y) {
-    deathMarkers.push({
-      x, y,
-      createdAt: performance.now(),
-      angle: Math.random() * Math.PI * 2
-    });
-  }
-
-  function drawDeathMarkers(now) {
-    const LIFETIME = 650;
-    for (let i = deathMarkers.length - 1; i >= 0; i--) {
-      const m = deathMarkers[i];
-      const age = now - m.createdAt;
-      if (age > LIFETIME) {
-        deathMarkers.splice(i, 1);
-        continue;
-      }
-      const t = age / LIFETIME;
-      const alpha = 1 - t;
-      const rays = 4;
-      const len = 2 + (8 * t);
-
-      ctx.save();
-      ctx.strokeStyle = `rgba(255,255,255,${alpha * 0.4})`;
-      ctx.lineWidth = 0.8;
-
-      for (let k = 0; k < rays; k++) {
-        const a = m.angle + (Math.PI * 2 * k / rays);
-        const x2 = m.x + Math.cos(a) * len;
-        const y2 = m.y + Math.sin(a) * len;
-        ctx.beginPath();
-        ctx.moveTo(m.x, m.y);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      }
-      ctx.restore();
-    }
-  }
-
-  function animate() {
-    const now = performance.now();
-    let inXCount = 0;
-
-    for (const p of particles) {
-      p.prevInX = p.inX;
-      p.inX = inXZone(p.x, p.y);
-      if (p.inX) inXCount++;
-    }
-
-    const centerX = width / 2;
-    const centerY = height / 2;
-    const saturated = inXCount >= X_SAT_THRESHOLD;
-
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.strokeStyle = "rgba(0,255,102,0.06)";
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(width, height);
-    ctx.moveTo(width, 0);
-    ctx.lineTo(0, height);
-    ctx.stroke();
-
-    drawConnections();
-    if (!REDUCED_MOTION) drawDeathMarkers(now);
-
-    for (const p of particles) {
-      const dxm = p.x - mouse.x;
-      const dym = p.y - mouse.y;
-      const distm2 = dxm * dxm + dym * dym;
-      if (distm2 < 10000 && distm2 > 0.0001) {
-        const distm = Math.sqrt(distm2);
-        const force = (100 - distm) * 0.007;
-        p.vx += (dxm / distm) * force;
-        p.vy += (dym / distm) * force;
-      }
-
-      if (p.inX && !p.prevInX && !REDUCED_MOTION) addDeathMarker(p.x, p.y);
-
-      if (p.inX && saturated) {
-        const dx = p.x - centerX;
-        const dy = p.y - centerY;
-        const d = Math.sqrt(dx * dx + dy * dy) || 1;
-        p.vx += (dx / d) * 1.2;
-        p.vy += (dy / d) * 1.2;
-      }
-
-      p.color = p.baseColor;
-
-      if (p.inX && !REDUCED_MOTION) {
-        p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
-        p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
-        p.radius = 3.3 + Math.sin(now * 0.05 + p.x + p.y) * 1.4;
-        if (Math.random() < 0.4) p.hexCode = randomHex();
-        ctx.font = "12px monospace";
-        ctx.fillStyle = "white";
-        ctx.fillText(p.hexCode, p.x + 10, p.y + 6);
-      } else {
-        if (p.prevInX) {
-          p.radius = 1.5;
-          p.hexCode = randomHex();
-        }
-      }
-
-      p.vx += (p.ox - p.x) * 0.002;
-      p.vy += (p.oy - p.y) * 0.002;
-
-      if (!REDUCED_MOTION) {
-        p.vx += (Math.random() - 0.5) * 0.05;
-        p.vy += (Math.random() - 0.5) * 0.05;
-      }
-
-      p.x += p.vx;
-      p.y += p.vy;
-
-      p.vx *= 0.97;
-      p.vy *= 0.97;
-
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
-</script>
-
+  <script src="/assets/app.js" defer></script>
 </body>
 </html>
