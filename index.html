@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
   <style>
     html, body {
       margin: 0;
@@ -12,7 +13,8 @@
       overflow: hidden;
       user-select: none;
       -webkit-user-select: none;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     video {
@@ -21,8 +23,25 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      display: block;
       background: #000;
+      pointer-events: none;
+    }
+
+    .nodes {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 7;
+
+      font-size: 12px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+
+      color: #fff;
+      opacity: 0.75;
+
+      mix-blend-mode: difference;
+
       pointer-events: none;
     }
 
@@ -51,22 +70,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
 
-      transition: transform .15s ease, background .15s ease, border-color .15s ease, opacity .2s ease;
-    }
-
-    .sound:hover {
-      transform: translateY(-1px);
-      background: rgba(0,0,0,0.60);
-      border-color: rgba(255,255,255,0.30);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.85);
-      box-shadow: 0 0 18px rgba(255,255,255,0.35);
-      flex: 0 0 auto;
+      transition: opacity .25s ease, transform .25s ease;
     }
 
     .sound.hidden {
@@ -75,48 +79,104 @@
       transform: translateY(6px);
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .sound { transition: none; }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 18px rgba(255,255,255,0.35);
+    }
+
+    .footer {
+      position: fixed;
+      left: 24px;
+      bottom: 24px;
+      z-index: 6;
+
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+
+      color: rgba(255,255,255,0.42);
+      opacity: 0;
+      pointer-events: none;
+
+      transition: opacity 1s ease;
+    }
+
+    .footer.visible {
+      opacity: 1;
+    }
+
+    .footer a {
+      color: inherit;
+      text-decoration: none;
+      pointer-events: auto;
+    }
+
+    .footer a:hover {
+      color: rgba(255,255,255,0.65);
     }
   </style>
 </head>
+
 <body>
 
-  <video id="bg" autoplay muted loop playsinline preload="auto"
+  <video id="bg"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noremoteplayback">
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
+  <div class="nodes">NODES</div>
+
   <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
-    <span class="dot" aria-hidden="true"></span>
+    <span class="dot"></span>
     Sound on
   </button>
 
+  <div id="footer" class="footer">
+    © 2023–2025
+    <a href="https://www.microretailx.com" target="_blank" rel="noopener">
+      MICRORETAILX LLC
+    </a>
+    · PROJECT UNDER DEVELOPMENT
+  </div>
+
   <script>
-    const v = document.getElementById("bg");
-    const btn = document.getElementById("soundBtn");
+    const video = document.getElementById("bg");
+    const soundBtn = document.getElementById("soundBtn");
+    const footer = document.getElementById("footer");
 
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
       e.stopPropagation();
-      return false;
     }, { capture: true });
 
-    async function enableSound() {
+    soundBtn.addEventListener("click", async () => {
       try {
-        v.muted = false;
-        v.volume = 0.8;
-        await v.play();
-        btn.classList.add("hidden");
-        setTimeout(() => btn.remove(), 250);
+        video.muted = false;
+        video.volume = 0.8;
+        await video.play();
+        soundBtn.classList.add("hidden");
+        setTimeout(() => soundBtn.remove(), 300);
       } catch {}
-    }
+    });
 
-    btn.addEventListener("click", enableSound);
+    setInterval(() => {
+      footer.classList.add("visible");
+      setTimeout(() => {
+        footer.classList.remove("visible");
+      }, 3000);
+    }, 5000);
 
     document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) v.play().catch(()=>{});
+      if (!document.hidden) video.play().catch(()=>{});
     });
   </script>
 
