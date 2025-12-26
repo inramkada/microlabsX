@@ -24,157 +24,33 @@
       object-fit: cover;
       background: #000;
       pointer-events: none;
+      z-index: 1;
     }
 
-    .nodes-wrap{
+    .nodes {
       position: fixed;
       top: 18px;
       right: 18px;
-      z-index: 30;
-      pointer-events: auto;
-    }
+      z-index: 10;
 
-    .nodes{
-      position: relative;
-      display: inline-block;
-
-      font-size: 22px;           
+      font-size: 20px;
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
 
       color: rgba(255,255,255,0.88);
-      opacity: 0.92;
+      opacity: 0.9;
 
       mix-blend-mode: difference;
 
-      cursor: default;
-      will-change: transform, filter, text-shadow;
-    }
-
-    
-    .nodes::before,
-    .nodes::after{
-      content: "NODES";
-      position: absolute;
-      inset: 0;
-      opacity: 0;
       pointer-events: none;
-      mix-blend-mode: difference;
-    }
-
-    .nodes-wrap:hover .nodes{
-      animation: nodesJitter 1s linear 1;
-      filter: saturate(1.15) contrast(1.12);
-      text-shadow:
-        0 0 18px rgba(255,255,255,0.18),
-        0 0 44px rgba(255,255,255,0.10);
-    }
-    .nodes-wrap:hover .nodes::before{
-      opacity: 0.9;
-      transform: translate(-2px, 0);
-      text-shadow: -1px 0 rgba(255, 0, 120, 0.55);
-      animation: nodesGlitchA 1s steps(2, end) 1;
-    }
-    .nodes-wrap:hover .nodes::after{
-      opacity: 0.9;
-      transform: translate(2px, 0);
-      text-shadow: 1px 0 rgba(0, 200, 255, 0.55);
-      animation: nodesGlitchB 1s steps(2, end) 1;
-    }
-
-    @keyframes nodesJitter {
-      0%   { transform: translate(0, 0); }
-      12%  { transform: translate(-0.7px, 0.4px); }
-      24%  { transform: translate(0.6px, -0.6px); }
-      36%  { transform: translate(0.9px, 0.2px); }
-      48%  { transform: translate(-0.5px, -0.2px); }
-      60%  { transform: translate(0.8px, -0.1px); }
-      72%  { transform: translate(-0.3px, 0.6px); }
-      84%  { transform: translate(0.4px, -0.4px); }
-      100% { transform: translate(0, 0); }
-    }
-    @keyframes nodesGlitchA {
-      0%   { clip-path: inset(0 0 85% 0); }
-      20%  { clip-path: inset(20% 0 55% 0); }
-      40%  { clip-path: inset(65% 0 15% 0); }
-      60%  { clip-path: inset(10% 0 70% 0); }
-      80%  { clip-path: inset(35% 0 35% 0); }
-      100% { clip-path: inset(0 0 85% 0); }
-    }
-    @keyframes nodesGlitchB {
-      0%   { clip-path: inset(80% 0 5% 0); }
-      25%  { clip-path: inset(40% 0 35% 0); }
-      50%  { clip-path: inset(5% 0 75% 0); }
-      75%  { clip-path: inset(55% 0 20% 0); }
-      100% { clip-path: inset(80% 0 5% 0); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .nodes-wrap:hover .nodes,
-      .nodes-wrap:hover .nodes::before,
-      .nodes-wrap:hover .nodes::after { animation: none; }
-    }
-
-    .nodes-menu{
-      position: absolute;
-      top: calc(100% + 12px);
-      right: 0;
-
-      min-width: 220px;
-      padding: 14px 14px;
-
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.45);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-
-      opacity: 0;
-      transform: translateY(8px);
-      pointer-events: none;
-
-      transition: opacity .18s ease, transform .18s ease;
-    }
-
-    .nodes-wrap:hover .nodes-menu{
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .region{
-      margin: 0 0 10px 0;
-    }
-    .region:last-child{ margin-bottom: 0; }
-
-    .region-title{
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(120, 255, 190, 0.85); 
-      margin: 0 0 6px 0;
-    }
-
-    .codes{
-      display: grid;
-      grid-auto-rows: min-content;
-      row-gap: 4px;
-    }
-
-    .code{
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.88);
-      text-transform: uppercase;
-      line-height: 1.1;
     }
 
     .sound {
       position: fixed;
       right: 24px;
       bottom: 24px;
-      z-index: 25;
+      z-index: 10;
 
       display: inline-flex;
       align-items: center;
@@ -197,11 +73,13 @@
 
       transition: opacity .25s ease, transform .25s ease;
     }
+
     .sound.hidden {
       opacity: 0;
       pointer-events: none;
       transform: translateY(6px);
     }
+
     .dot {
       width: 8px;
       height: 8px;
@@ -215,22 +93,27 @@
       left: 50%;
       bottom: 24px;
       transform: translateX(-50%);
-      z-index: 20;
+      z-index: 10;
 
-      font-size: 11px;
+      font-size: 9px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
 
       color: rgba(255,255,255,0.42);
       opacity: 1;
+
+      mix-blend-mode: difference;
+
       pointer-events: none;
       white-space: nowrap;
     }
+
     .footer a {
       color: inherit;
       text-decoration: none;
       pointer-events: auto;
     }
+
     .footer a:hover {
       color: rgba(255,255,255,0.65);
     }
@@ -239,19 +122,13 @@
 
 <body>
 
-  <video id="bg"
-    autoplay
-    muted
-    loop
-    playsinline
-    preload="auto"
+  <video id="bg" autoplay muted loop playsinline preload="auto"
     disablepictureinpicture
     controlslist="nodownload noplaybackrate noremoteplayback">
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="nodes-wrap" aria-label="Nodes menu">
-    <div class="nodes">NODES</div>
+  <div class="nodes">NODES</div>
 
   <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
     <span class="dot"></span>
@@ -260,7 +137,9 @@
 
   <div class="footer">
     © 2023–2025
-    <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
+    <a href="https://www.microretailx.com" target="_blank" rel="noopener">
+      MICRORETAILX LLC
+    </a>
     · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
   </div>
 
