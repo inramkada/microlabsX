@@ -26,13 +26,20 @@
       pointer-events: none;
     }
 
-    .nodes {
+    /* ---------- NODES + MENU (TOP RIGHT) ---------- */
+    .nodes-wrap{
       position: fixed;
-      top: 22px;
-      right: 22px;
-      z-index: 20;
+      top: 18px;
+      right: 18px;
+      z-index: 30;
+      pointer-events: auto;
+    }
 
-      font-size: 22px;
+    .nodes{
+      position: relative;
+      display: inline-block;
+
+      font-size: 20px;            /* 2px menos */
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -42,14 +49,13 @@
 
       mix-blend-mode: difference;
 
-      pointer-events: auto;
       cursor: default;
-
       will-change: transform, filter, text-shadow;
     }
 
+    /* capas glitch */
     .nodes::before,
-    .nodes::after {
+    .nodes::after{
       content: "NODES";
       position: absolute;
       inset: 0;
@@ -58,44 +64,46 @@
       mix-blend-mode: difference;
     }
 
-    .nodes:hover {
-      animation: nodesJitter 160ms infinite linear;
-      filter: saturate(1.2) contrast(1.15);
+    /* Glitch SOLO 1s cuando hover */
+    .nodes-wrap:hover .nodes{
+      animation: nodesJitter 1s linear 1;
+      filter: saturate(1.15) contrast(1.12);
       text-shadow:
-        0 0 18px rgba(255,255,255,0.20),
-        0 0 44px rgba(255,255,255,0.12);
+        0 0 18px rgba(255,255,255,0.18),
+        0 0 44px rgba(255,255,255,0.10);
     }
-
-    .nodes:hover::before {
+    .nodes-wrap:hover .nodes::before{
       opacity: 0.9;
       transform: translate(-2px, 0);
       text-shadow: -1px 0 rgba(255, 0, 120, 0.55);
-      animation: nodesGlitchA 280ms infinite steps(2, end);
+      animation: nodesGlitchA 1s steps(2, end) 1;
     }
-
-    .nodes:hover::after {
+    .nodes-wrap:hover .nodes::after{
       opacity: 0.9;
       transform: translate(2px, 0);
       text-shadow: 1px 0 rgba(0, 200, 255, 0.55);
-      animation: nodesGlitchB 220ms infinite steps(2, end);
+      animation: nodesGlitchB 1s steps(2, end) 1;
     }
 
     @keyframes nodesJitter {
       0%   { transform: translate(0, 0); }
-      25%  { transform: translate(-0.7px, 0.4px); }
-      50%  { transform: translate(0.5px, -0.6px); }
-      75%  { transform: translate(0.8px, 0.2px); }
+      12%  { transform: translate(-0.7px, 0.4px); }
+      24%  { transform: translate(0.6px, -0.6px); }
+      36%  { transform: translate(0.9px, 0.2px); }
+      48%  { transform: translate(-0.5px, -0.2px); }
+      60%  { transform: translate(0.8px, -0.1px); }
+      72%  { transform: translate(-0.3px, 0.6px); }
+      84%  { transform: translate(0.4px, -0.4px); }
       100% { transform: translate(0, 0); }
     }
-
     @keyframes nodesGlitchA {
       0%   { clip-path: inset(0 0 85% 0); }
-      25%  { clip-path: inset(20% 0 55% 0); }
-      50%  { clip-path: inset(65% 0 15% 0); }
-      75%  { clip-path: inset(10% 0 70% 0); }
+      20%  { clip-path: inset(20% 0 55% 0); }
+      40%  { clip-path: inset(65% 0 15% 0); }
+      60%  { clip-path: inset(10% 0 70% 0); }
+      80%  { clip-path: inset(35% 0 35% 0); }
       100% { clip-path: inset(0 0 85% 0); }
     }
-
     @keyframes nodesGlitchB {
       0%   { clip-path: inset(80% 0 5% 0); }
       25%  { clip-path: inset(40% 0 35% 0); }
@@ -105,16 +113,72 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .nodes:hover { animation: none; }
-      .nodes:hover::before,
-      .nodes:hover::after { animation: none; }
+      .nodes-wrap:hover .nodes,
+      .nodes-wrap:hover .nodes::before,
+      .nodes-wrap:hover .nodes::after { animation: none; }
     }
 
+    /* Menu desplegable tipo lista */
+    .nodes-menu{
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+
+      min-width: 220px;
+      padding: 14px 14px;
+
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .nodes-wrap:hover .nodes-menu{
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .region{
+      margin: 0 0 10px 0;
+    }
+    .region:last-child{ margin-bottom: 0; }
+
+    .region-title{
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(120, 255, 190, 0.85); /* toque “verde” pro */
+      margin: 0 0 6px 0;
+    }
+
+    .codes{
+      display: grid;
+      grid-auto-rows: min-content;
+      row-gap: 4px;
+    }
+
+    .code{
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.88);
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    /* ---------- SOUND BUTTON ---------- */
     .sound {
       position: fixed;
       right: 24px;
       bottom: 24px;
-      z-index: 30;
+      z-index: 25;
 
       display: inline-flex;
       align-items: center;
@@ -137,13 +201,11 @@
 
       transition: opacity .25s ease, transform .25s ease;
     }
-
     .sound.hidden {
       opacity: 0;
       pointer-events: none;
       transform: translateY(6px);
     }
-
     .dot {
       width: 8px;
       height: 8px;
@@ -152,12 +214,13 @@
       box-shadow: 0 0 18px rgba(255,255,255,0.35);
     }
 
+    /* ---------- FOOTER CENTER (ALWAYS VISIBLE) ---------- */
     .footer {
       position: fixed;
       left: 50%;
       bottom: 24px;
       transform: translateX(-50%);
-      z-index: 25;
+      z-index: 20;
 
       font-size: 11px;
       letter-spacing: 0.14em;
@@ -168,13 +231,11 @@
       pointer-events: none;
       white-space: nowrap;
     }
-
     .footer a {
       color: inherit;
       text-decoration: none;
       pointer-events: auto;
     }
-
     .footer a:hover {
       color: rgba(255,255,255,0.65);
     }
@@ -194,7 +255,53 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="nodes" aria-label="Nodes">NODES</div>
+  <div class="nodes-wrap" aria-label="Nodes menu">
+    <div class="nodes">NODES</div>
+
+    <div class="nodes-menu" role="menu" aria-label="Regions">
+      <div class="region">
+        <div class="region-title">Africa</div>
+        <div class="codes">
+          <div class="code">TANG1</div>
+          <div class="code">NAIV1</div>
+          <div class="code">IBAD1</div>
+        </div>
+      </div>
+
+      <div class="region">
+        <div class="region-title">America</div>
+        <div class="codes">
+          <div class="code">TEXS1</div>
+          <div class="code">PANM1</div>
+        </div>
+      </div>
+
+      <div class="region">
+        <div class="region-title">Asia</div>
+        <div class="codes">
+          <div class="code">KAEC1</div>
+          <div class="code">RAK1</div>
+          <div class="code">JAVA1</div>
+          <div class="code">HPH1</div>
+        </div>
+      </div>
+
+      <div class="region">
+        <div class="region-title">Australia</div>
+        <div class="codes">
+          <div class="code">DARW1</div>
+        </div>
+      </div>
+
+      <div class="region">
+        <div class="region-title">Europe</div>
+        <div class="codes">
+          <div class="code">BCN1</div>
+          <div class="code">LPA1</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
     <span class="dot"></span>
@@ -203,10 +310,8 @@
 
   <div class="footer">
     © 2023–2025
-    <a href="https://www.microretailx.com" target="_blank" rel="noopener">
-      MICRORETAILX LLC
-    </a>
-    · MICROLABSX IS A PROJECT UNDER DEVELOPMENT
+    <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
+    · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
   </div>
 
   <script>
