@@ -1,83 +1,3 @@
-const menuToggle = document.getElementById("menuToggle");
-const menuDropdown = document.getElementById("menuDropdown");
-const locationsLink = document.getElementById("locationsLink");
-const locationsSubmenu = document.getElementById("locationsSubmenu");
-
-function setMenuOpen(open) {
-  menuDropdown.classList.toggle("open", open);
-  menuDropdown.setAttribute("aria-hidden", String(!open));
-  menuToggle.classList.toggle("active", open);
-  menuToggle.setAttribute("aria-expanded", String(open));
-  menuToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-
-  if (!open) {
-    locationsSubmenu.classList.remove("open");
-    locationsSubmenu.setAttribute("aria-hidden", "true");
-    locationsLink.setAttribute("aria-expanded", "false");
-    menuToggle.classList.remove("spin", "shake", "double");
-  }
-}
-
-function toggleMenu() {
-  const open = menuDropdown.classList.contains("open");
-  setMenuOpen(!open);
-}
-
-function setLocationsOpen(open) {
-  locationsSubmenu.classList.toggle("open", open);
-  locationsSubmenu.setAttribute("aria-hidden", String(!open));
-  locationsLink.setAttribute("aria-expanded", String(open));
-}
-
-menuToggle.addEventListener("click", (e) => {
-  e.stopPropagation();
-  toggleMenu();
-});
-
-menuToggle.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    toggleMenu();
-  }
-  if (e.key === "Escape") {
-    setMenuOpen(false);
-    menuToggle.blur();
-  }
-});
-
-locationsLink.addEventListener("click", (e) => {
-  e.preventDefault();
-  if (menuDropdown.classList.contains("open")) {
-    menuToggle.classList.add("shake", "double");
-    setTimeout(() => menuToggle.classList.remove("shake", "double"), 230);
-  }
-  const isOpen = locationsSubmenu.classList.contains("open");
-  setLocationsOpen(!isOpen);
-});
-
-document.addEventListener("click", (e) => {
-  if (
-    !menuDropdown.contains(e.target) &&
-    !menuToggle.contains(e.target) &&
-    !locationsSubmenu.contains(e.target)
-  ) {
-    setMenuOpen(false);
-  }
-});
-
-menuDropdown.querySelectorAll("a").forEach(link => {
-  link.addEventListener("mouseenter", () => {
-    if (menuToggle.classList.contains("active")) {
-      menuToggle.classList.add("spin");
-      setTimeout(() => menuToggle.classList.remove("spin"), 400);
-    }
-  });
-});
-
-document.querySelectorAll(".submenu-link").forEach(a => {
-  a.addEventListener("click", () => setMenuOpen(false));
-});
-
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d", { alpha: false });
 
@@ -85,7 +5,6 @@ let width = canvas.width = window.innerWidth;
 let height = canvas.height = window.innerHeight;
 
 const mouse = { x: -1000, y: -1000 };
-
 function setPointer(x, y) { mouse.x = x; mouse.y = y; }
 
 window.addEventListener("mousemove", e => setPointer(e.clientX, e.clientY), { passive: true });
@@ -99,13 +18,9 @@ window.addEventListener("resize", () => {
   height = canvas.height = window.innerHeight;
 });
 
-function isMobile() {
-  return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-}
-
+function isMobile() { return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent); }
 const MOBILE_MODE = isMobile();
-const REDUCED_MOTION = window.matchMedia &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const CORES = navigator.hardwareConcurrency || 4;
 const BASE_PARTICLES_DESKTOP = 1800;
@@ -238,8 +153,8 @@ function animate() {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, width, height);
 
-  ctx.strokeStyle = "rgba(0,255,102,0.06)";
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "rgba(0,255,102,0.12)";
+  ctx.lineWidth = 1.7;
   ctx.beginPath();
   ctx.moveTo(0, 0);
   ctx.lineTo(width, height);
@@ -271,8 +186,6 @@ function animate() {
       p.vy += (dy / d) * 1.2;
     }
 
-    p.color = p.baseColor;
-
     if (p.inX && !REDUCED_MOTION) {
       p.vx += Math.sin(now * 0.1 + p.x) * 0.4;
       p.vy += Math.cos(now * 0.1 + p.y) * 0.4;
@@ -282,10 +195,7 @@ function animate() {
       ctx.fillStyle = "white";
       ctx.fillText(p.hexCode, p.x + 10, p.y + 6);
     } else {
-      if (p.prevInX) {
-        p.radius = 1.5;
-        p.hexCode = randomHex();
-      }
+      p.radius = 1.5;
     }
 
     p.vx += (p.ox - p.x) * 0.002;
@@ -305,7 +215,7 @@ function animate() {
     if (p.x < 0 || p.x > width) p.vx *= -1;
     if (p.y < 0 || p.y > height) p.vy *= -1;
 
-    ctx.fillStyle = p.color;
+    ctx.fillStyle = "white";
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
     ctx.fill();
