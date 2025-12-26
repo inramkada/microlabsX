@@ -26,6 +26,7 @@
       pointer-events: none;
     }
 
+    
     .nodes-wrap{
       position: fixed;
       top: 18px;
@@ -38,7 +39,7 @@
       position: relative;
       display: inline-block;
 
-      font-size: 22px;           
+      font-size: 20px;            
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -52,7 +53,6 @@
       will-change: transform, filter, text-shadow;
     }
 
-    
     .nodes::before,
     .nodes::after{
       content: "NODES";
@@ -65,21 +65,21 @@
 
     .nodes-wrap:hover .nodes{
       animation: nodesJitter 1s linear 1;
-      filter: saturate(1.15) contrast(1.12);
+      filter: saturate(1.12) contrast(1.10);
       text-shadow:
-        0 0 18px rgba(255,255,255,0.18),
-        0 0 44px rgba(255,255,255,0.10);
+        0 0 18px rgba(255,255,255,0.16),
+        0 0 44px rgba(255,255,255,0.08);
     }
     .nodes-wrap:hover .nodes::before{
       opacity: 0.9;
       transform: translate(-2px, 0);
-      text-shadow: -1px 0 rgba(255, 0, 120, 0.55);
+      text-shadow: -1px 0 rgba(255, 0, 120, 0.45);
       animation: nodesGlitchA 1s steps(2, end) 1;
     }
     .nodes-wrap:hover .nodes::after{
       opacity: 0.9;
       transform: translate(2px, 0);
-      text-shadow: 1px 0 rgba(0, 200, 255, 0.55);
+      text-shadow: 1px 0 rgba(0, 200, 255, 0.45);
       animation: nodesGlitchB 1s steps(2, end) 1;
     }
 
@@ -121,12 +121,12 @@
       top: calc(100% + 12px);
       right: 0;
 
-      min-width: 220px;
+      min-width: 210px;
       padding: 14px 14px;
 
       border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.45);
+      background: rgba(0,0,0,0.42);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
 
@@ -137,37 +137,32 @@
       transition: opacity .18s ease, transform .18s ease;
     }
 
-    .nodes-wrap:hover .nodes-menu{
+    .nodes-wrap:hover .nodes-menu,
+    .nodes-wrap.open .nodes-menu{
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
 
-    .region{
-      margin: 0 0 10px 0;
-    }
-    .region:last-child{ margin-bottom: 0; }
-
-    .region-title{
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(120, 255, 190, 0.85); 
-      margin: 0 0 6px 0;
-    }
-
-    .codes{
+    .centers{
       display: grid;
       grid-auto-rows: min-content;
-      row-gap: 4px;
+      row-gap: 6px;
     }
 
-    .code{
-      font-size: 14px;
-      letter-spacing: 0.08em;
-      color: rgba(255,255,255,0.88);
+    .center{
+      font-size: 14px;              
+      font-weight: 600;             
+      letter-spacing: 0.22em;       
       text-transform: uppercase;
       line-height: 1.1;
+
+      color: rgba(255,255,255,0.78); 
+      mix-blend-mode: difference;     
+      opacity: 0.95;
+
+      cursor: default;
+      pointer-events: none;           
     }
 
     .sound {
@@ -250,50 +245,23 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="nodes-wrap" aria-label="Nodes menu">
+  <div class="nodes-wrap" id="nodesWrap" aria-label="Nodes menu">
     <div class="nodes">NODES</div>
 
-    <div class="nodes-menu" role="menu" aria-label="Regions">
-      <div class="region">
-        <div class="region-title">Africa</div>
-        <div class="codes">
-          <div class="code">TANG1</div>
-          <div class="code">NAIV1</div>
-          <div class="code">IBAD1</div>
-        </div>
-      </div>
-
-      <div class="region">
-        <div class="region-title">America</div>
-        <div class="codes">
-          <div class="code">TEXS1</div>
-          <div class="code">PANM1</div>
-        </div>
-      </div>
-
-      <div class="region">
-        <div class="region-title">Asia</div>
-        <div class="codes">
-          <div class="code">KAEC1</div>
-          <div class="code">RAK1</div>
-          <div class="code">JAVA1</div>
-          <div class="code">HPH1</div>
-        </div>
-      </div>
-
-      <div class="region">
-        <div class="region-title">Australia</div>
-        <div class="codes">
-          <div class="code">DARW1</div>
-        </div>
-      </div>
-
-      <div class="region">
-        <div class="region-title">Europe</div>
-        <div class="codes">
-          <div class="code">BCN1</div>
-          <div class="code">LPA1</div>
-        </div>
+    <div class="nodes-menu" role="menu" aria-label="Centers">
+      <div class="centers">
+        <div class="center">TANG1</div>
+        <div class="center">NAIV1</div>
+        <div class="center">IBAD1</div>
+        <div class="center">TEXS1</div>
+        <div class="center">PANM1</div>
+        <div class="center">KAEC1</div>
+        <div class="center">RAK1</div>
+        <div class="center">JAVA1</div>
+        <div class="center">HPH1</div>
+        <div class="center">DARW1</div>
+        <div class="center">BCN1</div>
+        <div class="center">LPA1</div>
       </div>
     </div>
   </div>
@@ -306,7 +274,7 @@
   <div class="footer">
     © 2023–2025
     <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
-    · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
+    · PROJECT UNDER DEVELOPMENT
   </div>
 
   <script>
@@ -331,6 +299,25 @@
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) video.play().catch(()=>{});
     });
+
+    const wrap = document.getElementById("nodesWrap");
+    let closeTimer = null;
+
+    const openMenu = () => {
+      if (closeTimer) clearTimeout(closeTimer);
+      wrap.classList.add("open");
+    };
+
+    const scheduleClose = () => {
+      if (closeTimer) clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        wrap.classList.remove("open");
+      }, 5000);
+    };
+
+    wrap.addEventListener("mouseenter", openMenu);
+    wrap.addEventListener("mouseleave", scheduleClose);
+    wrap.addEventListener("mousemove", openMenu);
   </script>
 
 </body>
