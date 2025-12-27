@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -69,9 +68,15 @@
       mix-blend-mode: difference;
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
-      transition: opacity .35s ease, transform .35s ease;
+      transition:
+        opacity .35s ease,
+        transform .22s cubic-bezier(.22,.61,.36,1);
       will-change: transform, opacity;
       cursor: default;
+    }
+
+    .node:hover {
+      transform: translateY(var(--breath, 0px)) scale(1.04);
     }
 
     .nodes:hover .nodes-stack,
@@ -83,38 +88,21 @@
     .nodes:hover .node,
     .nodes:focus-within .node {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateY(var(--breath, 0px)) scale(1);
     }
 
-    .nodes:hover .node:nth-child(1),
-    .nodes:focus-within .node:nth-child(1) { transition-delay: 60ms; }
-    .nodes:hover .node:nth-child(2),
-    .nodes:focus-within .node:nth-child(2) { transition-delay: 140ms; }
-    .nodes:hover .node:nth-child(3),
-    .nodes:focus-within .node:nth-child(3) { transition-delay: 220ms; }
-    .nodes:hover .node:nth-child(4),
-    .nodes:focus-within .node:nth-child(4) { transition-delay: 300ms; }
-    .nodes:hover .node:nth-child(5),
-    .nodes:focus-within .node:nth-child(5) { transition-delay: 380ms; }
-    .nodes:hover .node:nth-child(6),
-    .nodes:focus-within .node:nth-child(6) { transition-delay: 460ms; }
-    .nodes:hover .node:nth-child(7),
-    .nodes:focus-within .node:nth-child(7) { transition-delay: 540ms; }
-    .nodes:hover .node:nth-child(8),
-    .nodes:focus-within .node:nth-child(8) { transition-delay: 620ms; }
-    .nodes:hover .node:nth-child(9),
-    .nodes:focus-within .node:nth-child(9) { transition-delay: 700ms; }
-    .nodes:hover .node:nth-child(10),
-    .nodes:focus-within .node:nth-child(10) { transition-delay: 780ms; }
-    .nodes:hover .node:nth-child(11),
-    .nodes:focus-within .node:nth-child(11) { transition-delay: 860ms; }
-    .nodes:hover .node:nth-child(12),
-    .nodes:focus-within .node:nth-child(12) { transition-delay: 940ms; }
-
-    .nodes:hover .nodes-stack .node,
-    .nodes:focus-within .nodes-stack .node {
-      transform: translateY(calc(var(--breath, 0px))) scale(1);
-    }
+    .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
+    .nodes:hover .node:nth-child(2) { transition-delay: 140ms; }
+    .nodes:hover .node:nth-child(3) { transition-delay: 220ms; }
+    .nodes:hover .node:nth-child(4) { transition-delay: 300ms; }
+    .nodes:hover .node:nth-child(5) { transition-delay: 380ms; }
+    .nodes:hover .node:nth-child(6) { transition-delay: 460ms; }
+    .nodes:hover .node:nth-child(7) { transition-delay: 540ms; }
+    .nodes:hover .node:nth-child(8) { transition-delay: 620ms; }
+    .nodes:hover .node:nth-child(9) { transition-delay: 700ms; }
+    .nodes:hover .node:nth-child(10) { transition-delay: 780ms; }
+    .nodes:hover .node:nth-child(11) { transition-delay: 860ms; }
+    .nodes:hover .node:nth-child(12) { transition-delay: 940ms; }
 
     .sound {
       position: fixed;
@@ -194,8 +182,10 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .node { transition: none; }
-      .nodes-stack { transition: none; }
+      .node,
+      .nodes-stack {
+        transition: none;
+      }
     }
   </style>
 </head>
@@ -229,11 +219,9 @@
   </button>
 
   <div class="footer">
-    <span>
-      © 2023–2025
-      <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
-      · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
-    </span>
+    © 2023–2025
+    <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
+    · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
   </div>
 
   <script>
@@ -262,24 +250,21 @@
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!prefersReduced) {
-      let raf = 0;
       const items = Array.from(nodes.querySelectorAll(".node"));
-      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.55);
-      let t = 0;
+      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.6);
+      let t = 0, raf = 0;
 
       function tick() {
         t += 0.02;
-        const breathe = Math.sin(t) * 1.6;
+        const breathe = Math.sin(t) * 1.4;
         for (let i = 0; i < items.length; i++) {
-          const v = (base[i] * 0.8) + breathe * (0.35 + (i % 3) * 0.06);
-          items[i].style.setProperty("--breath", v.toFixed(2) + "px");
+          items[i].style.setProperty("--breath", ((base[i] * 0.8) + breathe * 0.35).toFixed(2) + "px");
         }
         raf = requestAnimationFrame(tick);
       }
 
       function start() {
-        if (raf) return;
-        raf = requestAnimationFrame(tick);
+        if (!raf) raf = requestAnimationFrame(tick);
       }
 
       function stop() {
@@ -296,4 +281,3 @@
   </script>
 </body>
 </html>
-```
