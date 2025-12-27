@@ -41,7 +41,7 @@
       z-index: 12;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 28px;
       pointer-events: auto;
       mix-blend-mode: difference;
       color: rgba(255,255,255,0.85);
@@ -60,11 +60,24 @@
       opacity: 0.9;
       transition: opacity .18s ease, transform .18s cubic-bezier(.22,.61,.36,1);
       transform: translateY(0);
+      position: relative;
+      padding: 2px 0;
     }
 
     .navitem:hover {
       opacity: 1;
       transform: translateY(-1px);
+    }
+
+    .sep {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.52);
+      box-shadow: 0 0 18px rgba(255,255,255,0.12);
+      opacity: 0.65;
+      transform: translateY(1px);
+      flex: 0 0 auto;
     }
 
     .nodes {
@@ -78,6 +91,7 @@
 
     .nodes-label {
       cursor: default;
+      padding: 2px 0;
     }
 
     .nodes-stack {
@@ -226,6 +240,102 @@
       opacity: 0.62;
     }
 
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+    }
+
+    .overlay.on {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overlay-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .panel {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: min(520px, calc(100vw - 36px));
+      max-height: calc(100vh - 36px);
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.35);
+      box-shadow: 0 20px 80px rgba(0,0,0,0.55);
+      overflow: hidden;
+      transform: translateY(-6px);
+      transition: transform .22s ease;
+    }
+
+    .overlay.on .panel {
+      transform: translateY(0);
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      color: rgba(255,255,255,0.85);
+      mix-blend-mode: difference;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 800;
+      font-size: 12px;
+      user-select: none;
+      -webkit-user-select: none;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .close {
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.25);
+      color: rgba(255,255,255,0.88);
+      border-radius: 999px;
+      padding: 8px 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .panel-body {
+      padding: 16px 16px 18px 16px;
+      overflow: auto;
+      max-height: calc(100vh - 36px - 46px);
+      color: rgba(255,255,255,0.82);
+      mix-blend-mode: difference;
+      letter-spacing: 0.02em;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .panel-body h3 {
+      margin: 0 0 10px 0;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: rgba(255,255,255,0.85);
+      font-weight: 900;
+    }
+
+    .panel-body p {
+      margin: 0 0 12px 0;
+      opacity: 0.92;
+    }
+
     .footer {
       position: fixed;
       left: 50%;
@@ -254,9 +364,13 @@
       .topnav {
         top: 14px;
         right: 14px;
-        gap: 14px;
+        gap: 20px;
         font-size: 16px;
         letter-spacing: 0.20em;
+      }
+      .sep {
+        width: 5px;
+        height: 5px;
       }
       .nodes-stack {
         margin-top: 28px;
@@ -270,6 +384,12 @@
       .node::after {
         bottom: -8px;
       }
+      .panel {
+        top: 14px;
+        right: 14px;
+        width: calc(100vw - 28px);
+        max-height: calc(100vh - 28px);
+      }
       .footer {
         bottom: 18px;
         font-size: 10px;
@@ -282,7 +402,9 @@
       .node,
       video,
       .sound,
-      .navitem {
+      .navitem,
+      .overlay,
+      .panel {
         transition: none;
       }
       .node::after {
@@ -298,8 +420,10 @@
   </video>
 
   <div class="topnav" aria-label="Top navigation">
-    <div class="navitem" tabindex="0">ABOUT</div>
-    <div class="navitem" tabindex="0">ROADMAP</div>
+    <div class="navitem" id="aboutBtn" tabindex="0" role="button" aria-label="About">ABOUT</div>
+    <div class="sep" aria-hidden="true"></div>
+    <div class="navitem" id="roadmapBtn" tabindex="0" role="button" aria-label="Roadmap">ROADMAP</div>
+    <div class="sep" aria-hidden="true"></div>
 
     <div class="nodes" id="nodes" tabindex="0" role="button" aria-label="Nodes">
       <div class="nodes-label">NODES</div>
@@ -316,6 +440,21 @@
         <div class="node">JAVA1</div>
         <div class="node">HPH1</div>
         <div class="node">DARW1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="overlay-bg" id="overlayBg"></div>
+    <div class="panel" role="dialog" aria-modal="true" aria-label="Panel">
+      <div class="panel-head">
+        <div id="panelTitle">ABOUT</div>
+        <button class="close" id="closePanel" type="button">Close</button>
+      </div>
+      <div class="panel-body" id="panelBody">
+        <h3>MicroretailX / MicrolabsX</h3>
+        <p>Global operations framework under development.</p>
+        <p>No commercial activity. Concept, structure, and interaction research.</p>
       </div>
     </div>
   </div>
@@ -340,6 +479,14 @@
     const soundBtn = document.getElementById("soundBtn");
     const soundDot = document.getElementById("soundDot");
     const soundLabel = document.getElementById("soundLabel");
+
+    const overlay = document.getElementById("overlay");
+    const overlayBg = document.getElementById("overlayBg");
+    const closePanel = document.getElementById("closePanel");
+    const panelTitle = document.getElementById("panelTitle");
+    const panelBody = document.getElementById("panelBody");
+    const aboutBtn = document.getElementById("aboutBtn");
+    const roadmapBtn = document.getElementById("roadmapBtn");
 
     const COOLDOWN_MS = 35000;
     let cooldownUntil = 0;
@@ -372,7 +519,6 @@
     async function startVideo() {
       if (!canPlay()) return;
       playing = true;
-
       try {
         video.loop = false;
         video.currentTime = 0;
@@ -415,7 +561,6 @@
       e.stopPropagation();
       audioEnabled = !audioEnabled;
       syncSoundUI();
-
       try {
         video.muted = !audioEnabled;
         if (audioEnabled) video.volume = 0.8;
@@ -438,7 +583,7 @@
       });
 
       document.addEventListener("click", (e) => {
-        if (!nodes.contains(e.target)) setOpen(false);
+        if (!nodes.contains(e.target) && !overlay.contains(e.target)) setOpen(false);
       });
     } else {
       nodes.addEventListener("mouseenter", () => startVideo(), { passive: true });
@@ -447,8 +592,8 @@
 
     function measureUnderline(el) {
       const w = Math.ceil(el.getBoundingClientRect().width);
-      const pad = Math.max(6, Math.round(w * 0.06));
-      el.style.setProperty("--u", Math.max(14, w - pad) + "px");
+      const trim = Math.max(4, Math.round(w * 0.04));
+      el.style.setProperty("--u", Math.max(14, w - trim) + "px");
     }
 
     function clearActive() {
@@ -486,6 +631,43 @@
     window.addEventListener("resize", () => {
       for (const el of items) measureUnderline(el);
     }, { passive: true });
+
+    function openPanel(kind) {
+      overlay.classList.add("on");
+      overlay.setAttribute("aria-hidden", "false");
+
+      if (kind === "about") {
+        panelTitle.textContent = "ABOUT";
+        panelBody.innerHTML =
+          '<h3>MicroretailX / MicrolabsX</h3>' +
+          '<p>Global operations framework under development.</p>' +
+          '<p>Identity, interaction, and infrastructure mapping.</p>' +
+          '<p>No commercial activity.</p>';
+      } else {
+        panelTitle.textContent = "ROADMAP";
+        panelBody.innerHTML =
+          '<h3>Now</h3>' +
+          '<p>Visual system, nodes interface, mobile stability, streaming viewer foundation.</p>' +
+          '<h3>Next</h3>' +
+          '<p>Node routing, viewer embed, scene loading messages, performance hardening.</p>' +
+          '<h3>Later</h3>' +
+          '<p>Operational dashboards, data layers, integrations, deployment.</p>';
+      }
+    }
+
+    function closeOverlay() {
+      overlay.classList.remove("on");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    aboutBtn.addEventListener("click", (e) => { e.stopPropagation(); openPanel("about"); });
+    roadmapBtn.addEventListener("click", (e) => { e.stopPropagation(); openPanel("roadmap"); });
+    closePanel.addEventListener("click", closeOverlay);
+    overlayBg.addEventListener("click", closeOverlay);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeOverlay();
+    });
 
     if (!prefersReduced) {
       const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.8);
