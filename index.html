@@ -14,6 +14,7 @@
       user-select: none;
       -webkit-user-select: none;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     video {
@@ -25,6 +26,12 @@
       background: #000;
       pointer-events: none;
       z-index: 1;
+      opacity: 0;
+      transition: opacity .45s ease;
+    }
+
+    video.on {
+      opacity: 1;
     }
 
     .nodes {
@@ -42,6 +49,7 @@
       white-space: nowrap;
       pointer-events: auto;
       outline: none;
+      touch-action: manipulation;
     }
 
     .nodes-stack {
@@ -186,12 +194,15 @@
       .nodes-stack {
         transition: none;
       }
+      video {
+        transition: none;
+      }
     }
   </style>
 </head>
 
 <body>
-  <video id="bg" autoplay muted loop playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+  <video id="bg" muted playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
@@ -230,6 +241,57 @@
     const nodes = document.getElementById("nodes");
     const items = Array.from(nodes.querySelectorAll(".node"));
 
+    const COOLDOWN_MS = 35000;
+    let cooldownUntil = 0;
+    let playing = false;
+
+    function now() { return Date.now(); }
+
+    function canPlay() {
+      return now() >= cooldownUntil && !playing;
+    }
+
+    function showVideo() {
+      video.classList.add("on");
+    }
+
+    function hideVideo() {
+      video.classList.remove("on");
+    }
+
+    async function startVideo() {
+      if (!canPlay()) return;
+      playing = true;
+
+      try {
+        video.loop = false;
+        video.currentTime = 0;
+        video.muted = true;
+        showVideo();
+        await video.play();
+      } catch {
+        playing = false;
+        hideVideo();
+      }
+    }
+
+    function stopAndCooldown() {
+      try { video.pause(); } catch {}
+      hideVideo();
+      playing = false;
+      cooldownUntil = now() + COOLDOWN_MS;
+    }
+
+    video.addEventListener("ended", stopAndCooldown);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        try { video.pause(); } catch {}
+        hideVideo();
+        playing = false;
+      }
+    });
+
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
       e.stopPropagation();
@@ -237,16 +299,13 @@
 
     soundBtn.addEventListener("click", async () => {
       try {
+        if (video.classList.contains("on") && !playing) await startVideo();
         video.muted = false;
         video.volume = 0.8;
         await video.play();
         soundBtn.classList.add("hidden");
         setTimeout(() => soundBtn.remove(), 300);
       } catch {}
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) video.play().catch(()=>{});
     });
 
     function clearActive() {
@@ -265,6 +324,14 @@
 
     nodes.addEventListener("mouseleave", clearActive, { passive: true });
 
+    function onNodesOpenIntent() {
+      startVideo();
+    }
+
+    nodes.addEventListener("mouseenter", onNodesOpenIntent, { passive: true });
+    nodes.addEventListener("focusin", onNodesOpenIntent, { passive: true });
+    nodes.addEventListener("click", onNodesOpenIntent, { passive: true });
+
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!prefersReduced) {
       const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.8);
@@ -279,20 +346,20 @@
         raf = requestAnimationFrame(tick);
       }
 
-      function start() {
+      function startBreath() {
         if (!raf) raf = requestAnimationFrame(tick);
       }
 
-      function stop() {
+      function stopBreath() {
         cancelAnimationFrame(raf);
         raf = 0;
         for (const el of items) el.style.setProperty("--breath", "0px");
       }
 
-      nodes.addEventListener("mouseenter", start, { passive: true });
-      nodes.addEventListener("focusin", start, { passive: true });
-      nodes.addEventListener("mouseleave", stop, { passive: true });
-      nodes.addEventListener("focusout", stop, { passive: true });
+      nodes.addEventListener("mouseenter", startBreath, { passive: true });
+      nodes.addEventListener("focusin", startBreath, { passive: true });
+      nodes.addEventListener("mouseleave", stopBreath, { passive: true });
+      nodes.addEventListener("focusout", stopBreath, { passive: true });
     }
   </script>
 </body>
