@@ -34,64 +34,22 @@
       opacity: 1;
     }
 
-    .topnav {
+    .nodes {
       position: fixed;
       top: 18px;
       right: 18px;
-      z-index: 12;
-      display: flex;
-      align-items: center;
-      gap: 28px;
-      pointer-events: auto;
-      mix-blend-mode: difference;
-      color: rgba(255,255,255,0.85);
-      text-transform: uppercase;
-      font-weight: 700;
+      z-index: 10;
       font-size: 18px;
+      font-weight: 700;
       letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      mix-blend-mode: difference;
+      text-align: center;
       white-space: nowrap;
-      outline: none;
-    }
-
-    .navitem {
-      cursor: default;
-      user-select: none;
-      -webkit-user-select: none;
-      opacity: 0.9;
-      transition: opacity .18s ease, transform .18s cubic-bezier(.22,.61,.36,1);
-      transform: translateY(0);
-      position: relative;
-      padding: 2px 0;
-    }
-
-    .navitem:hover {
-      opacity: 1;
-      transform: translateY(-1px);
-    }
-
-    .sep {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.52);
-      box-shadow: 0 0 18px rgba(255,255,255,0.12);
-      opacity: 0.65;
-      transform: translateY(1px);
-      flex: 0 0 auto;
-    }
-
-    .nodes {
-      position: relative;
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
+      pointer-events: auto;
       outline: none;
       touch-action: manipulation;
-    }
-
-    .nodes-label {
-      cursor: default;
-      padding: 2px 0;
     }
 
     .nodes-stack {
@@ -122,31 +80,17 @@
       letter-spacing: 0.18em;
       font-variant-numeric: tabular-nums;
       color: rgba(255,255,255,0.85);
+      mix-blend-mode: difference;
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
       transition:
         opacity .35s ease,
         transform .18s cubic-bezier(.22,.61,.36,1),
-        color .12s linear,
-        filter .18s ease;
-      will-change: transform, opacity;
+        filter .18s ease,
+        color .12s linear;
+      will-change: transform, opacity, filter;
       cursor: default;
       position: relative;
-      mix-blend-mode: difference;
-    }
-
-    .node::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -10px;
-      height: 1px;
-      width: var(--u, 0px);
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.95);
-      opacity: 0;
-      transition: width .18s cubic-bezier(.22,.61,.36,1), opacity .18s ease;
-      pointer-events: none;
     }
 
     .nodes:hover .node,
@@ -164,27 +108,24 @@
     .node.is-active {
       color: rgb(255,255,255);
       mix-blend-mode: normal;
-      transform: translateY(var(--breath, 0px)) scale(1.04);
-      text-shadow: 0 0 28px rgba(255,255,255,0.10);
+      transform: translateY(var(--breath, 0px)) scale(1.05);
+      text-shadow:
+        0 0 14px rgba(255,255,255,0.55),
+        0 0 44px rgba(255,255,255,0.22);
       filter: none;
+      z-index: 2;
     }
 
-    .node.is-active::after {
-      opacity: 0.9;
+    .node.is-active::before {
+      content: "";
+      position: absolute;
+      inset: -16px -18px -16px -18px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18), rgba(255,255,255,0.06) 40%, rgba(0,0,0,0) 70%);
+      opacity: 1;
+      pointer-events: none;
+      z-index: -1;
     }
-
-    .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
-    .nodes:hover .node:nth-child(2) { transition-delay: 150ms; }
-    .nodes:hover .node:nth-child(3) { transition-delay: 240ms; }
-    .nodes:hover .node:nth-child(4) { transition-delay: 330ms; }
-    .nodes:hover .node:nth-child(5) { transition-delay: 420ms; }
-    .nodes:hover .node:nth-child(6) { transition-delay: 510ms; }
-    .nodes:hover .node:nth-child(7) { transition-delay: 600ms; }
-    .nodes:hover .node:nth-child(8) { transition-delay: 690ms; }
-    .nodes:hover .node:nth-child(9) { transition-delay: 780ms; }
-    .nodes:hover .node:nth-child(10) { transition-delay: 870ms; }
-    .nodes:hover .node:nth-child(11) { transition-delay: 960ms; }
-    .nodes:hover .node:nth-child(12) { transition-delay: 1050ms; }
 
     .sound {
       position: fixed;
@@ -223,117 +164,11 @@
       border-radius: 999px;
       background: rgba(255,255,255,0.85);
       box-shadow: 0 0 18px rgba(255,255,255,0.35);
-      transition: opacity .18s ease, box-shadow .18s ease;
     }
 
     .dot.off {
-      opacity: 0.25;
+      opacity: 0.35;
       box-shadow: none;
-    }
-
-    .sound span.label {
-      transition: opacity .18s ease;
-      opacity: 0.92;
-    }
-
-    .sound.off span.label {
-      opacity: 0.62;
-    }
-
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 20;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .22s ease;
-    }
-
-    .overlay.on {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .overlay-bg {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.72);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .panel {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: min(520px, calc(100vw - 36px));
-      max-height: calc(100vh - 36px);
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(0,0,0,0.35);
-      box-shadow: 0 20px 80px rgba(0,0,0,0.55);
-      overflow: hidden;
-      transform: translateY(-6px);
-      transition: transform .22s ease;
-    }
-
-    .overlay.on .panel {
-      transform: translateY(0);
-    }
-
-    .panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 16px;
-      color: rgba(255,255,255,0.85);
-      mix-blend-mode: difference;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-weight: 800;
-      font-size: 12px;
-      user-select: none;
-      -webkit-user-select: none;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.18);
-    }
-
-    .close {
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.25);
-      color: rgba(255,255,255,0.88);
-      border-radius: 999px;
-      padding: 8px 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      font-weight: 800;
-      font-size: 10px;
-      cursor: pointer;
-    }
-
-    .panel-body {
-      padding: 16px 16px 18px 16px;
-      overflow: auto;
-      max-height: calc(100vh - 36px - 46px);
-      color: rgba(255,255,255,0.82);
-      mix-blend-mode: difference;
-      letter-spacing: 0.02em;
-      line-height: 1.6;
-      font-size: 13px;
-    }
-
-    .panel-body h3 {
-      margin: 0 0 10px 0;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: rgba(255,255,255,0.85);
-      font-weight: 900;
-    }
-
-    .panel-body p {
-      margin: 0 0 12px 0;
-      opacity: 0.92;
     }
 
     .footer {
@@ -361,53 +196,30 @@
     }
 
     @media (max-width: 768px) {
-      .topnav {
-        top: 14px;
-        right: 14px;
-        gap: 20px;
-        font-size: 16px;
-        letter-spacing: 0.20em;
-      }
-      .sep {
-        width: 5px;
-        height: 5px;
-      }
-      .nodes-stack {
-        margin-top: 28px;
-        row-gap: 16px;
-      }
       .node {
         font-size: 22px;
         letter-spacing: 0.16em;
         width: 10ch;
       }
-      .node::after {
-        bottom: -8px;
-      }
-      .panel {
-        top: 14px;
-        right: 14px;
-        width: calc(100vw - 28px);
-        max-height: calc(100vh - 28px);
+      .nodes-stack {
+        margin-top: 28px;
+        row-gap: 16px;
       }
       .footer {
         bottom: 18px;
         font-size: 10px;
         letter-spacing: 0.12em;
       }
+      .node.is-active::before {
+        inset: -14px -16px -14px -16px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .nodes-stack,
       .node,
+      .nodes-stack,
       video,
-      .sound,
-      .navitem,
-      .overlay,
-      .panel {
-        transition: none;
-      }
-      .node::after {
+      .sound {
         transition: none;
       }
     }
@@ -419,49 +231,27 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="topnav" aria-label="Top navigation">
-    <div class="navitem" id="aboutBtn" tabindex="0" role="button" aria-label="About">ABOUT</div>
-    <div class="sep" aria-hidden="true"></div>
-    <div class="navitem" id="roadmapBtn" tabindex="0" role="button" aria-label="Roadmap">ROADMAP</div>
-    <div class="sep" aria-hidden="true"></div>
-
-    <div class="nodes" id="nodes" tabindex="0" role="button" aria-label="Nodes">
-      <div class="nodes-label">NODES</div>
-      <div class="nodes-stack" id="nodesStack" aria-hidden="true">
-        <div class="node">BCN1</div>
-        <div class="node">LPA1</div>
-        <div class="node">TXAS1</div>
-        <div class="node">PANM1</div>
-        <div class="node">TANG1</div>
-        <div class="node">NAIV1</div>
-        <div class="node">IBAD1</div>
-        <div class="node">KAEC1</div>
-        <div class="node">RAK1</div>
-        <div class="node">JAVA1</div>
-        <div class="node">HPH1</div>
-        <div class="node">DARW1</div>
-      </div>
+  <div class="nodes" id="nodes" tabindex="0" role="button" aria-label="Nodes">
+    NODES
+    <div class="nodes-stack" id="nodesStack" aria-hidden="true">
+      <div class="node">BCN1</div>
+      <div class="node">LPA1</div>
+      <div class="node">TXAS1</div>
+      <div class="node">PANM1</div>
+      <div class="node">TANG1</div>
+      <div class="node">NAIV1</div>
+      <div class="node">IBAD1</div>
+      <div class="node">KAEC1</div>
+      <div class="node">RAK1</div>
+      <div class="node">JAVA1</div>
+      <div class="node">HPH1</div>
+      <div class="node">DARW1</div>
     </div>
   </div>
 
-  <div class="overlay" id="overlay" aria-hidden="true">
-    <div class="overlay-bg" id="overlayBg"></div>
-    <div class="panel" role="dialog" aria-modal="true" aria-label="Panel">
-      <div class="panel-head">
-        <div id="panelTitle">ABOUT</div>
-        <button class="close" id="closePanel" type="button">Close</button>
-      </div>
-      <div class="panel-body" id="panelBody">
-        <h3>MicroretailX / MicrolabsX</h3>
-        <p>Global operations framework under development.</p>
-        <p>No commercial activity. Concept, structure, and interaction research.</p>
-      </div>
-    </div>
-  </div>
-
-  <button id="soundBtn" class="sound off" type="button" aria-label="Toggle sound">
+  <button id="soundBtn" class="sound" type="button" aria-label="Toggle sound">
     <span id="soundDot" class="dot off"></span>
-    <span id="soundLabel" class="label">Sound off</span>
+    <span id="soundLabel">Sound off</span>
   </button>
 
   <div class="footer">
@@ -480,14 +270,6 @@
     const soundDot = document.getElementById("soundDot");
     const soundLabel = document.getElementById("soundLabel");
 
-    const overlay = document.getElementById("overlay");
-    const overlayBg = document.getElementById("overlayBg");
-    const closePanel = document.getElementById("closePanel");
-    const panelTitle = document.getElementById("panelTitle");
-    const panelBody = document.getElementById("panelBody");
-    const aboutBtn = document.getElementById("aboutBtn");
-    const roadmapBtn = document.getElementById("roadmapBtn");
-
     const COOLDOWN_MS = 35000;
     let cooldownUntil = 0;
     let playing = false;
@@ -501,7 +283,6 @@
 
     function syncSoundUI() {
       soundDot.classList.toggle("off", !audioEnabled);
-      soundBtn.classList.toggle("off", !audioEnabled);
       soundLabel.textContent = audioEnabled ? "Sound on" : "Sound off";
     }
 
@@ -519,6 +300,7 @@
     async function startVideo() {
       if (!canPlay()) return;
       playing = true;
+
       try {
         video.loop = false;
         video.currentTime = 0;
@@ -561,6 +343,7 @@
       e.stopPropagation();
       audioEnabled = !audioEnabled;
       syncSoundUI();
+
       try {
         video.muted = !audioEnabled;
         if (audioEnabled) video.volume = 0.8;
@@ -583,17 +366,11 @@
       });
 
       document.addEventListener("click", (e) => {
-        if (!nodes.contains(e.target) && !overlay.contains(e.target)) setOpen(false);
+        if (!nodes.contains(e.target)) setOpen(false);
       });
     } else {
       nodes.addEventListener("mouseenter", () => startVideo(), { passive: true });
       nodes.addEventListener("focusin", () => startVideo(), { passive: true });
-    }
-
-    function measureUnderline(el) {
-      const w = Math.ceil(el.getBoundingClientRect().width);
-      const trim = Math.max(4, Math.round(w * 0.04));
-      el.style.setProperty("--u", Math.max(14, w - trim) + "px");
     }
 
     function clearActive() {
@@ -602,13 +379,10 @@
     }
 
     for (const el of items) {
-      measureUnderline(el);
-
       el.addEventListener("mouseenter", () => {
         clearActive();
         nodes.classList.add("has-active");
         el.classList.add("is-active");
-        measureUnderline(el);
       }, { passive: true });
 
       el.addEventListener("mouseleave", () => {
@@ -622,52 +396,10 @@
         clearActive();
         nodes.classList.add("has-active");
         el.classList.add("is-active");
-        measureUnderline(el);
       });
     }
 
     nodes.addEventListener("mouseleave", clearActive, { passive: true });
-
-    window.addEventListener("resize", () => {
-      for (const el of items) measureUnderline(el);
-    }, { passive: true });
-
-    function openPanel(kind) {
-      overlay.classList.add("on");
-      overlay.setAttribute("aria-hidden", "false");
-
-      if (kind === "about") {
-        panelTitle.textContent = "ABOUT";
-        panelBody.innerHTML =
-          '<h3>MicroretailX / MicrolabsX</h3>' +
-          '<p>Global operations framework under development.</p>' +
-          '<p>Identity, interaction, and infrastructure mapping.</p>' +
-          '<p>No commercial activity.</p>';
-      } else {
-        panelTitle.textContent = "ROADMAP";
-        panelBody.innerHTML =
-          '<h3>Now</h3>' +
-          '<p>Visual system, nodes interface, mobile stability, streaming viewer foundation.</p>' +
-          '<h3>Next</h3>' +
-          '<p>Node routing, viewer embed, scene loading messages, performance hardening.</p>' +
-          '<h3>Later</h3>' +
-          '<p>Operational dashboards, data layers, integrations, deployment.</p>';
-      }
-    }
-
-    function closeOverlay() {
-      overlay.classList.remove("on");
-      overlay.setAttribute("aria-hidden", "true");
-    }
-
-    aboutBtn.addEventListener("click", (e) => { e.stopPropagation(); openPanel("about"); });
-    roadmapBtn.addEventListener("click", (e) => { e.stopPropagation(); openPanel("roadmap"); });
-    closePanel.addEventListener("click", closeOverlay);
-    overlayBg.addEventListener("click", closeOverlay);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") closeOverlay();
-    });
 
     if (!prefersReduced) {
       const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.8);
