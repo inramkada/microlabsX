@@ -70,13 +70,9 @@
       transform: translateY(-6px) scale(0.97);
       transition:
         opacity .35s ease,
-        transform .22s cubic-bezier(.22,.61,.36,1);
+        transform .18s cubic-bezier(.22,.61,.36,1);
       will-change: transform, opacity;
       cursor: default;
-    }
-
-    .node:hover {
-      transform: translateY(var(--breath, 0px)) scale(1.05);
     }
 
     .nodes:hover .nodes-stack,
@@ -89,6 +85,10 @@
     .nodes:focus-within .node {
       opacity: 1;
       transform: translateY(var(--breath, 0px)) scale(1);
+    }
+
+    .node.is-active {
+      transform: translateY(var(--breath, 0px)) scale(1.045);
     }
 
     .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
@@ -228,6 +228,7 @@
     const video = document.getElementById("bg");
     const soundBtn = document.getElementById("soundBtn");
     const nodes = document.getElementById("nodes");
+    const items = Array.from(nodes.querySelectorAll(".node"));
 
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
@@ -248,9 +249,24 @@
       if (!document.hidden) video.play().catch(()=>{});
     });
 
+    function clearActive() {
+      for (const el of items) el.classList.remove("is-active");
+    }
+
+    for (const el of items) {
+      el.addEventListener("mouseenter", () => {
+        clearActive();
+        el.classList.add("is-active");
+      }, { passive: true });
+      el.addEventListener("mouseleave", () => {
+        el.classList.remove("is-active");
+      }, { passive: true });
+    }
+
+    nodes.addEventListener("mouseleave", clearActive, { passive: true });
+
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!prefersReduced) {
-      const items = Array.from(nodes.querySelectorAll(".node"));
       const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.7);
       let t = 0, raf = 0;
 
