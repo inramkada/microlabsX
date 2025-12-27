@@ -45,10 +45,10 @@
     }
 
     .nodes-stack {
-      margin-top: 14px;
+      margin-top: 22px;
       display: grid;
       grid-auto-rows: 1fr;
-      row-gap: 14px;
+      row-gap: 18px;
       justify-items: center;
       align-items: center;
       opacity: 0;
@@ -58,9 +58,9 @@
     }
 
     .node {
-      width: 10ch;
+      width: 10.5ch;
       text-align: center;
-      font-size: 22px;
+      font-size: 25px;
       font-weight: 700;
       letter-spacing: 0.18em;
       font-variant-numeric: tabular-nums;
@@ -76,7 +76,7 @@
     }
 
     .node:hover {
-      transform: translateY(var(--breath, 0px)) scale(1.04);
+      transform: translateY(var(--breath, 0px)) scale(1.05);
     }
 
     .nodes:hover .nodes-stack,
@@ -166,13 +166,13 @@
 
     @media (max-width: 768px) {
       .node {
-        font-size: 18px;
+        font-size: 20px;
         letter-spacing: 0.16em;
-        width: 9ch;
+        width: 9.5ch;
       }
       .nodes-stack {
-        row-gap: 12px;
-        margin-top: 12px;
+        row-gap: 14px;
+        margin-top: 18px;
       }
       .footer {
         bottom: 18px;
@@ -251,14 +251,14 @@
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!prefersReduced) {
       const items = Array.from(nodes.querySelectorAll(".node"));
-      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.6);
+      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.7);
       let t = 0, raf = 0;
 
       function tick() {
         t += 0.02;
-        const breathe = Math.sin(t) * 1.4;
+        const breathe = Math.sin(t) * 1.6;
         for (let i = 0; i < items.length; i++) {
-          items[i].style.setProperty("--breath", ((base[i] * 0.8) + breathe * 0.35).toFixed(2) + "px");
+          items[i].style.setProperty("--breath", ((base[i] * 0.85) + breathe * 0.4).toFixed(2) + "px");
         }
         raf = requestAnimationFrame(tick);
       }
