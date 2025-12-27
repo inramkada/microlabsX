@@ -131,7 +131,20 @@
       .nodes,
       .footer {
         mix-blend-mode: normal;
-        color: rgba(255,255,255,0.85);
+        background: linear-gradient(
+          120deg,
+          #ffffff,
+          #9efcff,
+          #c9b6ff,
+          #ffffff
+        );
+        background-size: 300% 300%;
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+
+        animation: rgbShift 10s ease infinite;
       }
 
       .footer-desktop {
@@ -147,6 +160,12 @@
         font-size: 10px;
         letter-spacing: 0.12em;
       }
+    }
+
+    @keyframes rgbShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
