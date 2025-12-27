@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -49,7 +50,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       opacity: 0;
       transform: translateY(-6px);
       transition: opacity .3s ease, transform .3s ease;
@@ -57,20 +58,15 @@
     }
 
     .node {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 0.28em;
-      background: linear-gradient(120deg, #ffffff, #9efcff, #c9b6ff, #ffffff);
-      background-size: 500% 500%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 0 18px rgba(255,255,255,0.12));
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.85);
+      mix-blend-mode: difference;
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
       transition: opacity .35s ease, transform .35s ease;
-      will-change: transform, opacity, background-position;
-      animation: rgbShift 6s ease infinite;
+      will-change: transform, opacity;
       cursor: default;
     }
 
@@ -180,20 +176,24 @@
     }
 
     @media (max-width: 768px) {
-      .node { font-size: 18px; letter-spacing: 0.24em; }
-      .nodes-stack { gap: 14px; margin-top: 12px; }
-      .footer { bottom: 18px; font-size: 10px; letter-spacing: 0.12em; }
+      .node {
+        font-size: 18px;
+        letter-spacing: 0.16em;
+      }
+      .nodes-stack {
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .footer {
+        bottom: 18px;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .node { animation: none; transition: none; }
+      .node { transition: none; }
       .nodes-stack { transition: none; }
-    }
-
-    @keyframes rgbShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
@@ -263,3 +263,4 @@
   </script>
 </body>
 </html>
+```
