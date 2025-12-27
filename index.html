@@ -45,10 +45,10 @@
     }
 
     .nodes-stack {
-      margin-top: 22px;
+      margin-top: 36px;
       display: grid;
       grid-auto-rows: 1fr;
-      row-gap: 18px;
+      row-gap: 22px;
       justify-items: center;
       align-items: center;
       opacity: 0;
@@ -58,9 +58,9 @@
     }
 
     .node {
-      width: 10.5ch;
+      width: 11.5ch;
       text-align: center;
-      font-size: 25px;
+      font-size: 30px;
       font-weight: 700;
       letter-spacing: 0.18em;
       font-variant-numeric: tabular-nums;
@@ -92,17 +92,17 @@
     }
 
     .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
-    .nodes:hover .node:nth-child(2) { transition-delay: 140ms; }
-    .nodes:hover .node:nth-child(3) { transition-delay: 220ms; }
-    .nodes:hover .node:nth-child(4) { transition-delay: 300ms; }
-    .nodes:hover .node:nth-child(5) { transition-delay: 380ms; }
-    .nodes:hover .node:nth-child(6) { transition-delay: 460ms; }
-    .nodes:hover .node:nth-child(7) { transition-delay: 540ms; }
-    .nodes:hover .node:nth-child(8) { transition-delay: 620ms; }
-    .nodes:hover .node:nth-child(9) { transition-delay: 700ms; }
-    .nodes:hover .node:nth-child(10) { transition-delay: 780ms; }
-    .nodes:hover .node:nth-child(11) { transition-delay: 860ms; }
-    .nodes:hover .node:nth-child(12) { transition-delay: 940ms; }
+    .nodes:hover .node:nth-child(2) { transition-delay: 150ms; }
+    .nodes:hover .node:nth-child(3) { transition-delay: 240ms; }
+    .nodes:hover .node:nth-child(4) { transition-delay: 330ms; }
+    .nodes:hover .node:nth-child(5) { transition-delay: 420ms; }
+    .nodes:hover .node:nth-child(6) { transition-delay: 510ms; }
+    .nodes:hover .node:nth-child(7) { transition-delay: 600ms; }
+    .nodes:hover .node:nth-child(8) { transition-delay: 690ms; }
+    .nodes:hover .node:nth-child(9) { transition-delay: 780ms; }
+    .nodes:hover .node:nth-child(10) { transition-delay: 870ms; }
+    .nodes:hover .node:nth-child(11) { transition-delay: 960ms; }
+    .nodes:hover .node:nth-child(12) { transition-delay: 1050ms; }
 
     .sound {
       position: fixed;
@@ -166,13 +166,13 @@
 
     @media (max-width: 768px) {
       .node {
-        font-size: 20px;
+        font-size: 22px;
         letter-spacing: 0.16em;
-        width: 9.5ch;
+        width: 10ch;
       }
       .nodes-stack {
-        row-gap: 14px;
-        margin-top: 18px;
+        margin-top: 28px;
+        row-gap: 16px;
       }
       .footer {
         bottom: 18px;
@@ -267,14 +267,14 @@
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!prefersReduced) {
-      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.7);
+      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.8);
       let t = 0, raf = 0;
 
       function tick() {
         t += 0.02;
-        const breathe = Math.sin(t) * 1.6;
+        const breathe = Math.sin(t) * 1.8;
         for (let i = 0; i < items.length; i++) {
-          items[i].style.setProperty("--breath", ((base[i] * 0.85) + breathe * 0.4).toFixed(2) + "px");
+          items[i].style.setProperty("--breath", ((base[i] * 0.9) + breathe * 0.45).toFixed(2) + "px");
         }
         raf = requestAnimationFrame(tick);
       }
