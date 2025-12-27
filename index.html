@@ -49,7 +49,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       opacity: 0;
       transform: translateY(-6px);
       transition: opacity .3s ease, transform .3s ease;
@@ -57,6 +57,9 @@
     }
 
     .node {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.28em;
       background: linear-gradient(120deg, #ffffff, #9efcff, #c9b6ff, #ffffff);
       background-size: 500% 500%;
       -webkit-background-clip: text;
@@ -64,26 +67,15 @@
       color: transparent;
       filter: drop-shadow(0 0 18px rgba(255,255,255,0.12));
       opacity: 0;
-      transform: translateY(-6px) scale(0.985);
+      transform: translateY(-6px) scale(0.97);
       transition: opacity .35s ease, transform .35s ease;
       will-change: transform, opacity, background-position;
-      animation: rgbShift 6.2s ease infinite;
+      animation: rgbShift 6s ease infinite;
+      cursor: default;
     }
 
-    .node:nth-child(1) {
-      font-size: 36px;
-      font-weight: 900;
-      letter-spacing: 0.30em;
-      animation-duration: 4.8s;
-      text-shadow: 0 0 28px rgba(255,255,255,0.08);
-    }
-
-    .node:nth-child(n+2) {
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 0.26em;
-      opacity: 0.9;
-      animation-duration: 6.6s;
+    .node:hover {
+      transform: translateY(0) scale(1.06);
     }
 
     .nodes:hover .nodes-stack,
@@ -101,39 +93,27 @@
     .nodes:hover .node:nth-child(1),
     .nodes:focus-within .node:nth-child(1) { transition-delay: 60ms; }
     .nodes:hover .node:nth-child(2),
-    .nodes:focus-within .node:nth-child(2) { transition-delay: 170ms; }
+    .nodes:focus-within .node:nth-child(2) { transition-delay: 140ms; }
     .nodes:hover .node:nth-child(3),
-    .nodes:focus-within .node:nth-child(3) { transition-delay: 260ms; }
+    .nodes:focus-within .node:nth-child(3) { transition-delay: 220ms; }
     .nodes:hover .node:nth-child(4),
-    .nodes:focus-within .node:nth-child(4) { transition-delay: 350ms; }
+    .nodes:focus-within .node:nth-child(4) { transition-delay: 300ms; }
     .nodes:hover .node:nth-child(5),
-    .nodes:focus-within .node:nth-child(5) { transition-delay: 440ms; }
+    .nodes:focus-within .node:nth-child(5) { transition-delay: 380ms; }
     .nodes:hover .node:nth-child(6),
-    .nodes:focus-within .node:nth-child(6) { transition-delay: 530ms; }
+    .nodes:focus-within .node:nth-child(6) { transition-delay: 460ms; }
     .nodes:hover .node:nth-child(7),
-    .nodes:focus-within .node:nth-child(7) { transition-delay: 620ms; }
+    .nodes:focus-within .node:nth-child(7) { transition-delay: 540ms; }
     .nodes:hover .node:nth-child(8),
-    .nodes:focus-within .node:nth-child(8) { transition-delay: 710ms; }
+    .nodes:focus-within .node:nth-child(8) { transition-delay: 620ms; }
     .nodes:hover .node:nth-child(9),
-    .nodes:focus-within .node:nth-child(9) { transition-delay: 800ms; }
+    .nodes:focus-within .node:nth-child(9) { transition-delay: 700ms; }
     .nodes:hover .node:nth-child(10),
-    .nodes:focus-within .node:nth-child(10) { transition-delay: 890ms; }
+    .nodes:focus-within .node:nth-child(10) { transition-delay: 780ms; }
     .nodes:hover .node:nth-child(11),
-    .nodes:focus-within .node:nth-child(11) { transition-delay: 980ms; }
+    .nodes:focus-within .node:nth-child(11) { transition-delay: 860ms; }
     .nodes:hover .node:nth-child(12),
-    .nodes:focus-within .node:nth-child(12) { transition-delay: 1070ms; }
-    .nodes:hover .node:nth-child(13),
-    .nodes:focus-within .node:nth-child(13) { transition-delay: 1160ms; }
-    .nodes:hover .node:nth-child(14),
-    .nodes:focus-within .node:nth-child(14) { transition-delay: 1250ms; }
-    .nodes:hover .node:nth-child(15),
-    .nodes:focus-within .node:nth-child(15) { transition-delay: 1340ms; }
-    .nodes:hover .node:nth-child(16),
-    .nodes:focus-within .node:nth-child(16) { transition-delay: 1430ms; }
-    .nodes:hover .node:nth-child(17),
-    .nodes:focus-within .node:nth-child(17) { transition-delay: 1520ms; }
-    .nodes:hover .node:nth-child(18),
-    .nodes:focus-within .node:nth-child(18) { transition-delay: 1610ms; }
+    .nodes:focus-within .node:nth-child(12) { transition-delay: 940ms; }
 
     .sound {
       position: fixed;
@@ -200,8 +180,7 @@
     }
 
     @media (max-width: 768px) {
-      .node:nth-child(1) { font-size: 28px; letter-spacing: 0.26em; }
-      .node:nth-child(n+2) { font-size: 18px; letter-spacing: 0.22em; }
+      .node { font-size: 18px; letter-spacing: 0.24em; }
       .nodes-stack { gap: 14px; margin-top: 12px; }
       .footer { bottom: 18px; font-size: 10px; letter-spacing: 0.12em; }
     }
