@@ -78,15 +78,32 @@
       transform: translateY(-6px) scale(0.97);
       transition:
         opacity .35s ease,
-        transform .18s cubic-bezier(.22,.61,.36,1);
-      will-change: transform, opacity;
+        transform .18s cubic-bezier(.22,.61,.36,1),
+        filter .18s ease;
+      will-change: transform, opacity, filter;
       cursor: default;
+      position: relative;
+    }
+
+    .node::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      width: 0;
+      height: 1px;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.95);
+      opacity: 0;
+      transition: width .18s cubic-bezier(.22,.61,.36,1), opacity .18s ease;
+      pointer-events: none;
     }
 
     .nodes:hover .nodes-stack,
     .nodes:focus-within .nodes-stack {
       opacity: 1;
       transform: translateY(0);
+      pointer-events: auto;
     }
 
     .nodes:hover .node,
@@ -95,8 +112,24 @@
       transform: translateY(var(--breath, 0px)) scale(1);
     }
 
+    .nodes.has-active .node:not(.is-active) {
+      opacity: 0.62;
+      filter: saturate(0.9);
+    }
+
     .node.is-active {
-      transform: translateY(var(--breath, 0px)) scale(1.045);
+      color: rgb(255,255,255);
+      mix-blend-mode: normal;
+      transform: translateY(var(--breath, 0px)) scale(1.05);
+      text-shadow:
+        0 0 14px rgba(255,255,255,0.55),
+        0 0 44px rgba(255,255,255,0.22);
+      filter: none;
+    }
+
+    .node.is-active::after {
+      width: 72%;
+      opacity: 0.9;
     }
 
     .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
@@ -187,6 +220,9 @@
         font-size: 10px;
         letter-spacing: 0.12em;
       }
+      .node::after {
+        bottom: -8px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -195,6 +231,9 @@
         transition: none;
       }
       video {
+        transition: none;
+      }
+      .node::after {
         transition: none;
       }
     }
@@ -246,23 +285,14 @@
     let playing = false;
 
     function now() { return Date.now(); }
+    function canPlay() { return now() >= cooldownUntil && !playing; }
 
-    function canPlay() {
-      return now() >= cooldownUntil && !playing;
-    }
-
-    function showVideo() {
-      video.classList.add("on");
-    }
-
-    function hideVideo() {
-      video.classList.remove("on");
-    }
+    function showVideo() { video.classList.add("on"); }
+    function hideVideo() { video.classList.remove("on"); }
 
     async function startVideo() {
       if (!canPlay()) return;
       playing = true;
-
       try {
         video.loop = false;
         video.currentTime = 0;
@@ -299,7 +329,6 @@
 
     soundBtn.addEventListener("click", async () => {
       try {
-        if (video.classList.contains("on") && !playing) await startVideo();
         video.muted = false;
         video.volume = 0.8;
         await video.play();
@@ -310,15 +339,19 @@
 
     function clearActive() {
       for (const el of items) el.classList.remove("is-active");
+      nodes.classList.remove("has-active");
     }
 
     for (const el of items) {
       el.addEventListener("mouseenter", () => {
         clearActive();
+        nodes.classList.add("has-active");
         el.classList.add("is-active");
       }, { passive: true });
+
       el.addEventListener("mouseleave", () => {
         el.classList.remove("is-active");
+        nodes.classList.remove("has-active");
       }, { passive: true });
     }
 
