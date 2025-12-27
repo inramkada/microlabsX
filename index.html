@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -46,10 +47,11 @@
 
     .nodes-stack {
       margin-top: 14px;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-auto-rows: 1fr;
+      row-gap: 14px;
+      justify-items: center;
       align-items: center;
-      gap: 14px;
       opacity: 0;
       transform: translateY(-6px);
       transition: opacity .3s ease, transform .3s ease;
@@ -57,26 +59,19 @@
     }
 
     .node {
-      width: 9.5ch;
+      width: 10ch;
       text-align: center;
-
       font-size: 22px;
       font-weight: 700;
       letter-spacing: 0.18em;
       font-variant-numeric: tabular-nums;
-
       color: rgba(255,255,255,0.85);
       mix-blend-mode: difference;
-
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
       transition: opacity .35s ease, transform .35s ease;
       will-change: transform, opacity;
       cursor: default;
-    }
-
-    .node:hover {
-      transform: translateY(0) scale(1.06);
     }
 
     .nodes:hover .nodes-stack,
@@ -91,18 +86,35 @@
       transform: translateY(0) scale(1);
     }
 
-    .nodes:hover .node:nth-child(1) { transition-delay: 60ms; }
-    .nodes:hover .node:nth-child(2) { transition-delay: 140ms; }
-    .nodes:hover .node:nth-child(3) { transition-delay: 220ms; }
-    .nodes:hover .node:nth-child(4) { transition-delay: 300ms; }
-    .nodes:hover .node:nth-child(5) { transition-delay: 380ms; }
-    .nodes:hover .node:nth-child(6) { transition-delay: 460ms; }
-    .nodes:hover .node:nth-child(7) { transition-delay: 540ms; }
-    .nodes:hover .node:nth-child(8) { transition-delay: 620ms; }
-    .nodes:hover .node:nth-child(9) { transition-delay: 700ms; }
-    .nodes:hover .node:nth-child(10) { transition-delay: 780ms; }
-    .nodes:hover .node:nth-child(11) { transition-delay: 860ms; }
-    .nodes:hover .node:nth-child(12) { transition-delay: 940ms; }
+    .nodes:hover .node:nth-child(1),
+    .nodes:focus-within .node:nth-child(1) { transition-delay: 60ms; }
+    .nodes:hover .node:nth-child(2),
+    .nodes:focus-within .node:nth-child(2) { transition-delay: 140ms; }
+    .nodes:hover .node:nth-child(3),
+    .nodes:focus-within .node:nth-child(3) { transition-delay: 220ms; }
+    .nodes:hover .node:nth-child(4),
+    .nodes:focus-within .node:nth-child(4) { transition-delay: 300ms; }
+    .nodes:hover .node:nth-child(5),
+    .nodes:focus-within .node:nth-child(5) { transition-delay: 380ms; }
+    .nodes:hover .node:nth-child(6),
+    .nodes:focus-within .node:nth-child(6) { transition-delay: 460ms; }
+    .nodes:hover .node:nth-child(7),
+    .nodes:focus-within .node:nth-child(7) { transition-delay: 540ms; }
+    .nodes:hover .node:nth-child(8),
+    .nodes:focus-within .node:nth-child(8) { transition-delay: 620ms; }
+    .nodes:hover .node:nth-child(9),
+    .nodes:focus-within .node:nth-child(9) { transition-delay: 700ms; }
+    .nodes:hover .node:nth-child(10),
+    .nodes:focus-within .node:nth-child(10) { transition-delay: 780ms; }
+    .nodes:hover .node:nth-child(11),
+    .nodes:focus-within .node:nth-child(11) { transition-delay: 860ms; }
+    .nodes:hover .node:nth-child(12),
+    .nodes:focus-within .node:nth-child(12) { transition-delay: 940ms; }
+
+    .nodes:hover .nodes-stack .node,
+    .nodes:focus-within .nodes-stack .node {
+      transform: translateY(calc(var(--breath, 0px))) scale(1);
+    }
 
     .sound {
       position: fixed;
@@ -168,10 +180,10 @@
       .node {
         font-size: 18px;
         letter-spacing: 0.16em;
-        width: 8.5ch;
+        width: 9ch;
       }
       .nodes-stack {
-        gap: 12px;
+        row-gap: 12px;
         margin-top: 12px;
       }
       .footer {
@@ -179,6 +191,11 @@
         font-size: 10px;
         letter-spacing: 0.12em;
       }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .node { transition: none; }
+      .nodes-stack { transition: none; }
     }
   </style>
 </head>
@@ -188,7 +205,7 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="nodes" tabindex="0">
+  <div class="nodes" id="nodes" tabindex="0">
     NODES
     <div class="nodes-stack">
       <div class="node">BCN1</div>
@@ -222,6 +239,7 @@
   <script>
     const video = document.getElementById("bg");
     const soundBtn = document.getElementById("soundBtn");
+    const nodes = document.getElementById("nodes");
 
     document.addEventListener("contextmenu", e => {
       e.preventDefault();
@@ -241,6 +259,41 @@
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) video.play().catch(()=>{});
     });
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReduced) {
+      let raf = 0;
+      const items = Array.from(nodes.querySelectorAll(".node"));
+      const base = items.map((_, i) => (i - (items.length - 1) / 2) * 0.55);
+      let t = 0;
+
+      function tick() {
+        t += 0.02;
+        const breathe = Math.sin(t) * 1.6;
+        for (let i = 0; i < items.length; i++) {
+          const v = (base[i] * 0.8) + breathe * (0.35 + (i % 3) * 0.06);
+          items[i].style.setProperty("--breath", v.toFixed(2) + "px");
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      function start() {
+        if (raf) return;
+        raf = requestAnimationFrame(tick);
+      }
+
+      function stop() {
+        cancelAnimationFrame(raf);
+        raf = 0;
+        for (const el of items) el.style.setProperty("--breath", "0px");
+      }
+
+      nodes.addEventListener("mouseenter", start, { passive: true });
+      nodes.addEventListener("focusin", start, { passive: true });
+      nodes.addEventListener("mouseleave", stop, { passive: true });
+      nodes.addEventListener("focusout", stop, { passive: true });
+    }
   </script>
 </body>
 </html>
+```
