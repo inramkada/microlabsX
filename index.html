@@ -8,56 +8,230 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(ellipse at center, #050b10 0%, #000 70%);
-      overflow: hidden;
+      background: #000;
+      overflow-x: hidden;
+      overflow-y: auto;
       user-select: none;
       -webkit-user-select: none;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    .panel {
+    video {
       position: fixed;
-      left: 32px;
-      top: 32px;
-      z-index: 20;
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-    }
-
-    .region {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .region-title {
-      font-size: 13px;
-      letter-spacing: 0.22em;
-      color: #58ffd6;
-      opacity: 0.85;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      background: #000;
+      pointer-events: none;
+      z-index: 1;
     }
 
     .nodes {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 10;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      mix-blend-mode: difference;
+      text-align: center;
+      white-space: nowrap;
+      pointer-events: auto;
+      outline: none;
+    }
+
+    .nodes-stack {
+      margin-top: 14px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      align-items: center;
+      gap: 18px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity .3s ease, transform .3s ease;
+      pointer-events: none;
     }
 
     .node {
-      font-size: 16px;
-      letter-spacing: 0.24em;
       background: linear-gradient(120deg, #ffffff, #9efcff, #c9b6ff, #ffffff);
-      background-size: 400% 400%;
+      background-size: 500% 500%;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      animation: rgbShift 6s ease infinite;
-      opacity: 0.9;
+      filter: drop-shadow(0 0 18px rgba(255,255,255,0.12));
+      opacity: 0;
+      transform: translateY(-6px) scale(0.985);
+      transition: opacity .35s ease, transform .35s ease;
+      will-change: transform, opacity, background-position;
+      animation: rgbShift 6.2s ease infinite;
     }
 
-    .node.tight {
-      margin-bottom: -2px;
+    .node:nth-child(1) {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: 0.30em;
+      animation-duration: 4.8s;
+      text-shadow: 0 0 28px rgba(255,255,255,0.08);
+    }
+
+    .node:nth-child(n+2) {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      opacity: 0.9;
+      animation-duration: 6.6s;
+    }
+
+    .nodes:hover .nodes-stack,
+    .nodes:focus-within .nodes-stack {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nodes:hover .node,
+    .nodes:focus-within .node {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .nodes:hover .node:nth-child(1),
+    .nodes:focus-within .node:nth-child(1) {
+      transition-delay: 60ms;
+    }
+
+    .nodes:hover .node:nth-child(2),
+    .nodes:focus-within .node:nth-child(2) {
+      transition-delay: 170ms;
+    }
+
+    .nodes:hover .node:nth-child(3),
+    .nodes:focus-within .node:nth-child(3) {
+      transition-delay: 260ms;
+    }
+
+    .nodes:hover .node:nth-child(4),
+    .nodes:focus-within .node:nth-child(4) {
+      transition-delay: 350ms;
+    }
+
+    .nodes:hover .node:nth-child(5),
+    .nodes:focus-within .node:nth-child(5) {
+      transition-delay: 440ms;
+    }
+
+    .nodes:hover .node:nth-child(6),
+    .nodes:focus-within .node:nth-child(6) {
+      transition-delay: 530ms;
+    }
+
+    .nodes:hover .node:nth-child(7),
+    .nodes:focus-within .node:nth-child(7) {
+      transition-delay: 620ms;
+    }
+
+    .nodes:hover .node:nth-child(8),
+    .nodes:focus-within .node:nth-child(8) {
+      transition-delay: 710ms;
+    }
+
+    .nodes:hover .node:nth-child(9),
+    .nodes:focus-within .node:nth-child(9) {
+      transition-delay: 800ms;
+    }
+
+    .nodes:hover .node:nth-child(10),
+    .nodes:focus-within .node:nth-child(10) {
+      transition-delay: 890ms;
+    }
+
+    .nodes:hover .node:nth-child(11),
+    .nodes:focus-within .node:nth-child(11) {
+      transition-delay: 980ms;
+    }
+
+    .nodes:hover .node:nth-child(12),
+    .nodes:focus-within .node:nth-child(12) {
+      transition-delay: 1070ms;
+    }
+
+    .sound {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.92);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .sound.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(6px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 18px rgba(255,255,255,0.35);
+    }
+
+    .footer {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 10;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.42);
+      mix-blend-mode: difference;
+      white-space: nowrap;
+      text-align: center;
+      padding: 0 16px;
+      max-width: 100vw;
+      pointer-events: none;
+    }
+
+    .footer a {
+      color: inherit;
+      text-decoration: none;
+      pointer-events: auto;
+    }
+
+    .footer-mobile {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .node:nth-child(1) { font-size: 28px; letter-spacing: 0.26em; }
+      .node:nth-child(n+2) { font-size: 18px; letter-spacing: 0.22em; }
+      .nodes-stack { gap: 14px; margin-top: 12px; }
+      .footer { bottom: 18px; font-size: 10px; letter-spacing: 0.12em; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .node { animation: none; transition: none; }
+      .nodes-stack { transition: none; }
     }
 
     @keyframes rgbShift {
@@ -65,70 +239,76 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    @media (max-width: 768px) {
-      .panel {
-        left: 20px;
-        top: 20px;
-        gap: 18px;
-      }
-      .region-title {
-        font-size: 12px;
-      }
-      .node {
-        font-size: 15px;
-      }
-    }
   </style>
 </head>
 
 <body>
+  <video id="bg" autoplay muted loop playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback">
+    <source src="/CT.mp4" type="video/mp4">
+  </video>
 
-  <div class="panel">
-
-    <div class="region">
-      <div class="region-title">AFRICA</div>
-      <div class="nodes">
-        <div class="node">TANG1</div>
-        <div class="node">NAIV1</div>
-        <div class="node">IBAD1</div>
-      </div>
+  <div class="nodes" tabindex="0">
+    NODES
+    <div class="nodes-stack">
+      <div class="node">AFRICA</div>
+      <div class="node">TANG1</div>
+      <div class="node">NAIV1</div>
+      <div class="node">IBAD1</div>
+      <div class="node">AMERICA</div>
+      <div class="node">TXAS1</div>
+      <div class="node">PANM1</div>
+      <div class="node">ASIA</div>
+      <div class="node">KAEC1</div>
+      <div class="node">RAK1</div>
+      <div class="node">JAVA1</div>
+      <div class="node">HPH1</div>
+      <div class="node">AUSTRALIA</div>
+      <div class="node">DARW1</div>
+      <div class="node">EUROPE</div>
+      <div class="node">BCN1</div>
+      <div class="node">LPA1</div>
     </div>
-
-    <div class="region">
-      <div class="region-title">AMERICA</div>
-      <div class="nodes">
-        <div class="node tight">TXAS1</div>
-        <div class="node">PANM1</div>
-      </div>
-    </div>
-
-    <div class="region">
-      <div class="region-title">ASIA</div>
-      <div class="nodes">
-        <div class="node">KAEC1</div>
-        <div class="node">RAK1</div>
-        <div class="node">JAVA1</div>
-        <div class="node">HPH1</div>
-      </div>
-    </div>
-
-    <div class="region">
-      <div class="region-title">AUSTRALIA</div>
-      <div class="nodes">
-        <div class="node">DARW1</div>
-      </div>
-    </div>
-
-    <div class="region">
-      <div class="region-title">EUROPE</div>
-      <div class="nodes">
-        <div class="node tight">BCN1</div>
-        <div class="node">LPA1</div>
-      </div>
-    </div>
-
   </div>
 
+  <button id="soundBtn" class="sound" type="button" aria-label="Enable sound">
+    <span class="dot"></span>
+    Sound on
+  </button>
+
+  <div class="footer">
+    <span class="footer-desktop">
+      © 2023–2025
+      <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
+      · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
+    </span>
+    <span class="footer-mobile">
+      © 2023–2025
+      <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
+    </span>
+  </div>
+
+  <script>
+    const video = document.getElementById("bg");
+    const soundBtn = document.getElementById("soundBtn");
+
+    document.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, { capture: true });
+
+    soundBtn.addEventListener("click", async () => {
+      try {
+        video.muted = false;
+        video.volume = 0.8;
+        await video.play();
+        soundBtn.classList.add("hidden");
+        setTimeout(() => soundBtn.remove(), 300);
+      } catch {}
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) video.play().catch(()=>{});
+    });
+  </script>
 </body>
 </html>
