@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>NODE 001 — NVIDIA Omniverse</title>
+<title>ASIA · NODE 001 — NVIDIA Omniverse</title>
 
 <style>
 html,body{
@@ -29,19 +29,17 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   justify-content:space-between;
   align-items:center;
   z-index:10;
-  background:linear-gradient(
-    to bottom,
-    rgba(0,0,0,0.75),
-    rgba(0,0,0,0)
-  );
+  mix-blend-mode:difference;
 }
 
-.header a{
+.header a,
+.header span{
   text-decoration:none;
-  color:rgba(255,255,255,0.75);
-  letter-spacing:0.18em;
+  color:rgba(255,255,255,0.85);
+  letter-spacing:0.22em;
   font-weight:700;
-  font-size:13px;
+  font-size:12px;
+  text-transform:uppercase;
 }
 
 .header a:hover{ color:#fff; }
@@ -50,7 +48,7 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 .wrapper{
   display:grid;
   grid-template-columns: 1.25fr 0.75fr;
-  gap:36px;
+  gap:40px;
   padding:110px 32px 40px;
   max-width:1480px;
   margin:0 auto;
@@ -59,7 +57,7 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 /* ================= VIEWER ================= */
 .viewer{
   position:relative;
-  border-radius:24px;
+  border-radius:26px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,0.12);
   background:#000;
@@ -67,7 +65,6 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   min-height:70vh;
 }
 
-/* iframe */
 .viewer iframe{
   width:100%;
   height:100%;
@@ -77,13 +74,13 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 /* loading overlay */
 .viewer::after{
-  content:"CONNECTING TO GPU STREAM…";
+  content:"SIMULATION LOADING…";
   position:absolute;
   inset:0;
   display:grid;
   place-items:center;
-  font-size:12px;
-  letter-spacing:0.18em;
+  font-size:11px;
+  letter-spacing:0.22em;
   text-transform:uppercase;
   color:rgba(255,255,255,0.55);
   pointer-events:none;
@@ -129,30 +126,30 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 /* ================= INFO ================= */
 .info{
-  padding-top:10px;
+  padding-top:6px;
 }
 
 .kicker{
-  font-size:12px;
-  letter-spacing:0.18em;
+  font-size:11px;
+  letter-spacing:0.22em;
   text-transform:uppercase;
   color:rgba(255,255,255,0.6);
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .title{
   font-size:28px;
-  letter-spacing:0.06em;
+  letter-spacing:0.12em;
   text-transform:uppercase;
   margin:0 0 18px;
 }
 
 .text{
   font-size:14px;
-  line-height:1.65;
+  line-height:1.7;
   color:rgba(255,255,255,0.72);
   margin-bottom:16px;
-  max-width:62ch;
+  max-width:64ch;
 }
 
 .hr{
@@ -169,14 +166,26 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 }
 
 .tag{
-  font-size:11px;
-  letter-spacing:0.14em;
+  font-size:10px;
+  letter-spacing:0.18em;
   text-transform:uppercase;
   padding:9px 12px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.16);
   background:rgba(255,255,255,0.03);
   color:rgba(255,255,255,0.8);
+}
+
+/* ================= FOOTER (same as index) ================= */
+.footer{
+  margin-top:80px;
+  padding:40px 24px 28px;
+  text-align:center;
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  mix-blend-mode:difference;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -194,8 +203,8 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 <body>
 
 <header class="header">
-  <a href="../index.html">← BACK</a>
-  <span>NODE 001</span>
+  <a href="../index.html">← Back</a>
+  <span>ASIA · NODE 001</span>
 </header>
 
 <main class="wrapper">
@@ -210,11 +219,10 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
       allow="autoplay; fullscreen; clipboard-read; clipboard-write">
     </iframe>
 
-    <!-- fallback if iframe blocked -->
     <div class="viewer-fallback" id="viewerFallback">
-      <p>Omniverse viewer cannot be embedded due to security restrictions.</p>
+      <p>Viewer cannot be embedded due to security restrictions.</p>
       <a href="/viewer/" target="_blank" rel="noopener">
-        OPEN VIEWER IN NEW TAB →
+        OPEN SIMULATION IN NEW TAB →
       </a>
     </div>
 
@@ -222,35 +230,41 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
   <!-- ===== INFO ===== -->
   <section class="info">
-    <div class="kicker">NVIDIA OMNIVERSE</div>
-    <h1 class="title">NODE 001</h1>
+    <div class="kicker">NVIDIA Omniverse · Simulation</div>
+    <h1 class="title">Node 001</h1>
 
     <p class="text">
-      This node exposes a live NVIDIA Omniverse viewport streamed directly to the browser.
-      The scene runs remotely on a GPU server and is delivered using WebRTC.
+      This environment is a simulation built using NVIDIA Omniverse technology to
+      analyse and visualise operational processes in a controlled, real-time context.
     </p>
 
     <p class="text">
-      This is not a video. The viewport is interactive and rendered in real time using RTX.
+      The purpose of this node is to demonstrate system behaviour, automation flows
+      and scalability scenarios to investors during early and intermediate project phases.
     </p>
 
     <div class="hr"></div>
 
     <p class="text">
-      Node 001 demonstrates how Omniverse can be integrated as a web-native tool
-      while preserving USD workflows, high-end rendering and real-time interaction.
+      This is not a final production model. Access to the full interactive system
+      will be restricted and granted exclusively to authorised parties once the
+      underlying model and infrastructure are completed.
     </p>
 
     <div class="tags">
-      <span class="tag">OMNIVERSE</span>
-      <span class="tag">USD</span>
-      <span class="tag">RTX</span>
-      <span class="tag">WEBRTC</span>
-      <span class="tag">GPU STREAMING</span>
+      <span class="tag">Simulation</span>
+      <span class="tag">Operational Analysis</span>
+      <span class="tag">Automation</span>
+      <span class="tag">Scalability</span>
+      <span class="tag">Investor Access</span>
     </div>
   </section>
 
 </main>
+
+<footer class="footer">
+  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION AND DOES NOT CONSTITUTE A LEGAL ENTITY
+</footer>
 
 <script>
   const iframe = document.getElementById("omniverseFrame");
@@ -264,7 +278,6 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
     box.classList.remove("loading");
   };
 
-  // If iframe is blocked by CSP / X-Frame-Options
   setTimeout(() => {
     if (!loaded) {
       fallback.style.display = "grid";
