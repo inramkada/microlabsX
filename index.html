@@ -29,59 +29,53 @@
       opacity: 0;
       transition: opacity .45s ease;
     }
-
     video.on { opacity: 1; }
 
-    /* TOP BAR (ABOUT + NODES) */
-    .topbar{
+    /* ✅ TOP BAR: group blending restored (NO transform/filter/opacity here) */
+    .topbar {
       position: fixed;
       top: 18px;
       right: 18px;
       z-index: 10;
       display: inline-flex;
       align-items: center;
-      gap: 38px; /* ✅ más separación */
-      pointer-events: auto;
+      gap: 58px;                 /* ✅ más separación */
       white-space: nowrap;
+      pointer-events: auto;
+
+      mix-blend-mode: difference; /* ✅ recupera fusión con el vídeo */
+      isolation: auto;            /* ✅ NO aislar (si aislas, se pierde el backdrop) */
     }
 
-    /* ABOUT: mismo cuerpo que NODES (peso/tamaño/espaciado), solo más suave por opacity */
-    .about{
-      font-size: 18px;
-      font-weight: 700;              /* ✅ mismo cuerpo */
-      letter-spacing: 0.22em;        /* ✅ mismo cuerpo */
+    /* ✅ Same “cuerpo” (mismo tamaño/peso). ABOUT diferente por opacidad + tracking */
+    .about,
+    .nodes {
+      font-size: 20px;            /* ✅ más grande */
+      font-weight: 700;           /* ✅ mismo cuerpo */
       text-transform: uppercase;
-      color: rgba(255,255,255,0.62);
-      mix-blend-mode: difference;    /* ✅ recupera fusión con vídeo */
-      cursor: pointer;
       outline: none;
       touch-action: manipulation;
-      transition: opacity .18s ease, filter .18s ease;
-    }
-    .about:hover,
-    .about:focus-visible{
-      opacity: 0.92;
-      filter: saturate(1.06);
+      color: rgba(255,255,255,0.92); /* blanco limpio para blend */
     }
 
     .nodes {
-      position: relative;            /* 🔑 para dropdown centrado */
-      z-index: 10;
-      font-size: 18px;
-      font-weight: 700;
       letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.85);
-      mix-blend-mode: difference;    /* ✅ fusión con vídeo */
       text-align: center;
-      white-space: nowrap;
-      pointer-events: auto;
-      outline: none;
-      touch-action: manipulation;
+      cursor: default;
+      position: relative;         /* para dropdown centrado */
       display: inline-block;
     }
 
-    /* DROPDOWN: centrado exacto bajo “NODES” y sin empujar layout */
+    .about {
+      letter-spacing: 0.18em;     /* ✅ sutilmente diferente */
+      opacity: 0.72;              /* ✅ diferente sin “menos cuerpo” */
+      cursor: pointer;
+      transition: opacity .18s ease;
+    }
+    .about:hover,
+    .about:focus-visible { opacity: 0.95; }
+
+    /* ✅ DROPDOWN: centrado real bajo “NODES” + NO empuja layout */
     .nodes-stack {
       position: absolute;
       top: calc(100% + 18px);
@@ -95,6 +89,7 @@
       transition: opacity .3s ease, transform .3s ease;
       pointer-events: none;
       width: max-content;
+      min-width: 11.5ch;
     }
 
     .nodes:hover .nodes-stack,
@@ -108,12 +103,11 @@
     .node {
       width: 11.5ch;
       text-align: center;
-      font-size: 36px;               /* ✅ más grande */
+      font-size: 38px;            /* ✅ más grande */
       font-weight: 700;
-      letter-spacing: 0.05em;        /* ✅ menos interespaciado */
+      letter-spacing: 0.04em;     /* ✅ menos interespaciado */
       font-variant-numeric: tabular-nums;
-      color: rgba(255,255,255,0.85);
-      mix-blend-mode: difference;    /* ✅ fusión con vídeo */
+      color: rgba(255,255,255,0.92); /* blanco para blend */
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
       transition:
@@ -149,7 +143,7 @@
       z-index: 2;
     }
 
-    /* ✅ subrayado clean */
+    /* ✅ Subrayado */
     .node::after{
       content:"";
       position:absolute;
@@ -158,16 +152,16 @@
       width:0;
       height:2px;
       transform: translateX(-50%);
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.92);
       opacity:0;
       transition: width .18s ease, opacity .18s ease;
     }
     .node:hover::after{
-      width: 64%;
-      opacity: .78;
+      width: 66%;
+      opacity: .82;
     }
     .node.is-active::after{
-      width: 72%;
+      width: 74%;
       opacity: 1;
     }
 
@@ -236,7 +230,7 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.42);
-      mix-blend-mode: difference;
+      mix-blend-mode: difference; /* ✅ mantiene tu efecto */
       white-space: nowrap;
       text-align: center;
       padding: 0 16px;
@@ -251,21 +245,27 @@
     }
 
     @media (max-width: 768px) {
-      .topbar{ gap: 30px; }
+      .topbar { gap: 44px; }
+      .about, .nodes { font-size: 18px; }
+
       .node {
-        font-size: 26px;            /* ✅ más grande en móvil */
-        letter-spacing: 0.05em;
+        font-size: 28px;
+        letter-spacing: 0.04em;
         width: 10ch;
       }
+
       .nodes-stack {
         row-gap: 16px;
+        min-width: 10ch;
         top: calc(100% + 14px);
       }
+
       .footer {
         bottom: 18px;
         font-size: 10px;
         letter-spacing: 0.12em;
       }
+
       .node.is-active::before {
         inset: -14px -16px -14px -16px;
       }
@@ -287,7 +287,7 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <!-- ✅ ORDER: ABOUT then NODES -->
+  <!-- TOP: ABOUT then NODES -->
   <div class="topbar" aria-label="Top controls">
     <div class="about" id="about" tabindex="0" role="button" aria-label="About">ABOUT</div>
 
