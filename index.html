@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en" dir="ltr">
 <head>
@@ -109,7 +110,7 @@
     mix-blend-mode:difference;
     padding:0 18px;
 
-    pointer-events:auto;              /* <- IMPORTANT: link clickable */
+    pointer-events:auto;
     user-select:none;
     -webkit-user-select:none;
   }
@@ -289,13 +290,9 @@
     cursor:pointer;
     color:rgba(255,255,255,.90);
   }
-  .lang-btn svg{
-    width:18px;
-    height:18px;
-    opacity:.9;
-  }
+  .lang-btn svg{ width:18px; height:18px; opacity:.9; }
 
-  /* bigger label size when open (options), opens to the LEFT */
+  /* opens to the LEFT */
   .lang-row{
     position:absolute;
     right:100%;
@@ -313,7 +310,7 @@
     pointer-events:auto;
   }
   .lang-chip{
-    font-size:15px;   /* bigger when open */
+    font-size:15px;
     font-weight:700;
     letter-spacing:.22em;
     text-transform:uppercase;
@@ -342,13 +339,15 @@
     user-select:none;
     -webkit-user-select:none;
 
-    mix-blend-mode:difference; /* RGB feel */
+    mix-blend-mode:difference;
     color:rgba(255,255,255,.95);
+    transform:translateZ(0);
   }
   .sound-ico{
-    width:38px;     /* bigger */
+    width:38px;
     height:38px;
     opacity:.98;
+    transform-origin: 50% 50%;
   }
   .sound-off{ display:none; }
   .sound-fab.is-muted .sound-on{ display:none; }
@@ -369,10 +368,29 @@
     transform:translateX(0);
   }
 
+  /* Micro pulse (80–120ms feel) */
+  .sound-fab.is-pulse .sound-ico{
+    animation: soundPulse 120ms ease-out;
+  }
+  @keyframes soundPulse{
+    0%{ transform: scale(1); }
+    50%{ transform: scale(1.08); }
+    100%{ transform: scale(1); }
+  }
+
   /* RTL support */
   html[dir="rtl"] .sound-fab{ flex-direction:row-reverse; }
   html[dir="rtl"] .sound-label{ transform:translateX(-8px); }
   html[dir="rtl"] .sound-fab:hover .sound-label{ transform:translateX(0); }
+
+  /* ===== RTL: topbar order + LANG opens RIGHT + globe mirrored ===== */
+  html[dir="rtl"] .topbar{ flex-direction: row-reverse; }
+  html[dir="rtl"] .lang-row{
+    right:auto;
+    left:100%;
+    transform:translateY(-50%) translateX(14px);
+  }
+  html[dir="rtl"] .lang-btn svg{ transform: scaleX(-1); }
 
   /* Anti-save best-effort */
   body{
@@ -391,7 +409,6 @@
 </video>
 
 <div class="topbar">
-
   <!-- LANG (globe) FIRST -->
   <div class="lang" id="langWrap" aria-label="Language">
     <div class="lang-btn" id="langBtn" title="Language" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
@@ -414,10 +431,10 @@
     </div>
   </div>
 
-  <!-- ABOUT SECOND (unchanged structure) -->
+  <!-- ABOUT -->
   <div class="toplink muted" id="aboutBtn" data-i18n="top_about">ABOUT</div>
 
-  <!-- NODES THIRD (original structure kept) -->
+  <!-- NODES -->
   <div class="toplink nodes"><span data-i18n="top_nodes">NODES</span>
     <div class="nodes-bridge" aria-hidden="true"></div>
     <div class="nodes-stack" aria-hidden="true">
@@ -439,7 +456,6 @@
 
   <div class="about-stage">
     <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
-
       <button class="about-close" id="aboutClose" type="button" data-i18n="ui_close">CLOSE</button>
 
       <div class="edge-arrow left" id="prevBtn" title="Previous">
@@ -457,7 +473,6 @@
       <div class="about-index" id="aboutIndex">01 / 03</div>
 
       <div class="about-track" id="aboutTrack">
-
         <!-- PANEL 1 -->
         <section class="about-panel" data-panel="about">
           <div class="about-inner">
@@ -526,13 +541,12 @@
             <p class="about-p" data-i18n="gov_p2">developing contact</p>
           </div>
         </section>
-
       </div>
     </div>
   </div>
 </div>
 
-<!-- SOUND FAB (bottom-right) -->
+<!-- SOUND FAB -->
 <div class="sound-fab" id="soundFab" role="button" tabindex="0" aria-label="Sound toggle">
   <span class="sound-label" id="soundLabel">SOUND OFF</span>
 
@@ -550,7 +564,8 @@
   <svg class="sound-ico sound-off" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M11 5.5L7.8 8H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2.8L11 18.5a1 1 0 0 0 1.6-.8V6.3a1 1 0 0 0-1.6-.8Z"
           fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/>
-    <path d="M19 7L7 19"
+    <!-- more centered slash -->
+    <path d="M18.8 7.2L7.2 18.8"
           fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
   </svg>
 </div>
@@ -641,6 +656,11 @@
   aboutShell.addEventListener("mouseleave", ()=> aboutShell.classList.remove("is-hot"));
   window.addEventListener("resize", ()=>{ scrollToIndex(idx()); updateNav(); });
   updateNav();
+
+  // Nodes click placeholders
+  document.querySelectorAll(".node").forEach(n=>{
+    n.addEventListener("click", (e)=> e.stopPropagation());
+  });
 
   // ===== I18N =====
   const SUPPORTED = ["en","es","ca","ar","zh","ru"];
@@ -745,30 +765,28 @@
 
     const dict = I18N[lang] || I18N.en;
 
-    // normal text keys
     document.querySelectorAll("[data-i18n]").forEach(el=>{
       const key = el.getAttribute("data-i18n");
       if(dict[key]) el.textContent = dict[key];
     });
 
-    // footer is HTML (link)
     const footer = document.querySelector("[data-i18n='footer_html']");
     if(footer && dict.footer_html) footer.innerHTML = dict.footer_html;
 
     syncSoundUI();
   }
 
-  // ===== LANG: click-to-open so it doesn't close too fast =====
+  // ===== LANG click-to-open (won't close too fast) =====
   const langWrap = document.getElementById("langWrap");
   const langBtn = document.getElementById("langBtn");
 
   function openLang(){
     langWrap.classList.add("is-open");
-    langBtn.setAttribute("aria-expanded", "true");
+    langBtn.setAttribute("aria-expanded","true");
   }
   function closeLang(){
     langWrap.classList.remove("is-open");
-    langBtn.setAttribute("aria-expanded", "false");
+    langBtn.setAttribute("aria-expanded","false");
   }
   function toggleLang(e){
     e.stopPropagation();
@@ -783,7 +801,6 @@
     }
   });
 
-  // Keep it open when interacting inside
   langWrap.addEventListener("click", (e)=> e.stopPropagation());
   document.addEventListener("click", closeLang);
 
@@ -798,38 +815,68 @@
   // init language
   applyLanguage(localStorage.getItem("mrx_lang") || "en");
 
-  // ===== SOUND: fixed toggle =====
+  // ===== SOUND (robust toggle + pulse) =====
   const bgVideo = document.getElementById("bg");
   const soundFab = document.getElementById("soundFab");
   const soundLabel = document.getElementById("soundLabel");
 
   function syncSoundUI(){
-    const muted = bgVideo.muted;
+    if(!bgVideo || !soundFab || !soundLabel) return;
+
+    const muted = !!bgVideo.muted;
     soundFab.classList.toggle("is-muted", muted);
 
     const dict = currentDict();
-    const txt = dict.top_sound_on_off
+    const txt = dict && dict.top_sound_on_off
       ? dict.top_sound_on_off[muted ? "off" : "on"]
       : (muted ? "SOUND OFF" : "SOUND ON");
+
     soundLabel.textContent = txt;
   }
 
-  function toggleSound(e){
-    if(e) e.stopPropagation();
-    // user gesture -> allowed to unmute
+  let lastToggleAt = 0;
+
+  async function toggleSound(e){
+    if(e){ e.stopPropagation(); e.preventDefault(); }
+
+    const now = performance.now();
+    if(now - lastToggleAt < 220) return; // avoid double-fire (pointerdown+click)
+    lastToggleAt = now;
+
+    if(!bgVideo || !soundFab) return;
+
+    // pulse feedback
+    soundFab.classList.remove("is-pulse");
+    void soundFab.offsetWidth; // restart animation reliably
+    soundFab.classList.add("is-pulse");
+    setTimeout(()=> soundFab.classList.remove("is-pulse"), 140);
+
+    // toggle muted
     bgVideo.muted = !bgVideo.muted;
+
+    // ensure audible playback after user gesture
+    if(!bgVideo.muted){
+      try{
+        bgVideo.volume = 1;
+        await bgVideo.play();
+      }catch(_){}
+    }
+
     syncSoundUI();
   }
 
-  soundFab.addEventListener("click", toggleSound);
-  soundFab.addEventListener("keydown", (e)=>{
-    if(e.key === "Enter" || e.key === " "){
-      e.preventDefault();
-      toggleSound(e);
-    }
-  });
+  if(soundFab){
+    soundFab.addEventListener("pointerdown", toggleSound, { passive:false });
+    soundFab.addEventListener("click", toggleSound, { passive:false });
+    soundFab.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleSound(e);
+      }
+    });
+  }
 
-  // init sound label/state (no hardcoded class)
+  // init sound state
   syncSoundUI();
 
   // ===== Anti-save (best-effort) =====
@@ -845,3 +892,4 @@
 
 </body>
 </html>
+```
