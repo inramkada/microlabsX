@@ -31,7 +31,7 @@
     }
     video.on { opacity: 1; }
 
-    /* ✅ TOP BAR: group blending restored (NO transform/filter/opacity here) */
+    /* TOP BAR */
     .topbar {
       position: fixed;
       top: 18px;
@@ -39,43 +39,55 @@
       z-index: 10;
       display: inline-flex;
       align-items: center;
-      gap: 58px;                 /* ✅ más separación */
+      gap: 58px;                 /* separación */
       white-space: nowrap;
       pointer-events: auto;
 
-      mix-blend-mode: difference; /* ✅ recupera fusión con el vídeo */
-      isolation: auto;            /* ✅ NO aislar (si aislas, se pierde el backdrop) */
+      mix-blend-mode: difference; /* fusión general */
+      opacity: 1;                 /* no aplanar */
+      filter: none;               /* no aplanar */
     }
 
-    /* ✅ Same “cuerpo” (mismo tamaño/peso). ABOUT diferente por opacidad + tracking */
-    .about,
-    .nodes {
-      font-size: 20px;            /* ✅ más grande */
-      font-weight: 700;           /* ✅ mismo cuerpo */
+    /* ABOUT: diferente, pero con RGB fundido */
+    .about{
+      font-size: 20px;
+      font-weight: 700;            /* mismo cuerpo que NODES */
       text-transform: uppercase;
+
+      letter-spacing: 0.18em;      /* diferente */
+      color: rgba(255,255,255,0.75);/* diferente SIN opacity */
+
+      mix-blend-mode: difference;  /* ✅ fuerza el fundido */
+      cursor: pointer;
       outline: none;
       touch-action: manipulation;
-      color: rgba(255,255,255,0.92); /* blanco limpio para blend */
+      transition: filter .18s ease, color .18s ease;
+    }
+    .about:hover,
+    .about:focus-visible{
+      color: rgba(255,255,255,0.92);
+      filter: saturate(1.06);
     }
 
     .nodes {
+      position: relative;
+      z-index: 10;
+      font-size: 20px;
+      font-weight: 700;
       letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.92);
+      mix-blend-mode: difference;
       text-align: center;
-      cursor: default;
-      position: relative;         /* para dropdown centrado */
+      white-space: nowrap;
+      pointer-events: auto;
+      outline: none;
+      touch-action: manipulation;
       display: inline-block;
+      cursor: default;
     }
 
-    .about {
-      letter-spacing: 0.18em;     /* ✅ sutilmente diferente */
-      opacity: 0.72;              /* ✅ diferente sin “menos cuerpo” */
-      cursor: pointer;
-      transition: opacity .18s ease;
-    }
-    .about:hover,
-    .about:focus-visible { opacity: 0.95; }
-
-    /* ✅ DROPDOWN: centrado real bajo “NODES” + NO empuja layout */
+    /* DROPDOWN centrado bajo NODES */
     .nodes-stack {
       position: absolute;
       top: calc(100% + 18px);
@@ -103,11 +115,12 @@
     .node {
       width: 11.5ch;
       text-align: center;
-      font-size: 38px;            /* ✅ más grande */
+      font-size: 38px;
       font-weight: 700;
-      letter-spacing: 0.04em;     /* ✅ menos interespaciado */
+      letter-spacing: 0.04em;
       font-variant-numeric: tabular-nums;
-      color: rgba(255,255,255,0.92); /* blanco para blend */
+      color: rgba(255,255,255,0.92);
+      mix-blend-mode: difference;
       opacity: 0;
       transform: translateY(-6px) scale(0.97);
       transition:
@@ -143,7 +156,7 @@
       z-index: 2;
     }
 
-    /* ✅ Subrayado */
+    /* Subrayado */
     .node::after{
       content:"";
       position:absolute;
@@ -230,7 +243,7 @@
       letter-spacing: 0.14em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.42);
-      mix-blend-mode: difference; /* ✅ mantiene tu efecto */
+      mix-blend-mode: difference;
       white-space: nowrap;
       text-align: center;
       padding: 0 16px;
@@ -272,12 +285,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .node,
-      .nodes-stack,
-      video,
-      .sound {
-        transition: none;
-      }
+      .node, .nodes-stack, video, .sound { transition: none; }
     }
   </style>
 </head>
@@ -287,7 +295,6 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <!-- TOP: ABOUT then NODES -->
   <div class="topbar" aria-label="Top controls">
     <div class="about" id="about" tabindex="0" role="button" aria-label="About">ABOUT</div>
 
