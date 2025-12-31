@@ -16,7 +16,7 @@ html,body{
   color:#fff;
 }
 
-/* hide scrollbar */
+/* hide scrollbars */
 html, body { scrollbar-width:none; -ms-overflow-style:none; }
 ::-webkit-scrollbar{ width:0; height:0; }
 
@@ -67,6 +67,7 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   min-height:70vh;
 }
 
+/* iframe */
 .viewer iframe{
   width:100%;
   height:100%;
@@ -87,11 +88,43 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   color:rgba(255,255,255,0.55);
   pointer-events:none;
   opacity:0;
-  transition:opacity .3s ease;
+  transition:opacity .25s ease;
 }
 
 .viewer.loading::after{
   opacity:1;
+}
+
+/* fallback overlay */
+.viewer-fallback{
+  position:absolute;
+  inset:0;
+  display:none;
+  place-items:center;
+  text-align:center;
+  gap:18px;
+  background:#000;
+  color:rgba(255,255,255,0.7);
+}
+
+.viewer-fallback p{
+  margin:0;
+  font-size:13px;
+  letter-spacing:0.04em;
+}
+
+.viewer-fallback a{
+  color:#fff;
+  text-decoration:none;
+  border:1px solid rgba(255,255,255,0.25);
+  padding:12px 18px;
+  border-radius:999px;
+  letter-spacing:0.14em;
+  font-size:12px;
+}
+
+.viewer-fallback a:hover{
+  border-color:#fff;
 }
 
 /* ================= INFO ================= */
@@ -169,18 +202,22 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
   <!-- ===== NVIDIA OMNIVERSE VIEWER ===== -->
   <section class="viewer loading" id="viewerBox">
-    <!--
-      AQUÍ VA EL VISOR REAL DE NVIDIA OMNIVERSE
-      Ejemplos de src cuando lo tengas:
-        /viewer/
-        /viewer/?node=001
-        https://viewer.tudominio.com/?scene=asia_001
-    -->
+
     <iframe
+      id="omniverseFrame"
       src="/viewer/"
       loading="lazy"
       allow="autoplay; fullscreen; clipboard-read; clipboard-write">
     </iframe>
+
+    <!-- fallback if iframe blocked -->
+    <div class="viewer-fallback" id="viewerFallback">
+      <p>Omniverse viewer cannot be embedded due to security restrictions.</p>
+      <a href="/viewer/" target="_blank" rel="noopener">
+        OPEN VIEWER IN NEW TAB →
+      </a>
+    </div>
+
   </section>
 
   <!-- ===== INFO ===== -->
@@ -194,15 +231,14 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
     </p>
 
     <p class="text">
-      Users can navigate, inspect and interact with the scene in real time.
-      This is not a video — it is a live RTX-rendered environment.
+      This is not a video. The viewport is interactive and rendered in real time using RTX.
     </p>
 
     <div class="hr"></div>
 
     <p class="text">
-      Node 001 focuses on demonstrating how Omniverse can be integrated as a web-native tool
-      while preserving high-end rendering, USD workflows and collaborative potential.
+      Node 001 demonstrates how Omniverse can be integrated as a web-native tool
+      while preserving USD workflows, high-end rendering and real-time interaction.
     </p>
 
     <div class="tags">
@@ -217,13 +253,24 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 </main>
 
 <script>
-  // Remove loading overlay once iframe starts loading
-  const iframe = document.querySelector(".viewer iframe");
+  const iframe = document.getElementById("omniverseFrame");
+  const fallback = document.getElementById("viewerFallback");
   const box = document.getElementById("viewerBox");
 
-  iframe.addEventListener("load", () => {
+  let loaded = false;
+
+  iframe.onload = () => {
+    loaded = true;
     box.classList.remove("loading");
-  });
+  };
+
+  // If iframe is blocked by CSP / X-Frame-Options
+  setTimeout(() => {
+    if (!loaded) {
+      fallback.style.display = "grid";
+      box.classList.remove("loading");
+    }
+  }, 2500);
 </script>
 
 </body>
