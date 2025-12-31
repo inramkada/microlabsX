@@ -5,18 +5,31 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>microlabsX</title>
 
-<!-- Minimal share/SEO polish (safe for prototype) -->
 <meta name="description" content="Global automation systems for institutional biotech infrastructure. Cinematic prototype." />
 <meta property="og:title" content="microlabsX" />
 <meta property="og:description" content="Automation-first infrastructure for institutional deployments. Cinematic prototype." />
 <meta property="og:type" content="website" />
 
 <style>
+  :root{ --vh: 100vh; }
+
   html, body{
-    margin:0; height:100%;
+    margin:0;
+    height: var(--vh);
     background:#000; color:#fff;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    overflow:hidden; /* no scroll */
+
+    /* Prevent “ghost” page scroll */
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  /* iOS: kill rubber-band + Safari viewport jump */
+  @supports (-webkit-touch-callout: none){
+    body{
+      position: fixed;
+      width: 100%;
+    }
   }
 
   /* ===== Reduced motion (A11y) ===== */
@@ -48,17 +61,20 @@
 
   #bg{
     position:fixed; inset:0;
-    width:100vw; height:100vh;
+    width:100vw; height:var(--vh);
     object-fit:cover;
     z-index:1;
     pointer-events:none;
     background:#000;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   /* ===== Topbar ===== */
   .topbar{
     position:fixed;
-    top:18px; right:18px;
+    top: calc(18px + env(safe-area-inset-top));
+    right: calc(18px + env(safe-area-inset-right));
     z-index:9999;
     display:flex;
     align-items:center;
@@ -77,6 +93,12 @@
     color:rgba(255,255,255,.92);
   }
   .toplink.muted{ color:rgba(255,255,255,.72); }
+
+  /* iOS fallback for blend mode */
+  @supports (-webkit-touch-callout: none){
+    .topbar, .index-footer, .sound-fab{ mix-blend-mode: normal; }
+    .topbar, .index-footer, .sound-fab{ color: rgba(255,255,255,.92); }
+  }
 
   /* ===== LANG globe (click-to-open) ===== */
   .lang{
@@ -109,10 +131,7 @@
     pointer-events:none;
     white-space:nowrap;
   }
-  .lang.is-open .lang-row{
-    opacity:1;
-    pointer-events:auto;
-  }
+  .lang.is-open .lang-row{ opacity:1; pointer-events:auto; }
   .lang-chip{
     font-size:15px;
     font-weight:700;
@@ -148,10 +167,9 @@
     pointer-events:none;
     z-index:99999;
   }
-  .nodes:hover .nodes-stack{
-    opacity:1;
-    pointer-events:auto;
-  }
+  .nodes:hover .nodes-stack{ opacity:1; pointer-events:auto; }
+  .nodes.is-open .nodes-stack{ opacity:1; pointer-events:auto; } /* touch toggle */
+
   .node{
     width:11.5ch;
     text-align:center;
@@ -175,22 +193,24 @@
   }
   .node:hover::after{ width:66%; }
 
-  /* ===== Footer ===== */
+  /* ===== Footer (smaller + stable in iOS) ===== */
   .index-footer{
     position:fixed;
     left:0; right:0;
-    bottom:18px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
     z-index:9998;
     text-align:center;
-    font-size:11px;
-    letter-spacing:.14em;
+    font-size:10px;
+    line-height:1.15;
+    letter-spacing:.12em;
     text-transform:uppercase;
-    opacity:.60;
-    mix-blend-mode:difference;
-    padding:0 18px;
+    opacity:.58;
+    padding:0 14px;
     pointer-events:auto;
     user-select:none;
     -webkit-user-select:none;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
   .index-footer a{
     color:rgba(255,255,255,.92);
@@ -198,15 +218,16 @@
     border-bottom:1px solid rgba(255,255,255,.28);
     padding-bottom:2px;
   }
-  .index-footer a:hover{
-    border-bottom-color:rgba(255,255,255,.75);
+  .index-footer a:hover{ border-bottom-color:rgba(255,255,255,.75); }
+  @media (max-width: 520px){
+    .index-footer{ font-size:9px; letter-spacing:.10em; }
   }
 
   /* ===== SOUND FAB ===== */
   .sound-fab{
     position:fixed;
-    right:18px;
-    bottom:18px;
+    right: calc(18px + env(safe-area-inset-right));
+    bottom: calc(18px + env(safe-area-inset-bottom));
     z-index:9999;
     display:flex;
     align-items:center;
@@ -219,12 +240,7 @@
     transform:translateZ(0);
     pointer-events:auto;
   }
-  .sound-ico{
-    width:40px;
-    height:40px;
-    opacity:.98;
-    transform-origin: 50% 50%;
-  }
+  .sound-ico{ width:40px; height:40px; opacity:.98; transform-origin:50% 50%; }
   .sound-off{ display:none; }
   .sound-fab.is-muted .sound-on{ display:none; }
   .sound-fab.is-muted .sound-off{ display:block; }
@@ -239,18 +255,9 @@
     transform:translateX(8px);
     white-space:nowrap;
   }
-  .sound-fab:hover .sound-label{
-    opacity:.72;
-    transform:translateX(0);
-  }
-  .sound-fab.is-pulse .sound-ico{
-    animation: soundPulse 120ms ease-out;
-  }
-  @keyframes soundPulse{
-    0%{ transform: scale(1); }
-    50%{ transform: scale(1.08); }
-    100%{ transform: scale(1); }
-  }
+  .sound-fab:hover .sound-label{ opacity:.72; transform:translateX(0); }
+  .sound-fab.is-pulse .sound-ico{ animation: soundPulse 120ms ease-out; }
+  @keyframes soundPulse{ 0%{transform:scale(1)} 50%{transform:scale(1.08)} 100%{transform:scale(1)} }
 
   /* ===== ABOUT overlay ===== */
   .about-overlay{
@@ -260,31 +267,31 @@
     display:none;
     pointer-events:none;
   }
-  .about-overlay.is-open{
-    display:block;
-    pointer-events:auto;
-  }
-  .about-dim{
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.50);
-  }
+  .about-overlay.is-open{ display:block; pointer-events:auto; }
+  .about-dim{ position:absolute; inset:0; background:rgba(0,0,0,.50); }
+
   .about-stage{
     position:absolute;
     inset:0;
     display:grid;
     place-items:center;
-    padding:min(6vh, 48px) 0;
+    padding: calc(14px + env(safe-area-inset-top)) 0 calc(14px + env(safe-area-inset-bottom)) 0;
   }
+
   .about-shell{
     position:relative;
     width:100vw;
+    height:var(--vh);
     background:#000;
     overflow:hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
   }
+
   .about-close{
     position:absolute;
-    top:18px; right:18px;
+    top: calc(14px + env(safe-area-inset-top));
+    right: calc(14px + env(safe-area-inset-right));
     border:1px solid rgba(255,255,255,.14);
     background:rgba(255,255,255,.04);
     border-radius:999px;
@@ -296,6 +303,7 @@
     cursor:pointer;
     z-index:6;
   }
+
   .edge-arrow{
     position:absolute;
     top:50%;
@@ -323,7 +331,7 @@
   .about-index{
     position:absolute;
     left:24px;
-    bottom:18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
     font-size:11px;
     letter-spacing:.14em;
     text-transform:uppercase;
@@ -334,19 +342,23 @@
 
   .about-track{
     display:flex;
-    overflow:hidden;
+    height:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling: touch;
     scroll-snap-type:x mandatory;
     scroll-behavior:smooth;
     touch-action: pan-x pinch-zoom;
   }
   .about-panel{
     min-width:100%;
+    height:100%;
     scroll-snap-align:start;
-    padding:56px 0;
     box-sizing:border-box;
+    padding: 64px 0 72px;
   }
   .about-inner{
-    width:min(1180px, calc(100vw - 96px));
+    width:min(1180px, calc(100vw - 44px));
     margin:0 auto;
   }
   .about-grid{
@@ -403,18 +415,13 @@
     opacity:.72;
     max-width:70ch;
   }
-  .about-hr{
-    height:1px;
-    background:rgba(255,255,255,.10);
-    margin:22px 0;
-  }
+  .about-hr{ height:1px; background:rgba(255,255,255,.10); margin:22px 0; }
 
-  /* Mobile dots (always visible) */
   .about-dots{
     position:absolute;
     left:50%;
     transform:translateX(-50%);
-    bottom:18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
     z-index:8;
     display:flex;
     gap:10px;
@@ -422,8 +429,7 @@
     pointer-events:auto;
   }
   .dot{
-    width:7px;
-    height:7px;
+    width:7px; height:7px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.35);
     background:transparent;
@@ -433,19 +439,16 @@
     background:rgba(255,255,255,.70);
     border-color:rgba(255,255,255,.70);
   }
-  @media (min-width: 981px){
-    .about-dots{ display:none; }
-  }
-
+  @media (min-width: 981px){ .about-dots{ display:none; } }
   @media (max-width: 980px){
     .about-inner{ width:min(1180px, calc(100vw - 44px)); }
     .about-grid{ grid-template-columns:1fr; }
-    .about-media{ height:44vh; }
+    .about-media{ height:34vh; }
     .edge-arrow{ opacity:.92; pointer-events:auto; height:92px; width:52px; }
     .about-shell.is-hot .edge-arrow{ opacity:.92; pointer-events:auto; }
   }
 
-  /* ===== Screen-reader only ===== */
+  /* Screen reader only */
   .sr-only{
     position:absolute;
     width:1px; height:1px;
@@ -456,33 +459,26 @@
     border:0;
   }
 
-  /* ===== RTL (AR) =====
-     Requirement: globe stays on RIGHT (not left), dropdown opens LEFT, order flipped. */
+  /* ===== RTL (Arabic) — globe stays RIGHT, dropdown opens LEFT ===== */
   html[dir="rtl"] .topbar{
     left:auto;
-    right:18px;               /* keep topbar on the right */
-    flex-direction: row-reverse; /* LANG remains rightmost */
+    right: calc(18px + env(safe-area-inset-right));
+    flex-direction: row-reverse;
   }
   html[dir="rtl"] .lang-btn svg{ transform: scaleX(-1); }
-
   html[dir="rtl"] .lang-row{
     left:auto;
     right:100%;
-    transform:translateY(-50%) translateX(-14px); /* open left */
-    flex-direction: row-reverse; /* visual order reversed */
-  }
-
-  html[dir="rtl"] .sound-fab{
-    left:auto;
-    right:18px;
+    transform:translateY(-50%) translateX(-14px);
     flex-direction: row-reverse;
   }
-  html[dir="rtl"] .sound-label{
-    transform:translateX(-8px);
+  html[dir="rtl"] .sound-fab{
+    left:auto;
+    right: calc(18px + env(safe-area-inset-right));
+    flex-direction: row-reverse;
   }
-  html[dir="rtl"] .sound-fab:hover .sound-label{
-    transform:translateX(0);
-  }
+  html[dir="rtl"] .sound-label{ transform:translateX(-8px); }
+  html[dir="rtl"] .sound-fab:hover .sound-label{ transform:translateX(0); }
 </style>
 </head>
 
@@ -493,7 +489,6 @@
   <source src="CT.mp4" type="video/mp4">
 </video>
 
-<!-- ARIA announcer -->
 <div role="status" aria-live="polite" aria-atomic="true" class="sr-only" id="announcer"></div>
 
 <div class="topbar">
@@ -520,7 +515,7 @@
 
   <div class="toplink muted" id="aboutBtn" data-i18n="top_about">ABOUT</div>
 
-  <div class="toplink nodes"><span data-i18n="top_nodes">NODES</span>
+  <div class="toplink nodes" id="nodesBtn"><span data-i18n="top_nodes">NODES</span>
     <div class="nodes-bridge" aria-hidden="true"></div>
     <div class="nodes-stack" aria-hidden="true">
       <div class="node" data-node="001">001</div>
@@ -571,18 +566,14 @@
               <div>
                 <div class="about-kicker" data-i18n="about_kicker">ABOUT</div>
                 <h2 class="about-title" data-i18n="about_title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
-
                 <p class="about-p" data-i18n="about_p1">
                   Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
                 </p>
-
                 <div class="about-hr"></div>
-
                 <p class="about-p" data-i18n="about_p2">
                   The system is designed to transform physical space into fully automated operational environments,
                   aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
                 </p>
-
                 <p class="about-p" data-i18n="about_p3">
                   By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
                 </p>
@@ -595,13 +586,10 @@
           <div class="about-inner">
             <div class="about-kicker" data-i18n="ceo_kicker">microlabsX</div>
             <h2 class="about-title" data-i18n="ceo_title">WHO WE ARE</h2>
-
             <p class="about-p" data-i18n="ceo_p1">
               MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
             </p>
-
             <div class="about-hr"></div>
-
             <p class="about-p" data-i18n="ceo_p2">
               We focus on the structural layer of the next industrial shift: robotics, software orchestration,
               and measurable execution as a deployable operating system for space.
@@ -613,18 +601,16 @@
           <div class="about-inner">
             <div class="about-kicker" data-i18n="gov_kicker">GOVERNMENTS</div>
             <h2 class="about-title" data-i18n="gov_title">INSTITUTIONAL DEPLOYMENT</h2>
-
             <p class="about-p" data-i18n="gov_p1">
               A globally deployable framework for public-sector and institutional partners:
               pilot environments, regulatory alignment, operational governance, and long-term resilience.
             </p>
-
             <div class="about-hr"></div>
-
             <p class="about-p" data-i18n="gov_p2">developing contact</p>
           </div>
         </section>
       </div>
+
     </div>
   </div>
 </div>
@@ -652,12 +638,35 @@
 
 <script>
 /* =========================
+   0) Viewport hardening (iOS/Android)
+========================= */
+function setVh(){
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`);
+}
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+function hardResetTop(){
+  requestAnimationFrame(() => {
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+    setTimeout(() => window.scrollTo(0, 0), 60);
+  });
+}
+
+window.addEventListener('load', () => { setVh(); hardResetTop(); }, { passive:true });
+window.addEventListener('resize', () => { setVh(); hardResetTop(); }, { passive:true });
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => { setVh(); hardResetTop(); }, 120);
+}, { passive:true });
+setVh();
+
+/* =========================
    Helpers
 ========================= */
 function $(id){ return document.getElementById(id); }
 
 /* =========================
-   I18N
+   I18N (same dict as before)
 ========================= */
 const SUPPORTED = ["en","es","ca","ar","zh","ru"];
 const I18N = {
@@ -679,7 +688,7 @@ const I18N = {
     footer_html:`<a href="https://www.microstudioX.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROSTUDIOX ES UN PROYECTO EN DESARROLLO. SIN ACTIVIDAD COMERCIAL.`,
     about_kicker:"ABOUT", about_title:"UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
     about_p1:"Nuestro objetivo es ofrecer a gobiernos una solución global, desplegable y escalable basada en automatización avanzada e infraestructura biotecnológica controlada.",
-    about_p2:"El sistema transforma el espacio físico en entornos operativos totalmente automatizados, alineados con el nuevo paradigma industrial donde el software, la robótica y la orquestación de datos redefinen la producción.",
+    about_p2:"El sistema transforma el espacio físico en entornos operativos totalmente automatizados, alineados con el nuevo paradigma industrial donde el software, la robótica y la orquestación de datos redefine la producción.",
     about_p3:"Al priorizar la automatización como capa fundacional, nuestro enfoque impulsa eficiencia, resiliencia y soberanía operativa a largo plazo en despliegues públicos e institucionales.",
     ceo_kicker:"microlabsX", ceo_title:"QUIÉNES SOMOS",
     ceo_p1:"MicroretailX LLC es la entidad legal detrás de esta iniciativa. Desarrollamos sistemas con automatización como base para infraestructura biotecnológica controlada y escalable en entornos institucionales.",
@@ -773,9 +782,7 @@ function applyLanguage(lang){
   syncSoundUI();
 }
 
-/* =========================
-   LANG UI
-========================= */
+/* LANG */
 function initLang(){
   const wrap = $("langWrap");
   const btn  = $("langBtn");
@@ -802,28 +809,18 @@ function initLang(){
   });
 }
 
-/* =========================
-   SOUND (robust)
-========================= */
-function getSoundRefs(){
-  return { v: $("bg"), fab: $("soundFab"), label: $("soundLabel") };
-}
-
+/* SOUND */
+function getSoundRefs(){ return { v: $("bg"), fab: $("soundFab"), label: $("soundLabel") }; }
 function syncSoundUI(){
   const { v, fab, label } = getSoundRefs();
   if(!v || !fab || !label) return;
-
   const muted = !!v.muted;
   fab.classList.toggle("is-muted", muted);
-
   const dict = currentDict();
   let txt = muted ? "SOUND OFF" : "SOUND ON";
-  if(dict && dict.top_sound_on_off){
-    txt = dict.top_sound_on_off[muted ? "off" : "on"] || txt;
-  }
+  if(dict && dict.top_sound_on_off) txt = dict.top_sound_on_off[muted ? "off" : "on"] || txt;
   label.textContent = txt;
 }
-
 let lastToggleAt = 0;
 async function toggleSound(e){
   if(e){ e.stopPropagation(); e.preventDefault(); }
@@ -834,47 +831,32 @@ async function toggleSound(e){
   const { v, fab } = getSoundRefs();
   if(!v || !fab) return;
 
-  fab.classList.remove("is-pulse");
-  void fab.offsetWidth;
-  fab.classList.add("is-pulse");
+  fab.classList.remove("is-pulse"); void fab.offsetWidth; fab.classList.add("is-pulse");
   setTimeout(()=> fab.classList.remove("is-pulse"), 140);
 
   v.muted = !v.muted;
-
   if(!v.muted){
-    try{
-      v.volume = 1;
-      if(v.paused) await v.play();
-    }catch(_){
-      v.muted = true; // rollback if blocked
-    }
+    try{ v.volume = 1; if(v.paused) await v.play(); }
+    catch(_){ v.muted = true; }
   }
   syncSoundUI();
 }
-
 function initSound(){
   const { fab } = getSoundRefs();
   if(!fab) return;
-
   fab.addEventListener("pointerdown", toggleSound, { passive:false });
   fab.addEventListener("click", toggleSound, { passive:false });
-  fab.addEventListener("keydown", (e)=>{
-    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleSound(e); }
-  });
-
+  fab.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggleSound(e); }});
   syncSoundUI();
 }
 
-/* =========================
-   ABOUT modal (focus + dots + announcer)
-========================= */
+/* ABOUT */
 function initAbout(){
   const aboutBtn = $("aboutBtn");
   const overlay  = $("aboutOverlay");
   const dim      = $("aboutDim");
   const closeBtn = $("aboutClose");
   const shell    = $("aboutShell");
-
   const track = $("aboutTrack");
   const panels = track ? Array.from(track.querySelectorAll(".about-panel")) : [];
   const prevBtn = $("prevBtn");
@@ -887,14 +869,10 @@ function initAbout(){
   if(!aboutBtn || !overlay || !dim || !closeBtn || !shell || !track) return;
 
   let lastFocus = null;
-
   function w(){ return track.clientWidth || window.innerWidth; }
   function idx(){ return Math.round(track.scrollLeft / w()); }
   function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-
-  function updateDots(i){
-    dots.forEach((d,di)=> d.classList.toggle("is-active", di === i));
-  }
+  function updateDots(i){ dots.forEach((d,di)=> d.classList.toggle("is-active", di === i)); }
 
   function updateNav(){
     const i = idx();
@@ -902,7 +880,6 @@ function initAbout(){
     if(prevBtn) prevBtn.classList.toggle("is-disabled", i === 0);
     if(nextBtn) nextBtn.classList.toggle("is-disabled", i === panels.length - 1);
     updateDots(i);
-
     if(announcer){
       const dict = currentDict();
       const label = dict?.about_kicker || "Panel";
@@ -928,19 +905,14 @@ function initAbout(){
     const first = list[0];
     const last  = list[list.length - 1];
 
-    if(e.shiftKey && document.activeElement === first){
-      e.preventDefault(); last.focus();
-    }else if(!e.shiftKey && document.activeElement === last){
-      e.preventDefault(); first.focus();
-    }
+    if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
   }
 
   function openAbout(panelKey){
     lastFocus = document.activeElement;
-
     overlay.classList.add("is-open");
     overlay.setAttribute("aria-hidden","false");
-    document.body.style.overflow = "hidden";
 
     let i = 0;
     if(panelKey){
@@ -949,14 +921,12 @@ function initAbout(){
     }
     scrollToIndex(i);
     updateNav();
-
     setTimeout(()=> closeBtn.focus(), 0);
   }
 
   function closeAbout(){
     overlay.classList.remove("is-open");
     overlay.setAttribute("aria-hidden","true");
-    document.body.style.overflow = "";
     shell.classList.remove("is-hot");
     if(lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
   }
@@ -999,18 +969,29 @@ function initAbout(){
   });
   shell.addEventListener("mouseleave", ()=> shell.classList.remove("is-hot"));
 
-  window.addEventListener("resize", ()=>{ scrollToIndex(idx()); updateNav(); });
+  window.addEventListener("resize", ()=>{ scrollToIndex(idx()); updateNav(); }, { passive:true });
   updateNav();
 }
 
-/* =========================
-   Boot
-========================= */
+/* NODES touch toggle (mobile/Android/iOS) */
+function initNodesTouch(){
+  const isTouch = matchMedia('(hover: none)').matches;
+  if(!isTouch) return;
+  const nodes = $("nodesBtn");
+  if(!nodes) return;
+  nodes.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    nodes.classList.toggle("is-open");
+  });
+  document.addEventListener("click", ()=> nodes.classList.remove("is-open"));
+}
+
+/* Boot */
 document.addEventListener("DOMContentLoaded", ()=>{
   initLang();
   initAbout();
   initSound();
-
+  initNodesTouch();
   applyLanguage(localStorage.getItem("mrx_lang") || "en");
 });
 </script>
