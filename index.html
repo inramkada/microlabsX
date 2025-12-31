@@ -295,6 +295,44 @@
     cursor:pointer;
     z-index:6;
   }
+
+  /* ===== Immersive reader (ABOUT) ===== */
+  .about-tts{
+    position:absolute;
+    top:18px;
+    right:92px; /* leaves room for CLOSE */
+    width:46px;
+    height:40px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    border-radius:999px;
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    z-index:7;
+    color:rgba(255,255,255,.86);
+  }
+  .about-tts:hover{ background:rgba(255,255,255,.07); }
+  .about-tts:focus{ outline:2px solid rgba(255,255,255,.22); outline-offset:3px; }
+
+  .about-tts .tts-icon{
+    position:absolute;
+    font-size:14px;
+    line-height:1;
+    transition:opacity 160ms ease;
+    opacity:0;
+  }
+  .about-tts .tts-reader{ opacity:.92; }
+
+  @media (hover:hover) and (pointer:fine){
+    .about-tts:hover .tts-reader{ opacity:0; }
+    .about-tts:hover .tts-play{ opacity:1; }
+    .about-tts.is-playing:hover .tts-play{ opacity:0; }
+    .about-tts.is-playing:hover .tts-pause{ opacity:1; }
+  }
+  @media (hover:none){
+    .about-tts .tts-reader{ opacity:.92; }
+  }
   .edge-arrow{
     position:absolute;
     top:50%;
@@ -542,7 +580,17 @@
     <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
       <button class="about-close" id="aboutClose" type="button" data-i18n="ui_close">CLOSE</button>
 
-      <div class="edge-arrow left" id="prevBtn" title="Previous">
+      
+      <button class="about-tts" id="aboutSpeak" type="button"
+        aria-label="Immersive reader"
+        aria-pressed="false"
+        title="Immersive reader">
+        <span class="tts-icon tts-reader" aria-hidden="true">⌁</span>
+        <span class="tts-icon tts-play" aria-hidden="true">▶</span>
+        <span class="tts-icon tts-pause" aria-hidden="true">⏸</span>
+      </button>
+      <span class="sr-only" id="ttsStatus" aria-live="polite" aria-atomic="true"></span>
+<div class="edge-arrow left" id="prevBtn" title="Previous">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1002,6 +1050,133 @@ function initAbout(){
   updateNav();
 }
 
+
+/* =========================
+   Immersive reader (TTS) — ABOUT only
+========================= */
+function ttsLangFromApp(lang){
+  switch(lang){
+    case "es": return "es-ES";
+    case "ca": return "ca-ES";
+    case "ar": return "ar-SA";
+    case "zh": return "zh-CN";
+    case "ru": return "ru-RU";
+    default:   return "en-US";
+  }
+}
+
+function pickVoice(langTag){
+  const voices = window.speechSynthesis?.getVoices?.() || [];
+  if(!voices.length) return null;
+  const primary = langTag.toLowerCase();
+  const base = primary.split("-")[0];
+  return (
+    voices.find(v => (v.lang||"").toLowerCase() === primary) ||
+    voices.find(v => (v.lang||"").toLowerCase().startsWith(base)) ||
+    voices.find(v => v.default) ||
+    voices[0] ||
+    null
+  );
+}
+
+function buildAboutTextOnly(){
+  const aboutPanel = document.querySelector('.about-panel[data-panel="about"]');
+  if(!aboutPanel) return "";
+  const title = aboutPanel.querySelector(".about-title")?.textContent?.trim() || "";
+  const paras = Array.from(aboutPanel.querySelectorAll(".about-p"))
+    .map(p => (p.textContent || "").trim())
+    .filter(Boolean);
+  return [title, ...paras].filter(Boolean).join(". ");
+}
+
+function initImmersiveTTSAboutOnly(){
+  const btn = $("aboutSpeak");
+  const overlay = $("aboutOverlay");
+  const closeBtn = $("aboutClose");
+  const dim = $("aboutDim");
+  const status = $("ttsStatus");
+
+  if(!btn || !("speechSynthesis" in window)) return;
+
+  function setState(state){
+    // "idle" | "playing" | "paused"
+    btn.classList.toggle("is-playing", state === "playing");
+    btn.classList.toggle("is-paused", state === "paused");
+    btn.setAttribute("aria-pressed", state === "playing" ? "true" : "false");
+
+    if(status){
+      status.textContent = state === "playing" ? "Reading ABOUT." : (state === "paused" ? "Paused." : "Stopped.");
+      setTimeout(()=>{ status.textContent = ""; }, 800);
+    }
+  }
+
+  function stop(){
+    try{ window.speechSynthesis.cancel(); }catch(_){}
+    setState("idle");
+  }
+
+  function speak(){
+    const text = buildAboutTextOnly();
+    if(!text){ stop(); return; }
+
+    stop(); // cancel previous
+
+    const langTag = ttsLangFromApp(localStorage.getItem("mrx_lang") || "en");
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = langTag;
+
+    const voice = pickVoice(langTag);
+    if(voice) u.voice = voice;
+
+    u.onend = ()=> setState("idle");
+    u.onerror = ()=> setState("idle");
+
+    setState("playing");
+    window.speechSynthesis.speak(u);
+  }
+
+  function toggle(){
+    // Only operate when modal is open
+    if(overlay && !overlay.classList.contains("is-open")) return;
+
+    const s = window.speechSynthesis;
+    if(s.speaking){
+      if(s.paused){ s.resume(); setState("playing"); }
+      else { s.pause(); setState("paused"); }
+      return;
+    }
+    speak();
+  }
+
+  // Some browsers load voices asynchronously
+  window.speechSynthesis.onvoiceschanged = () => {};
+
+  btn.addEventListener("click", (e)=>{ e.stopPropagation(); toggle(); });
+  btn.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggle(); }
+  });
+
+  // Stop when closing modal
+  if(closeBtn) closeBtn.addEventListener("click", stop);
+  if(dim) dim.addEventListener("click", stop);
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && overlay?.classList.contains("is-open")) stop();
+  });
+
+  // Restart in new language if language changes mid-read
+  const _applyLanguage = window.applyLanguage;
+  if(typeof _applyLanguage === "function"){
+    window.applyLanguage = function(lang){
+      _applyLanguage(lang);
+      const synth = window.speechSynthesis;
+      if(synth.speaking || synth.paused) speak();
+    };
+  }
+
+  setState("idle");
+}
+
+
 /* =========================
    Boot
 ========================= */
@@ -1009,6 +1184,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   initLang();
   initAbout();
   initSound();
+  initImmersiveTTSAboutOnly();
 
   applyLanguage(localStorage.getItem("mrx_lang") || "en");
 });
