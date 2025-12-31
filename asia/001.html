@@ -6,191 +6,151 @@
 <title>ASIA · NODE 001</title>
 
 <style>
-  :root{
-    --bg:#000;
-    --fg:rgba(255,255,255,.92);
-    --muted:rgba(255,255,255,.58);
-    --line:rgba(255,255,255,.10);
-    --line2:rgba(255,255,255,.06);
-    --card:rgba(255,255,255,.03);
-  }
-
-  html,body{
+  html, body{
     margin:0;
     width:100%;
     height:100%;
-    background:var(--bg);
-    color:var(--fg);
+    background:#000;
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:#fff;
     overflow:hidden; /* NO SCROLL */
   }
 
-  /* subtle dumbar-ish grid */
-  body::before{
-    content:"";
+  /* ===== BACKGROUND VIDEO (same as index) ===== */
+  #bg{
     position:fixed;
     inset:0;
+    width:100vw;
+    height:100vh;
+    object-fit:cover;
+    z-index:1;
     pointer-events:none;
-    background:
-      linear-gradient(to right, var(--line2) 1px, transparent 1px) 0 0 / 120px 120px,
-      linear-gradient(to bottom, var(--line2) 1px, transparent 1px) 0 0 / 120px 120px;
-    opacity:.22;
   }
 
-  /* ===== HEADER ===== */
-  .header{
-    position:absolute;
-    top:18px; left:22px; right:22px;
+  /* darken slightly for readability */
+  .bg-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:2;
+    pointer-events:none;
+  }
+
+  /* ===== TOPBAR (same language as index) ===== */
+  .topbar{
+    position:fixed;
+    top:18px;
+    left:18px;
+    right:18px;
+    z-index:30;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    z-index:10;
     mix-blend-mode:difference;
   }
-  .header a,
-  .header span{
-    text-decoration:none;
-    color:rgba(255,255,255,.85);
-    font-weight:700;
+
+  .topbar a,
+  .topbar span{
     font-size:12px;
+    font-weight:700;
     letter-spacing:.22em;
     text-transform:uppercase;
+    color:rgba(255,255,255,.9);
+    text-decoration:none;
     user-select:none;
-    -webkit-user-select:none;
-  }
-  .header a:hover{ color:#fff; }
-
-  /* ===== LAYOUT ===== */
-  .panel{
-    position:absolute;
-    inset:0;
-    display:grid;
-    grid-template-columns: 1.05fr 0.95fr; /* more balanced, more air */
   }
 
-  /* a clean vertical separator */
-  .panel::after{
-    content:"";
-    position:absolute;
-    top:78px;
-    bottom:78px;
-    left:50%;
-    width:1px;
-    background:var(--line2);
-    transform:translateX(-0.5px);
-    pointer-events:none;
-    opacity:.7;
-  }
+  .topbar a:hover{ color:#fff; }
 
-  /* ===== LEFT ===== */
-  .info{
-    padding:118px 64px 88px;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-  }
-
-  .title{
-    margin:0 0 26px;
-    font-size:26px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    font-weight:800;
-  }
-
-  .sub{
-    margin:0 0 22px;
-    font-size:12px;
-    line-height:1.7;
-    color:var(--muted);
-    letter-spacing:.06em;
-    max-width:56ch;
-  }
-
-  .metrics{
-    margin-top:22px;
-    max-width:420px;
-    display:grid;
-    gap:12px;
-  }
-
-  .metric{
-    display:grid;
-    grid-template-columns: 1fr auto;
-    gap:14px;
-    align-items:baseline;
-    padding:10px 0;
-    border-bottom:1px solid var(--line2);
-  }
-
-  .metric-label{
-    font-size:11px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.52);
-  }
-
-  .metric-value{
-    font-size:12px;
-    letter-spacing:.12em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.82);
-    white-space:nowrap;
-  }
-
-  .status{
-    margin-top:26px;
-    font-size:11px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.52);
-    max-width:62ch;
-  }
-
-  /* ===== RIGHT ===== */
-  .right{
-    padding:118px 64px 88px;
+  /* ===== PAGE ===== */
+  .page{
+    position:relative;
+    z-index:10;
+    height:100%;
     display:flex;
     align-items:center;
     justify-content:center;
+    padding:96px 0 86px;
   }
 
-  /* image card (smaller, positioned) */
-  .card{
-    width:min(560px, 100%);
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:24px;
-    overflow:hidden;
-    box-shadow:0 44px 160px rgba(0,0,0,.76);
-    position:relative;
+  .wrap{
+    width:min(1240px, calc(100vw - 56px));
   }
 
-  /* dumbar-ish top bar */
-  .card-top{
-    display:flex;
-    justify-content:space-between;
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.2fr; /* media más protagonista */
+    gap:56px;
     align-items:center;
-    padding:14px 16px;
-    border-bottom:1px solid var(--line2);
-    background:rgba(0,0,0,.35);
-    color:rgba(255,255,255,.72);
-    font-size:10px;
+  }
+
+  /* ===== LEFT ===== */
+  .copy{}
+
+  .kicker{
+    font-size:12px;
     letter-spacing:.18em;
     text-transform:uppercase;
+    opacity:.6;
+    margin-bottom:14px;
   }
-  .dot{
-    display:inline-block;
-    width:8px;height:8px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.24);
-    margin-right:8px;
+
+  .h{
+    font-size:28px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin:0 0 18px;
+  }
+
+  .p{
+    font-size:14px;
+    line-height:1.65;
+    opacity:.75;
+    max-width:56ch;
+    margin-bottom:18px;
+  }
+
+  .hr{
+    height:1px;
+    background:rgba(255,255,255,.14);
+    margin:22px 0;
+  }
+
+  .metrics{
+    display:grid;
+    gap:12px;
+    max-width:520px;
+  }
+
+  .row{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    padding-bottom:10px;
+  }
+
+  .label{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+
+  .value{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
     opacity:.9;
   }
 
+  /* ===== RIGHT MEDIA ===== */
   .media{
     position:relative;
-    aspect-ratio: 16 / 10;
+    height:min(62vh, 520px);
+    border-radius:26px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 32px 140px rgba(0,0,0,.75);
     background:#000;
   }
 
@@ -198,132 +158,146 @@
     width:100%;
     height:100%;
     object-fit:cover;
-    display:block;
-    transform:scale(1.01);
-    filter:saturate(1.04) contrast(1.03);
+    transform:scale(1.03);
+    filter:saturate(1.05) contrast(1.02);
   }
 
-  /* subtle vignette */
   .media::after{
     content:"";
     position:absolute;
     inset:0;
     pointer-events:none;
     background:
-      radial-gradient(circle at 20% 25%, rgba(255,255,255,.06), rgba(0,0,0,0) 55%),
-      linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.40));
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,.08), rgba(0,0,0,0) 55%),
+      linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.6));
+  }
+
+  .chip{
+    position:absolute;
+    top:14px;
+    left:14px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.35);
+    mix-blend-mode:difference;
   }
 
   .note{
-    padding:14px 16px 16px;
-    border-top:1px solid var(--line2);
-    color:rgba(255,255,255,.62);
-    font-size:11px;
+    position:absolute;
+    left:14px;
+    right:14px;
+    bottom:14px;
+    font-size:12px;
     line-height:1.6;
     letter-spacing:.06em;
-    background:rgba(0,0,0,.22);
+    background:rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:16px;
+    padding:12px 14px;
+    backdrop-filter:blur(6px);
+    opacity:.85;
   }
 
-  /* ===== FOOTER (same as index) ===== */
+  /* ===== FOOTER ===== */
   .footer{
-    position:absolute;
+    position:fixed;
     bottom:18px;
-    left:0; right:0;
+    left:0;
+    right:0;
     text-align:center;
     font-size:11px;
     letter-spacing:.14em;
     text-transform:uppercase;
-    color:rgba(255,255,255,.45);
+    opacity:.45;
     mix-blend-mode:difference;
-    z-index:10;
-    user-select:none;
-    -webkit-user-select:none;
+    z-index:30;
   }
 
-  /* ===== RESPONSIVE ===== */
-  @media(max-width:1100px){
-    .panel{
-      grid-template-columns:1fr;
-    }
-    .panel::after{ display:none; }
-    .right{ display:none; } /* mobile: keep it ultra clean */
-    .info{ padding:104px 28px 80px; }
+  @media(max-width:980px){
+    .grid{ grid-template-columns:1fr; gap:36px; }
+    .media{ height:44vh; }
   }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-  <a href="../index.html">← Back</a>
+<!-- BACKGROUND VIDEO -->
+<video id="bg" autoplay muted loop playsinline preload="metadata">
+  <source src="ct.mp4" type="video/mp4">
+</video>
+<div class="bg-overlay"></div>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="../index.html">← BACK</a>
   <span>ASIA · NODE 001</span>
-</header>
+</div>
 
-<main class="panel">
+<!-- CONTENT -->
+<div class="page">
+  <div class="wrap">
+    <div class="grid">
 
-  <!-- LEFT -->
-  <section class="info">
-    <div>
-      <h1 class="title">ASIA · NODE 001</h1>
+      <!-- LEFT -->
+      <div class="copy">
+        <div class="kicker">NODE 001</div>
+        <h1 class="h">IN DEVELOPMENT</h1>
 
-      <p class="sub">
-        Public preview. This module is currently being built. The interactive Omniverse tool will replace the placeholder.
-      </p>
+        <p class="p">
+          Public preview. This space is reserved for an interactive NVIDIA Omniverse tool.
+          The current media is a placeholder while the module is being built.
+        </p>
 
-      <div class="metrics">
-        <div class="metric">
-          <span class="metric-label">Site Area (m²)</span>
-          <span class="metric-value">TBD</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Production Capacity</span>
-          <span class="metric-value">TBD</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Automation</span>
-          <span class="metric-value">In Design</span>
-        </div>
-        <div class="metric">
-          <span class="metric-label">Phase</span>
-          <span class="metric-value">Build</span>
+        <div class="hr"></div>
+
+        <div class="metrics">
+          <div class="row">
+            <div class="label">Area (m²)</div>
+            <div class="value">TBD</div>
+          </div>
+          <div class="row">
+            <div class="label">Production Capacity</div>
+            <div class="value">TBD</div>
+          </div>
+          <div class="row">
+            <div class="label">Phase</div>
+            <div class="value">BUILD</div>
+          </div>
+          <div class="row">
+            <div class="label">Access</div>
+            <div class="value">RESTRICTED LATER</div>
+          </div>
         </div>
       </div>
 
-      <div class="status">
-        Work in progress — specifications and interactive access will evolve over time.
-      </div>
-    </div>
-  </section>
-
-  <!-- RIGHT -->
-  <section class="right" aria-label="Placeholder media">
-    <div class="card">
-      <div class="card-top">
-        <span><span class="dot"></span>Placeholder · Omniverse</span>
-        <span>Preview</span>
-      </div>
-
+      <!-- RIGHT -->
       <div class="media">
+        <div class="chip">PLACEHOLDER</div>
         <img
           src="https://developer.download.nvidia.com/images/isaac/sim/nvidia-physical-ai-ari.jpg"
-          alt="NVIDIA Isaac Sim / Omniverse placeholder"
+          alt="NVIDIA Omniverse / Isaac Sim placeholder"
           loading="eager"
           decoding="async"
           referrerpolicy="no-referrer"
         >
+        <div class="note">
+          Placeholder image only. The interactive NVIDIA Omniverse environment will be enabled here once ready.
+        </div>
       </div>
 
-      <div class="note">
-        This image is a visual placeholder only. This space is reserved for the interactive NVIDIA Omniverse tool.
-      </div>
     </div>
-  </section>
+  </div>
+</div>
 
-</main>
-
-<footer class="footer">
-  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION AND DOES NOT CONSTITUTE A LEGAL ENTITY
-</footer>
+<!-- FOOTER -->
+<div class="footer">
+  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION
+</div>
 
 </body>
 </html>
