@@ -920,9 +920,7 @@ async function toggleSound(e){
 function initSound(){
   const { fab } = getSoundRefs();
   if(!fab) return;
-
-  fab.addEventListener("pointerdown", toggleSound, { passive:false });
-  fab.addEventListener("click", toggleSound, { passive:false });
+fab.addEventListener("click", toggleSound, { passive:false });
   fab.addEventListener("keydown", (e)=>{
     if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleSound(e); }
   });
@@ -1086,15 +1084,45 @@ function ttsLangFromApp(lang){
 function pickVoice(langTag){
   const voices = window.speechSynthesis?.getVoices?.() || [];
   if(!voices.length) return null;
-  const base = String(langTag || "").split("-")[0].toLowerCase();
+
   const primary = String(langTag || "").toLowerCase();
-  return (
-    voices.find(v => (v.lang||"").toLowerCase() === primary) ||
-    voices.find(v => (v.lang||"").toLowerCase().startsWith(base)) ||
-    voices.find(v => v.default) ||
-    voices[0] ||
-    null
-  );
+  const base = primary.split("-")[0];
+
+  const score = (v) => {
+    let pts = 0;
+    const name = (v.name || "").toLowerCase();
+    const vLang = (v.lang || "").toLowerCase();
+
+    // 1) Language match (exact preferred, base acceptable)
+    if(vLang === primary) pts += 10;
+    else if(vLang.startsWith(base)) pts += 5;
+    else return -1;
+
+    // 2) Quality hints (best-effort)
+    if(name.includes("google")) pts += 2;
+    if(name.includes("premium")) pts += 2;
+    if(name.includes("enhanced")) pts += 2;
+    if(name.includes("natural")) pts += 2;
+    if(name.includes("neural")) pts += 2;
+
+    // Prefer default slightly
+    if(v.default) pts += 1;
+
+    return pts;
+  };
+
+  const candidates = voices
+    .map(v => ({ v, s: score(v) }))
+    .filter(x => x.s > 0)
+    .sort((a,b) => b.s - a.s);
+
+  if(candidates.length) return candidates[0].v;
+
+  // Plan B: if Catalan has no voice, fall back to Spanish so it doesn't go silent
+  if(base === "ca") return pickVoice("es-ES");
+
+  // Last resort: default/first voice (instead of null silence)
+  return voices.find(v => v.default) || voices[0] || null;
 }
 
 function buildAboutTextOnly(){
