@@ -15,7 +15,7 @@
   html,body{scrollbar-width:none;-ms-overflow-style:none}
   ::-webkit-scrollbar{width:0;height:0}
 
-  /* ===== Background video ===== */
+  /* Background video */
   #bg{
     position:fixed; inset:0;
     width:100vw; height:100vh;
@@ -24,7 +24,7 @@
     pointer-events:none;
   }
 
-  /* ===== Topbar ===== */
+  /* Topbar */
   .topbar{
     position:fixed;
     top:18px; right:18px;
@@ -36,58 +36,43 @@
     user-select:none;
     -webkit-user-select:none;
   }
-
-  .about-btn, .nodes{
+  .toplink{
     font-size:22px;
     font-weight:700;
     letter-spacing:.22em;
     text-transform:uppercase;
     white-space:nowrap;
-  }
-
-  .about-btn{
     cursor:pointer;
-    color:rgba(255,255,255,.78);
-    transition: transform .18s ease, opacity .18s ease;
-  }
-  .about-btn:hover{ opacity:.95; transform: translateY(-1px); }
-
-  /* ===== Nodes dropdown ===== */
-  .nodes{
-    position:relative;
-    cursor:default;
     color:rgba(255,255,255,.92);
   }
+  .toplink.muted{ color:rgba(255,255,255,.72); }
 
+  /* Nodes dropdown */
+  .nodes{ position:relative; cursor:default; }
   .nodes-bridge{
-    position:absolute;
-    top:100%;
-    left:-30px;
-    right:-30px;
+    position:absolute; top:100%;
+    left:-30px; right:-30px;
     height:28px;
     background:transparent;
     pointer-events:auto;
   }
-
   .nodes-stack{
     position:absolute;
     top:calc(100% + 18px);
     left:50%;
-    transform: translateX(-50%) translateY(-6px);
+    transform:translateX(-50%) translateY(-6px);
     display:grid;
     gap:22px;
     opacity:0;
     pointer-events:none;
-    transition: opacity .22s ease, transform .22s ease;
+    transition:opacity .22s ease, transform .22s ease;
     z-index:99999;
   }
-
   .nodes:hover .nodes-stack{
     opacity:1;
     pointer-events:auto;
-    transform: translateX(-50%) translateY(0);
+    transform:translateX(-50%) translateY(0);
   }
-
   .node{
     width:11.5ch;
     text-align:center;
@@ -105,163 +90,214 @@
     bottom:-12px;
     width:0;
     height:2px;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,.9);
+    transform:translateX(-50%);
+    background:rgba(255,255,255,.9);
     opacity:0;
-    transition: width .18s ease, opacity .18s ease;
+    transition:width .18s ease, opacity .18s ease;
   }
   .node:hover::after{ width:66%; opacity:.85; }
 
-  /* ===== Main page spacer so you can scroll down to rail area if needed ===== */
-  .page{
-    position:relative;
-    z-index:2;
-    min-height:140vh;
-  }
-
-  /* ===== Bottom black rail ===== */
-  .rail{
+  /* ===== ABOUT overlay container (only opens on click) ===== */
+  .about-overlay{
     position:fixed;
-    left:0; right:0; bottom:0;
-    height:min(58vh, 520px);
-    z-index:50;
-
-    background:#000; /* ✅ BLACK CONTAINER */
-    border-top:1px solid rgba(255,255,255,.10);
-    box-shadow: 0 -40px 140px rgba(0,0,0,.65);
-
-    display:flex;
-    flex-direction:column;
+    inset:0;
+    z-index:2000;
+    display:none;            /* hidden by default */
+    pointer-events:none;
+  }
+  .about-overlay.is-open{
+    display:block;
     pointer-events:auto;
   }
 
-  .rail-header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:18px 20px 10px;
+  /* subtle dim (keeps video visible) */
+  .about-dim{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
-  .rail-title{
-    font-size:11px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    opacity:.6;
-  }
-
-  .rail-arrows{
-    display:flex; gap:10px;
-  }
-
-  .chev{
-    width:40px; height:40px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.04);
-    color:rgba(255,255,255,.88);
-    cursor:pointer;
+  /* Centered stage */
+  .about-stage{
+    position:absolute;
+    inset:0;
     display:grid;
     place-items:center;
-    transition: transform .16s ease, border-color .16s ease, background .16s ease;
-  }
-  .chev:hover{
-    transform: translateY(-1px);
-    border-color: rgba(255,255,255,.24);
-    background: rgba(255,255,255,.06);
+    padding: min(6vh, 48px) 28px;
   }
 
-  /* the draggable track */
-  .rail-track{
-    flex:1;
+  /* This is the “same as screenshot” centered block */
+  .about-shell{
+    position:relative;
+    width:min(1180px, calc(100vw - 56px));
+    background:rgba(0,0,0,.78);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:32px;
+    overflow:hidden;
+    box-shadow: 0 60px 220px rgba(0,0,0,.75);
+  }
+
+  /* Horizontal panels (arrow controlled) */
+  .about-track{
     display:flex;
-
-    overflow-x:auto;
-    overflow-y:hidden;
-
+    overflow:hidden;                /* no manual drag */
     scroll-snap-type:x mandatory;
-    -webkit-overflow-scrolling:touch;
-    scroll-behavior:auto; /* we will animate ourselves for inertia */
-
-    touch-action: pan-x;
-    cursor:grab;
-    user-select:none;
-    -webkit-user-select:none;
-  }
-  .rail-track.dragging{
-    cursor:grabbing;
+    scroll-behavior:smooth;
+    touch-action: pan-x;            /* allow swipe on mobile */
   }
 
-  .panel{
+  .about-panel{
     min-width:100%;
-    height:100%;
     scroll-snap-align:start;
-    padding:26px 20px 34px;
+    padding:56px;
     box-sizing:border-box;
   }
 
-  .kicker{
-    font-size:11px;
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap:48px;
+    align-items:start;
+  }
+
+  .about-media{
+    height:min(52vh, 520px);
+    border-radius:28px;
+    overflow:hidden;
+    background:#000;
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .about-media video{
+    width:100%; height:100%;
+    object-fit:cover;
+  }
+
+  .about-kicker{
+    font-size:12px;
     letter-spacing:.18em;
     text-transform:uppercase;
     opacity:.6;
-    margin:0 0 12px;
+    margin:0 0 14px;
   }
 
-  .h2{
-    margin:0 0 16px;
-    font-size:26px;
+  .about-title{
+    margin:0 0 18px;
+    font-size:28px;
+    line-height:1.15;
     letter-spacing:.06em;
     text-transform:uppercase;
-    line-height:1.15;
-    opacity:.92;
-    max-width: 26ch;
+    color:rgba(255,255,255,.92);
   }
 
-  .p{
-    margin:0 0 14px;
+  .about-p{
+    margin:0 0 18px;
     font-size:14px;
     line-height:1.65;
     opacity:.72;
-    max-width:74ch;
+    max-width:70ch;
   }
 
-  .tags{
-    display:flex; flex-wrap:wrap; gap:10px; margin-top:12px;
+  .about-hr{
+    height:1px;
+    background:rgba(255,255,255,.10);
+    margin:22px 0;
   }
-  .tag{
+
+  .about-tags{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+  }
+
+  .about-tag{
     font-size:11px;
     letter-spacing:.14em;
     text-transform:uppercase;
     padding:9px 14px;
     border-radius:999px;
     border:1px solid rgba(255,255,255,.16);
-    background:rgba(255,255,255,.04);
+    background:rgba(255,255,255,.03);
     cursor:pointer;
   }
-  .tag:hover{ border-color:rgba(255,255,255,.28); background:rgba(255,255,255,.06); }
-
-  /* Small top hint line (optional subtle) */
-  .rail-progress{
-    height:1px;
-    background:rgba(255,255,255,.08);
-    margin:0 20px 12px;
-    position:relative;
-    overflow:hidden;
+  .about-tag:hover{
+    border-color:rgba(255,255,255,.26);
+    background:rgba(255,255,255,.06);
   }
-  .rail-tick{
+
+  /* Premium edge arrows */
+  .edge-arrow{
     position:absolute;
-    top:-7px;
-    width:2px;
-    height:15px;
-    background:rgba(255,255,255,.9);
-    opacity:.25;
-    transform: translateX(0);
-    transition: transform .18s ease;
+    top:50%;
+    transform:translateY(-50%);
+    width:56px;
+    height:120px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    box-shadow: 0 26px 120px rgba(0,0,0,.55);
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    opacity:.88;
+    transition: transform .16s ease, opacity .16s ease, border-color .16s ease;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .edge-arrow:hover{
+    opacity:1;
+    border-color:rgba(255,255,255,.20);
+    transform:translateY(-50%) scale(1.02);
+  }
+  .edge-arrow:active{
+    transform:translateY(-50%) scale(.99);
+  }
+  .edge-arrow.left{ left:18px; }
+  .edge-arrow.right{ right:18px; }
+
+  .edge-arrow svg{
+    width:22px; height:22px;
+    opacity:.9;
   }
 
-  @media (max-width: 720px){
-    .rail{ height:min(62vh, 560px); }
-    .h2{ font-size:22px; }
+  /* Close button (top-right inside overlay) */
+  .about-close{
+    position:absolute;
+    top:18px; right:18px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.22);
+    border-radius:999px;
+    padding:10px 14px;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.86);
+    cursor:pointer;
+  }
+  .about-close:hover{
+    border-color:rgba(255,255,255,.22);
+    color:rgba(255,255,255,.95);
+  }
+
+  /* Index indicator subtle */
+  .about-index{
+    position:absolute;
+    left:24px;
+    bottom:18px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.55;
+    pointer-events:none;
+  }
+
+  @media (max-width: 980px){
+    .about-panel{ padding:28px; }
+    .about-grid{ grid-template-columns:1fr; }
+    .about-media{ height:44vh; }
+    .edge-arrow{ height:92px; width:52px; }
   }
 </style>
 </head>
@@ -273,10 +309,8 @@
 </video>
 
 <div class="topbar">
-  <div class="about-btn" id="aboutBtn">ABOUT</div>
-
-  <div class="nodes">
-    NODES
+  <div class="toplink muted" id="aboutBtn">ABOUT</div>
+  <div class="toplink nodes">NODES
     <div class="nodes-bridge" aria-hidden="true"></div>
     <div class="nodes-stack" aria-hidden="true">
       <div class="node" data-node="001">001</div>
@@ -286,218 +320,181 @@
   </div>
 </div>
 
-<div class="page"></div>
+<!-- ABOUT overlay (opens on click, centered) -->
+<div class="about-overlay" id="aboutOverlay" aria-hidden="true">
+  <div class="about-dim" id="aboutDim"></div>
 
-<!-- BLACK DRAGGABLE RAIL (always visible) -->
-<div class="rail" id="rail">
-  <div class="rail-header">
-    <div class="rail-title" id="railMeta">01 / 03</div>
-    <div class="rail-arrows">
-      <button class="chev" id="prevBtn" type="button" aria-label="Previous">&#8592;</button>
-      <button class="chev" id="nextBtn" type="button" aria-label="Next">&#8594;</button>
-    </div>
-  </div>
+  <div class="about-stage">
+    <div class="about-shell" role="dialog" aria-modal="true" aria-label="About panels">
 
-  <div class="rail-progress" aria-hidden="true">
-    <div class="rail-tick" id="railTick"></div>
-  </div>
+      <button class="about-close" id="aboutClose" type="button">CLOSE</button>
 
-  <div class="rail-track" id="railTrack">
-    <!-- PANEL 0 -->
-    <section class="panel" data-panel="overview">
-      <div class="kicker">SOLUTIONS</div>
-      <div class="h2">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</div>
-
-      <p class="p">
-        Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
-      </p>
-
-      <p class="p">
-        Designed to transform physical space into fully automated operational environments,
-        where software, robotics, and data orchestration redefine production.
-      </p>
-
-      <div class="tags">
-        <span class="tag" data-jump="ceo">CEO</span>
-        <span class="tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
+      <div class="edge-arrow left" id="prevBtn" title="Previous">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
-    </section>
 
-    <!-- PANEL 1 -->
-    <section class="panel" data-panel="ceo">
-      <div class="kicker">CEO</div>
-      <div class="h2">WHO WE ARE</div>
+      <div class="edge-arrow right" id="nextBtn" title="Next">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9.5 5L16 12l-6.5 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
 
-      <p class="p">
-        MicroretailX LLC is the legal entity behind this initiative. We design automation-first systems for controlled, scalable biotech operations across institutional environments.
-      </p>
+      <div class="about-index" id="aboutIndex">01 / 03</div>
 
-      <p class="p">
-        The focus is the structural layer of the next industrial shift: measurable execution, robotics, and orchestration as a deployable system.
-      </p>
-    </section>
+      <div class="about-track" id="aboutTrack">
+        <!-- Panel 1 (your screenshot style) -->
+        <section class="about-panel" data-panel="about">
+          <div class="about-grid">
+            <div class="about-media">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="CT.mp4" type="video/mp4">
+              </video>
+            </div>
 
-    <!-- PANEL 2 -->
-    <section class="panel" data-panel="gov">
-      <div class="kicker">GOVERNMENTS</div>
-      <div class="h2">INSTITUTIONAL CONTACT</div>
+            <div>
+              <div class="about-kicker">ABOUT</div>
+              <h2 class="about-title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
 
-      <p class="p">
-        For public-sector agencies and institutional partners: deployment frameworks, pilots, regulatory alignment, and collaboration models.
-      </p>
+              <p class="about-p">
+                This is not a new page. It’s the same world — reframed. Live video becomes a controlled surface, and content becomes a system layer.
+              </p>
 
-      <p class="p" style="opacity:.62;">
-        (We embed your preferred contact mechanism here once you decide the channel.)
-      </p>
-    </section>
+              <div class="about-hr"></div>
+
+              <p class="about-p">
+                The interface is designed as a sequence: reveal, focus, expand. Information appears without breaking immersion.
+              </p>
+
+              <p class="about-p">
+                The user doesn’t navigate — the space transforms.
+              </p>
+
+              <div class="about-tags">
+                <span class="about-tag" data-jump="ceo">CEO</span>
+                <span class="about-tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
+                <span class="about-tag">R&amp;D</span>
+                <span class="about-tag">CINEMATIC UI</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Panel 2 -->
+        <section class="about-panel" data-panel="ceo">
+          <div class="about-kicker">CEO</div>
+          <h2 class="about-title">WHO WE ARE</h2>
+
+          <p class="about-p">
+            MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
+          </p>
+
+          <div class="about-hr"></div>
+
+          <p class="about-p">
+            We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as a deployable operating system for space.
+          </p>
+        </section>
+
+        <!-- Panel 3 -->
+        <section class="about-panel" data-panel="gov">
+          <div class="about-kicker">GOVERNMENTS</div>
+          <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
+
+          <p class="about-p">
+            A globally deployable framework for public-sector and institutional partners: pilot environments, regulatory alignment, operational governance, and long-term resilience.
+          </p>
+
+          <div class="about-hr"></div>
+
+          <p class="about-p">
+            (When you decide the channel, we embed a minimal institutional contact mechanism here — without exposing unnecessary data.)
+          </p>
+        </section>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <script>
   const aboutBtn = document.getElementById("aboutBtn");
-  const track = document.getElementById("railTrack");
-  const panels = Array.from(track.querySelectorAll(".panel"));
+  const aboutOverlay = document.getElementById("aboutOverlay");
+  const aboutDim = document.getElementById("aboutDim");
+  const aboutClose = document.getElementById("aboutClose");
+
+  const track = document.getElementById("aboutTrack");
+  const panels = Array.from(track.querySelectorAll(".about-panel"));
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const railMeta = document.getElementById("railMeta");
-  const railTick = document.getElementById("railTick");
-
-  const clamp = (n,min,max)=>Math.max(min,Math.min(max,n));
+  const indexEl = document.getElementById("aboutIndex");
 
   function w(){ return track.clientWidth || window.innerWidth; }
   function idx(){ return Math.round(track.scrollLeft / w()); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
-  function scrollToIndex(i, smooth=true){
-    const target = clamp(i,0,panels.length-1) * w();
-    if(smooth){
-      track.scrollTo({ left: target, behavior: "smooth" });
-    }else{
-      track.scrollLeft = target;
-    }
-  }
-
-  function updateUI(){
+  function updateIndex(){
     const i = idx();
-    railMeta.textContent = String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
-
-    const line = railTick.parentElement;
-    const maxX = Math.max(0, line.clientWidth - 2);
-    const pct = (panels.length<=1) ? 0 : i/(panels.length-1);
-    railTick.style.transform = `translateX(${Math.round(maxX*pct)}px)`;
+    indexEl.textContent = String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
   }
 
-  // Buttons
-  prevBtn.addEventListener("click", ()=>scrollToIndex(idx()-1, true));
-  nextBtn.addEventListener("click", ()=>scrollToIndex(idx()+1, true));
+  function scrollToIndex(i){
+    const target = clamp(i,0,panels.length-1) * w();
+    track.scrollTo({ left: target, behavior:"smooth" });
+    // update a bit later to reflect snap
+    setTimeout(updateIndex, 180);
+  }
 
-  // Tags jump
+  function openAbout(panelKey){
+    aboutOverlay.classList.add("is-open");
+    aboutOverlay.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+
+    if(panelKey){
+      const i = panels.findIndex(p => p.dataset.panel === panelKey);
+      if(i >= 0) scrollToIndex(i);
+      else scrollToIndex(0);
+    }else{
+      scrollToIndex(0);
+    }
+    updateIndex();
+  }
+
+  function closeAbout(){
+    aboutOverlay.classList.remove("is-open");
+    aboutOverlay.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+  }
+
+  aboutBtn.addEventListener("click", ()=> openAbout("about"));
+  aboutDim.addEventListener("click", closeAbout);
+  aboutClose.addEventListener("click", closeAbout);
+  document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape" && aboutOverlay.classList.contains("is-open")) closeAbout();
+  });
+
+  prevBtn.addEventListener("click", ()=> scrollToIndex(idx() - 1));
+  nextBtn.addEventListener("click", ()=> scrollToIndex(idx() + 1));
+
+  // tags jump INSIDE the same centered about container
   document.querySelectorAll("[data-jump]").forEach(el=>{
     el.addEventListener("click", ()=>{
-      const key = el.getAttribute("data-jump");
-      const i = panels.findIndex(p => p.dataset.panel === key);
-      if(i>=0) scrollToIndex(i, true);
+      openAbout(el.getAttribute("data-jump"));
     });
   });
 
-  // ABOUT just brings focus to the rail (bottom)
-  aboutBtn.addEventListener("click", ()=>{
-    // small nudge so user notices the rail
-    track.scrollTo({ left: track.scrollLeft, behavior:"smooth" });
-  });
+  // Keep index in sync when user swipes on mobile
+  track.addEventListener("scroll", ()=> {
+    // lightweight
+    updateIndex();
+  }, { passive:true });
 
-  // ===== Drag + throw inertia =====
-  let dragging=false;
-  let startX=0;
-  let startLeft=0;
-  let lastX=0;
-  let lastT=0;
-  let v=0; // px/ms
-  let raf=null;
-
-  function stopInertia(){
-    if(raf) cancelAnimationFrame(raf);
-    raf=null;
-  }
-
-  function snapNearest(){
-    scrollToIndex(idx(), true);
-  }
-
-  track.addEventListener("mousedown", (e)=>{
-    dragging=true;
-    track.classList.add("dragging");
-    stopInertia();
-
-    startX = e.pageX;
-    startLeft = track.scrollLeft;
-
-    lastX = e.pageX;
-    lastT = performance.now();
-    v = 0;
-  });
-
-  window.addEventListener("mousemove", (e)=>{
-    if(!dragging) return;
-    const dx = e.pageX - startX;
-    track.scrollLeft = startLeft - dx;
-
-    const now = performance.now();
-    const dt = Math.max(1, now - lastT);
-    const dxv = e.pageX - lastX;
-    v = dxv / dt; // px/ms (pointer)
-    lastX = e.pageX;
-    lastT = now;
-
-    updateUI();
-  });
-
-  window.addEventListener("mouseup", ()=>{
-    if(!dragging) return;
-    dragging=false;
-    track.classList.remove("dragging");
-
-    // throw: convert pointer velocity to scroll velocity
-    // pointer moving right means scrollLeft decreases; invert sign
-    let sv = -v * 28; // tuning factor for feel
-
-    const friction = 0.92;
-    const minV = 0.06;
-
-    const step = ()=>{
-      sv *= friction;
-      track.scrollLeft += sv * 16; // approx per frame
-      updateUI();
-
-      if(Math.abs(sv) > minV){
-        raf = requestAnimationFrame(step);
-      }else{
-        raf = null;
-        snapNearest();
-      }
-    };
-
-    if(Math.abs(sv) > 0.25){
-      raf = requestAnimationFrame(step);
-    }else{
-      snapNearest();
-    }
-  });
-
-  // Mobile: snap after touch end
-  track.addEventListener("touchend", ()=>setTimeout(snapNearest, 60));
-
-  // Keep UI in sync
-  track.addEventListener("scroll", ()=>updateUI(), { passive:true });
-  window.addEventListener("resize", ()=>{ scrollToIndex(idx(), false); updateUI(); });
-
-  // Init
-  updateUI();
-
-  // Nodes click placeholder
+  // NODES click placeholders
   document.querySelectorAll(".node").forEach(n=>{
     n.addEventListener("click", (e)=>{
       e.stopPropagation();
-      // console.log("Node:", n.dataset.node);
+      // hook later
     });
   });
 </script>
