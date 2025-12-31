@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
@@ -31,11 +31,12 @@
     z-index:9999;
     display:flex;
     align-items:center;
-    gap:56px;
+    gap:18px;
     mix-blend-mode:difference;
     user-select:none;
     -webkit-user-select:none;
   }
+
   .toplink{
     font-size:22px;
     font-weight:700;
@@ -46,6 +47,19 @@
     color:rgba(255,255,255,.92);
   }
   .toplink.muted{ color:rgba(255,255,255,.72); }
+
+  /* Smaller utility links (sound/lang) */
+  .topmini{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    cursor:pointer;
+    color:rgba(255,255,255,.86);
+    opacity:.92;
+  }
+  .topmini.muted{ opacity:.68; }
 
   /* Nodes dropdown */
   .nodes{ position:relative; cursor:default; }
@@ -65,7 +79,6 @@
     gap:22px;
     opacity:0;
     pointer-events:none;
-    /* no transitions (test mode) */
     z-index:99999;
   }
   .nodes:hover .nodes-stack{
@@ -131,7 +144,6 @@
     position:absolute;
     inset:0;
     background:rgba(0,0,0,.50);
-    /* no blur in this test */
   }
 
   /* Stage: no side padding (edge-to-edge feel) */
@@ -149,14 +161,13 @@
     width:100vw;
     max-width:none;
     background:#000;
-
-    border:none;           /* ✅ no borders */
-    border-radius:0;       /* ✅ no radius */
-    box-shadow:none;       /* ✅ no shadow */
+    border:none;
+    border-radius:0;
+    box-shadow:none;
     overflow:hidden;
   }
 
-  /* Premium edge arrows — no transitions */
+  /* Premium edge arrows */
   .edge-arrow{
     position:absolute;
     top:50%;
@@ -171,8 +182,7 @@
     cursor:pointer;
     user-select:none;
     -webkit-user-select:none;
-
-    opacity:0;             /* auto-hide default */
+    opacity:0;
     pointer-events:none;
     z-index:7;
   }
@@ -189,7 +199,7 @@
     pointer-events:none !important;
   }
 
-  /* Close button — no transitions */
+  /* Close button */
   .about-close{
     position:absolute;
     top:18px; right:18px;
@@ -221,10 +231,10 @@
   /* Track & panels */
   .about-track{
     display:flex;
-    overflow:hidden;                 /* no drag */
+    overflow:hidden;
     scroll-snap-type:x mandatory;
     scroll-behavior:smooth;
-    touch-action: pan-x;             /* mobile swipe ok */
+    touch-action: pan-x;
   }
   .about-panel{
     min-width:100%;
@@ -233,7 +243,7 @@
     box-sizing:border-box;
   }
 
-  /* Inner content stays centered like your screenshot */
+  /* Inner content stays centered */
   .about-inner{
     width:min(1180px, calc(100vw - 96px));
     margin:0 auto;
@@ -283,23 +293,6 @@
     margin:22px 0;
   }
 
-  .about-tags{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:10px;
-  }
-  .about-tag{
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    padding:9px 14px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,.16);
-    background:rgba(255,255,255,.03);
-    cursor:pointer;
-  }
-
   @media (max-width: 980px){
     .about-inner{ width:min(1180px, calc(100vw - 44px)); }
     .about-grid{ grid-template-columns:1fr; }
@@ -316,6 +309,82 @@
       pointer-events:auto;
     }
   }
+
+  /* ===== Language selector (premium, small) ===== */
+  .lang{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  .lang-btn{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    cursor:pointer;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.03);
+  }
+
+  .lang-label{
+    font-size:10px;
+    letter-spacing:.20em;
+    text-transform:uppercase;
+    opacity:.65;
+  }
+
+  .lang-val{
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.86;
+  }
+
+  .lang-menu{
+    position:absolute;
+    top:calc(100% + 12px);
+    right:0;
+    min-width:92px;
+    display:none;
+    padding:8px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index:99999;
+  }
+
+  .lang-menu.is-open{ display:block; }
+
+  .lang-item{
+    padding:10px 12px;
+    border-radius:12px;
+    font-size:11px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    opacity:.82;
+    cursor:pointer;
+    text-align:center;
+  }
+
+  .lang-item:hover{
+    background:rgba(255,255,255,.06);
+    opacity:.95;
+  }
+
+  /* Basic anti-save UX (best-effort) */
+  body{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 </style>
 </head>
 
@@ -326,9 +395,27 @@
 </video>
 
 <div class="topbar">
-  <div class="toplink muted" id="aboutBtn">ABOUT</div>
+  <div class="toplink muted" id="aboutBtn" data-i18n="top_about">ABOUT</div>
 
-  <div class="toplink nodes">NODES
+  <div class="lang">
+    <div class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+      <span class="lang-label" data-i18n="top_lang_label">LANG</span>
+      <span class="lang-val" id="langVal">EN</span>
+    </div>
+
+    <div class="lang-menu" id="langMenu" role="listbox" aria-label="Language">
+      <div class="lang-item" role="option" data-lang="en">EN</div>
+      <div class="lang-item" role="option" data-lang="es">ES</div>
+      <div class="lang-item" role="option" data-lang="ca">CA</div>
+      <div class="lang-item" role="option" data-lang="ar">AR</div>
+      <div class="lang-item" role="option" data-lang="zh">ZH</div>
+      <div class="lang-item" role="option" data-lang="ru">RU</div>
+    </div>
+  </div>
+
+  <div class="topmini muted" id="soundBtn" data-i18n="top_sound_off">SOUND OFF</div>
+
+  <div class="toplink nodes"><span data-i18n="top_nodes">NODES</span>
     <div class="nodes-bridge" aria-hidden="true"></div>
     <div class="nodes-stack" aria-hidden="true">
       <div class="node" data-node="001">001</div>
@@ -338,7 +425,7 @@
   </div>
 </div>
 
-<div class="index-footer">
+<div class="index-footer" data-i18n="footer">
   © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION · NON-COMMERCIAL
 </div>
 
@@ -349,7 +436,7 @@
   <div class="about-stage">
     <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
 
-      <button class="about-close" id="aboutClose" type="button">CLOSE</button>
+      <button class="about-close" id="aboutClose" type="button" data-i18n="ui_close">CLOSE</button>
 
       <div class="edge-arrow left" id="prevBtn" title="Previous">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -367,6 +454,7 @@
 
       <div class="about-track" id="aboutTrack">
 
+        <!-- PANEL 1 -->
         <section class="about-panel" data-panel="about">
           <div class="about-inner">
             <div class="about-grid">
@@ -377,63 +465,61 @@
               </div>
 
               <div>
-                <div class="about-kicker">ABOUT</div>
-                <h2 class="about-title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
+                <div class="about-kicker" data-i18n="about_kicker">ABOUT</div>
+                <h2 class="about-title" data-i18n="about_title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
 
-                <p class="about-p">
+                <p class="about-p" data-i18n="about_p1">
                   Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
                 </p>
 
                 <div class="about-hr"></div>
 
-                <p class="about-p">
+                <p class="about-p" data-i18n="about_p2">
                   The system is designed to transform physical space into fully automated operational environments,
                   aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
                 </p>
 
-                <p class="about-p">
+                <p class="about-p" data-i18n="about_p3">
                   By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
                 </p>
-
-            
               </div>
             </div>
           </div>
         </section>
 
+        <!-- PANEL 2 -->
         <section class="about-panel" data-panel="ceo">
           <div class="about-inner">
-            <div class="about-kicker">microlabsX</div>
-            <h2 class="about-title">WHO WE ARE</h2>
+            <div class="about-kicker" data-i18n="ceo_kicker">microlabsX</div>
+            <h2 class="about-title" data-i18n="ceo_title">WHO WE ARE</h2>
 
-            <p class="about-p">
+            <p class="about-p" data-i18n="ceo_p1">
               MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
             </p>
 
             <div class="about-hr"></div>
 
-            <p class="about-p">
+            <p class="about-p" data-i18n="ceo_p2">
               We focus on the structural layer of the next industrial shift: robotics, software orchestration,
               and measurable execution as a deployable operating system for space.
             </p>
           </div>
         </section>
 
+        <!-- PANEL 3 -->
         <section class="about-panel" data-panel="gov">
           <div class="about-inner">
-            <div class="about-kicker">GOVERNMENTS</div>
-            <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
+            <div class="about-kicker" data-i18n="gov_kicker">GOVERNMENTS</div>
+            <h2 class="about-title" data-i18n="gov_title">INSTITUTIONAL DEPLOYMENT</h2>
 
-            <p class="about-p">
+            <p class="about-p" data-i18n="gov_p1">
               A globally deployable framework for public-sector and institutional partners:
               pilot environments, regulatory alignment, operational governance, and long-term resilience.
             </p>
 
             <div class="about-hr"></div>
 
-            <p class="about-p">
-              developing contact
-            </p>
+            <p class="about-p" data-i18n="gov_p2">developing contact</p>
           </div>
         </section>
 
@@ -443,6 +529,7 @@
 </div>
 
 <script>
+  // ===== Core UI refs =====
   const aboutBtn = document.getElementById("aboutBtn");
   const aboutOverlay = document.getElementById("aboutOverlay");
   const aboutDim = document.getElementById("aboutDim");
@@ -455,6 +542,7 @@
   const nextBtn = document.getElementById("nextBtn");
   const indexEl = document.getElementById("aboutIndex");
 
+  // ===== About navigation =====
   function w(){ return track.clientWidth || window.innerWidth; }
   function idx(){ return Math.round(track.scrollLeft / w()); }
   function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
@@ -508,13 +596,6 @@
 
   prevBtn.addEventListener("click", ()=> scrollToIndex(idx() - 1));
   nextBtn.addEventListener("click", ()=> scrollToIndex(idx() + 1));
-
-  document.querySelectorAll("[data-jump]").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      openAbout(el.getAttribute("data-jump"));
-    });
-  });
-
   track.addEventListener("scroll", ()=> updateNav(), { passive:true });
 
   /* Auto-hide arrows: show when cursor near left/right edge of shell */
@@ -526,7 +607,6 @@
       hotT = setTimeout(()=> aboutShell.classList.remove("is-hot"), 1000);
     }
   }
-
   aboutShell.addEventListener("mousemove", (e)=>{
     const r = aboutShell.getBoundingClientRect();
     const x = e.clientX - r.left;
@@ -536,17 +616,227 @@
   aboutShell.addEventListener("mouseleave", ()=>{
     aboutShell.classList.remove("is-hot");
   });
-
   window.addEventListener("resize", ()=>{
     scrollToIndex(idx());
     updateNav();
   });
-
   updateNav();
 
   // Nodes click placeholders (keep behavior)
   document.querySelectorAll(".node").forEach(n=>{
     n.addEventListener("click", (e)=> e.stopPropagation());
+  });
+
+  // ===== Sound toggle (background video) =====
+  const bgVideo = document.getElementById("bg");
+  const soundBtn = document.getElementById("soundBtn");
+
+  function syncSoundLabel(){
+    const muted = bgVideo.muted;
+    soundBtn.textContent = (currentDict().top_sound_on_off)[muted ? "off" : "on"];
+    soundBtn.classList.toggle("muted", muted);
+  }
+
+  soundBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    bgVideo.muted = !bgVideo.muted;
+    syncSoundLabel();
+  });
+
+  // ===== Language selector (FULL) =====
+  const langBtn = document.getElementById("langBtn");
+  const langMenu = document.getElementById("langMenu");
+  const langVal = document.getElementById("langVal");
+
+  const SUPPORTED = ["en","es","ca","ar","zh","ru"];
+
+  const I18N = {
+    en: {
+      top_about: "ABOUT",
+      top_lang_label: "LANG",
+      top_nodes: "NODES",
+      ui_close: "CLOSE",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION · NON-COMMERCIAL",
+      about_kicker: "ABOUT",
+      about_title: "A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.",
+      about_p1: "Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.",
+      about_p2: "The system is designed to transform physical space into fully automated operational environments, aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.",
+      about_p3: "By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.",
+      ceo_kicker: "microlabsX",
+      ceo_title: "WHO WE ARE",
+      ceo_p1: "MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.",
+      ceo_p2: "We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as a deployable operating system for space.",
+      gov_kicker: "GOVERNMENTS",
+      gov_title: "INSTITUTIONAL DEPLOYMENT",
+      gov_p1: "A globally deployable framework for public-sector and institutional partners: pilot environments, regulatory alignment, operational governance, and long-term resilience.",
+      gov_p2: "developing contact",
+      top_sound_on_off: { on: "SOUND ON", off: "SOUND OFF" }
+    },
+    es: {
+      top_about: "ABOUT",
+      top_lang_label: "IDIOMA",
+      top_nodes: "NODES",
+      ui_close: "CERRAR",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX ES UNA DESIGNACIÓN DE PROYECTO · NO COMERCIAL",
+      about_kicker: "ABOUT",
+      about_title: "UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
+      about_p1: "Nuestro objetivo es ofrecer a gobiernos una solución global, desplegable y escalable basada en automatización avanzada e infraestructura biotecnológica controlada.",
+      about_p2: "El sistema transforma el espacio físico en entornos operativos totalmente automatizados, alineados con el nuevo paradigma industrial donde el software, la robótica y la orquestación de datos redefinen la producción.",
+      about_p3: "Al priorizar la automatización como capa fundacional, nuestro enfoque impulsa eficiencia, resiliencia y soberanía operativa a largo plazo en despliegues públicos e institucionales.",
+      ceo_kicker: "microlabsX",
+      ceo_title: "QUIÉNES SOMOS",
+      ceo_p1: "MicroretailX LLC es la entidad legal detrás de esta iniciativa. Desarrollamos sistemas con automatización como base para infraestructura biotecnológica controlada y escalable en entornos institucionales.",
+      ceo_p2: "Nos centramos en la capa estructural del próximo cambio industrial: robótica, orquestación de software y ejecución medible como sistema operativo desplegable para el espacio.",
+      gov_kicker: "GOBIERNOS",
+      gov_title: "DESPLIEGUE INSTITUCIONAL",
+      gov_p1: "Un marco globalmente desplegable para socios del sector público e institucional: entornos piloto, alineación regulatoria, gobernanza operativa y resiliencia a largo plazo.",
+      gov_p2: "contacto en desarrollo",
+      top_sound_on_off: { on: "SONIDO ON", off: "SONIDO OFF" }
+    },
+    ca: {
+      top_about: "ABOUT",
+      top_lang_label: "IDIOMA",
+      top_nodes: "NODES",
+      ui_close: "TANCAR",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX ÉS UNA DESIGNACIÓ DE PROJECTE · NO COMERCIAL",
+      about_kicker: "ABOUT",
+      about_title: "UN SISTEMA GLOBAL I ESCALABLE PER A LA PROPERA ERA INDUSTRIAL.",
+      about_p1: "El nostre objectiu és oferir als governs una solució global, desplegable i escalable basada en automatització avançada i infraestructura biotecnològica controlada.",
+      about_p2: "El sistema transforma l’espai físic en entorns operatius totalment automatitzats, alineats amb el nou paradigma industrial on el programari, la robòtica i l’orquestració de dades redefineixen la producció.",
+      about_p3: "En prioritzar l’automatització com a capa fonamental, el nostre enfocament impulsa eficiència, resiliència i sobirania operativa a llarg termini en desplegaments públics i institucionals.",
+      ceo_kicker: "microlabsX",
+      ceo_title: "QUI SOM",
+      ceo_p1: "MicroretailX LLC és l’entitat legal darrere d’aquesta iniciativa. Desenvolupem sistemes amb automatització com a base per a infraestructura biotecnològica controlada i escalable en entorns institucionals.",
+      ceo_p2: "Ens centrem en la capa estructural del proper canvi industrial: robòtica, orquestració de programari i execució mesurable com a sistema operatiu desplegable per a l’espai.",
+      gov_kicker: "GOVERNS",
+      gov_title: "DESPLEGAMENT INSTITUCIONAL",
+      gov_p1: "Un marc desplegable globalment per a socis del sector públic i institucional: entorns pilot, alineació regulatòria, governança operativa i resiliència a llarg termini.",
+      gov_p2: "contacte en desenvolupament",
+      top_sound_on_off: { on: "SO ON", off: "SO OFF" }
+    },
+    ar: {
+      top_about: "نبذة",
+      top_lang_label: "اللغة",
+      top_nodes: "عُقَد",
+      ui_close: "إغلاق",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX تسمية مشروع · غير تجاري",
+      about_kicker: "نبذة",
+      about_title: "نظام عالمي قابل للتوسع لعصر صناعي جديد.",
+      about_p1: "هدفنا هو تزويد الحكومات بحل عالمي قابل للنشر والتوسع يعتمد على الأتمتة المتقدمة وبنية تحتية للتقنية الحيوية ضمن بيئات مُحكَمة.",
+      about_p2: "يحوّل النظام المساحات الفيزيائية إلى بيئات تشغيل مؤتمتة بالكامل، منسجمة مع التحول الصناعي حيث يعيد البرمجيات والروبوتات وتنسيق البيانات تعريف الإنتاج.",
+      about_p3: "من خلال جعل الأتمتة طبقة أساسية، يدعم نهجنا الكفاءة والمرونة والسيادة التشغيلية طويلة الأمد في التطبيقات العامة والمؤسسية.",
+      ceo_kicker: "microlabsX",
+      ceo_title: "من نحن",
+      ceo_p1: "MicroretailX LLC هي الكيان القانوني وراء هذه المبادرة. نطوّر أنظمة «الأتمتة أولاً» لبنية تحتية للتقنية الحيوية محكومة وقابلة للتوسع ضمن بيئات مؤسسية.",
+      ceo_p2: "نركّز على الطبقة البنيوية للتحول الصناعي القادم: الروبوتات، تنسيق البرمجيات، والتنفيذ القابل للقياس كنظام تشغيل قابل للنشر للمساحات.",
+      gov_kicker: "الحكومات",
+      gov_title: "النشر المؤسسي",
+      gov_p1: "إطار عالمي قابل للنشر لشركاء القطاع العام والمؤسسات: بيئات تجريبية، مواءمة تنظيمية، حوكمة تشغيلية، ومرونة طويلة الأمد.",
+      gov_p2: "جهة الاتصال قيد التطوير",
+      top_sound_on_off: { on: "الصوت تشغيل", off: "الصوت إيقاف" }
+    },
+    zh: {
+      top_about: "关于",
+      top_lang_label: "语言",
+      top_nodes: "节点",
+      ui_close: "关闭",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX 为项目标识 · 非商业",
+      about_kicker: "关于",
+      about_title: "面向下一代工业时代的全球可扩展系统。",
+      about_p1: "我们的目标是为政府提供可全球部署、可扩展的解决方案，基于先进自动化与受控生物技术基础设施。",
+      about_p2: "该系统将物理空间转化为完全自动化的运营环境，契合新兴工业范式：软件、机器人与数据编排正在重塑生产。",
+      about_p3: "以自动化为基础层，我们的方法支持效率、韧性与长期主权，适用于公共与机构级部署。",
+      ceo_kicker: "microlabsX",
+      ceo_title: "我们是谁",
+      ceo_p1: "MicroretailX LLC 是本项目背后的法律实体。我们为机构环境开发以自动化为先的系统，用于受控、可扩展的生物技术基础设施。",
+      ceo_p2: "我们聚焦下一次工业转型的结构层：机器人、软件编排与可量化执行，作为可部署的空间操作系统。",
+      gov_kicker: "政府",
+      gov_title: "机构部署",
+      gov_p1: "面向公共部门与机构伙伴的全球可部署框架：试点环境、合规对齐、运营治理与长期韧性。",
+      gov_p2: "联系方式建设中",
+      top_sound_on_off: { on: "声音开", off: "声音关" }
+    },
+    ru: {
+      top_about: "О НАС",
+      top_lang_label: "ЯЗЫК",
+      top_nodes: "УЗЛЫ",
+      ui_close: "ЗАКРЫТЬ",
+      footer: "© 2023–2025 MICRORETAILX LLC · MICROLABSX — ОБОЗНАЧЕНИЕ ПРОЕКТА · НЕКОММЕРЧЕСКИЙ",
+      about_kicker: "О НАС",
+      about_title: "ГЛОБАЛЬНАЯ МАСШТАБИРУЕМАЯ СИСТЕМА ДЛЯ НОВОЙ ИНДУСТРИАЛЬНОЙ ЭПОХИ.",
+      about_p1: "Наша цель — предоставить государствам глобально разворачиваемое и масштабируемое решение на основе продвинутой автоматизации и контролируемой биотехнологической инфраструктуры.",
+      about_p2: "Система превращает физическое пространство в полностью автоматизированные операционные среды, соответствующие новому индустриальному сдвигу, где ПО, робототехника и оркестрация данных переопределяют производство.",
+      about_p3: "Ставя автоматизацию базовым слоем, мы поддерживаем эффективность, устойчивость и долгосрочный суверенитет в публичных и институциональных внедрениях.",
+      ceo_kicker: "microlabsX",
+      ceo_title: "КТО МЫ",
+      ceo_p1: "MicroretailX LLC — юридическое лицо, стоящее за этой инициативой. Мы разрабатываем системы «automation-first» для контролируемой и масштабируемой биотехнологической инфраструктуры в институциональных средах.",
+      ceo_p2: "Мы фокусируемся на структурном слое следующего индустриального сдвига: робототехника, оркестрация ПО и измеримое исполнение как разворачиваемая операционная система для пространства.",
+      gov_kicker: "ГОСУДАРСТВА",
+      gov_title: "ИНСТИТУЦИОНАЛЬНОЕ ВНЕДРЕНИЕ",
+      gov_p1: "Глобально разворачиваемый фреймворк для государственного и институционального сектора: пилотные среды, регуляторное соответствие, операционное управление и долгосрочная устойчивость.",
+      gov_p2: "контакт в разработке",
+      top_sound_on_off: { on: "ЗВУК ВКЛ", off: "ЗВУК ВЫКЛ" }
+    }
+  };
+
+  function currentDict(){
+    const lang = (localStorage.getItem("mrx_lang") || "en");
+    return I18N[lang] || I18N.en;
+  }
+
+  function applyLanguage(lang){
+    if(!SUPPORTED.includes(lang)) lang = "en";
+    localStorage.setItem("mrx_lang", lang);
+    langVal.textContent = lang.toUpperCase();
+
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+    document.documentElement.setAttribute("lang", lang);
+
+    const dict = I18N[lang] || I18N.en;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const key = el.getAttribute("data-i18n");
+      if(key === "top_sound_off"){ return; } // handled via syncSoundLabel()
+      if(dict[key]) el.textContent = dict[key];
+    });
+
+    syncSoundLabel();
+  }
+
+  function closeLang(){
+    langMenu.classList.remove("is-open");
+    langBtn.setAttribute("aria-expanded","false");
+  }
+
+  langBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    const open = langMenu.classList.toggle("is-open");
+    langBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+
+  langMenu.querySelectorAll(".lang-item").forEach(item=>{
+    item.addEventListener("click", (e)=>{
+      e.stopPropagation();
+      applyLanguage(item.getAttribute("data-lang"));
+      closeLang();
+    });
+  });
+
+  document.addEventListener("click", closeLang);
+
+  // init
+  applyLanguage(localStorage.getItem("mrx_lang") || "en");
+
+  // ===== Anti-save (best-effort) =====
+  document.addEventListener("contextmenu", e => e.preventDefault());
+  document.addEventListener("keydown", e => {
+    const k = e.key.toLowerCase();
+    if (
+      (e.ctrlKey && ["s","u","p","c","x"].includes(k)) ||
+      e.key === "F12"
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   });
 </script>
 
