@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 
-<title>ASIA · NODE 001 — NVIDIA Omniverse</title>
+<title>ASIA · NODE 001</title>
 
 <style>
 html,body{
@@ -47,14 +47,14 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 /* ================= LAYOUT ================= */
 .wrapper{
   display:grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  gap:40px;
+  grid-template-columns: 1fr;
+  gap:28px;
   padding:110px 32px 40px;
   max-width:1480px;
   margin:0 auto;
 }
 
-/* ================= VIEWER ================= */
+/* ================= VIEWER PLACEHOLDER ================= */
 .viewer{
   position:relative;
   border-radius:26px;
@@ -62,118 +62,43 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   border:1px solid rgba(255,255,255,0.12);
   background:#000;
   box-shadow:0 44px 180px rgba(0,0,0,0.78);
-  min-height:70vh;
+  min-height:72vh;
 }
 
-.viewer iframe{
+.viewer img{
   width:100%;
   height:100%;
-  border:0;
-  background:#000;
+  object-fit:cover;
+  display:block;
+  transform: scale(1.02);
+  filter: saturate(1.05) contrast(1.02);
 }
 
-/* loading overlay */
 .viewer::after{
-  content:"SIMULATION LOADING…";
+  content:"PREVIEW";
   position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  font-size:11px;
-  letter-spacing:0.22em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.55);
-  pointer-events:none;
-  opacity:0;
-  transition:opacity .25s ease;
-}
-
-.viewer.loading::after{
-  opacity:1;
-}
-
-/* fallback overlay */
-.viewer-fallback{
-  position:absolute;
-  inset:0;
-  display:none;
-  place-items:center;
-  text-align:center;
-  gap:18px;
-  background:#000;
-  color:rgba(255,255,255,0.7);
-}
-
-.viewer-fallback p{
-  margin:0;
-  font-size:13px;
-  letter-spacing:0.04em;
-}
-
-.viewer-fallback a{
-  color:#fff;
-  text-decoration:none;
-  border:1px solid rgba(255,255,255,0.25);
-  padding:12px 18px;
+  top:18px;
+  left:18px;
+  padding:10px 12px;
   border-radius:999px;
-  letter-spacing:0.14em;
-  font-size:12px;
-}
-
-.viewer-fallback a:hover{
-  border-color:#fff;
-}
-
-/* ================= INFO ================= */
-.info{
-  padding-top:6px;
-}
-
-.kicker{
-  font-size:11px;
-  letter-spacing:0.22em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.6);
-  margin-bottom:12px;
-}
-
-.title{
-  font-size:28px;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  margin:0 0 18px;
-}
-
-.text{
-  font-size:14px;
-  line-height:1.7;
-  color:rgba(255,255,255,0.72);
-  margin-bottom:16px;
-  max-width:64ch;
-}
-
-.hr{
-  height:1px;
-  background:rgba(255,255,255,0.1);
-  margin:22px 0;
-}
-
-.tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:18px;
-}
-
-.tag{
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.35);
   font-size:10px;
   letter-spacing:0.18em;
   text-transform:uppercase;
-  padding:9px 12px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.16);
-  background:rgba(255,255,255,0.03);
-  color:rgba(255,255,255,0.8);
+  color:rgba(255,255,255,0.78);
+  mix-blend-mode:difference;
+}
+
+/* subtle bottom fade for premium depth */
+.viewer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
+    linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.35));
 }
 
 /* ================= FOOTER (same as index) ================= */
@@ -190,12 +115,7 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 /* ================= RESPONSIVE ================= */
 @media(max-width:1100px){
-  .wrapper{
-    grid-template-columns:1fr;
-  }
-  .viewer{
-    min-height:52vh;
-  }
+  .viewer{ min-height:52vh; }
 }
 </style>
 </head>
@@ -209,82 +129,33 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 <main class="wrapper">
 
-  <!-- ===== NVIDIA OMNIVERSE VIEWER ===== -->
-  <section class="viewer loading" id="viewerBox">
+  <!-- PREVIEW IMAGE (placeholder until Omniverse viewer is enabled) -->
+  <section class="viewer" aria-label="Node 001 preview">
+    <img
+      src="https://developer.download.nvidia.com/images/omniverse/ai-factories-ari.jpg"
+      alt="NVIDIA Omniverse preview image"
+      loading="eager"
+      decoding="async"
+      referrerpolicy="no-referrer"
+    >
+  </section>
 
+  <!--
+  FUTURE: NVIDIA Omniverse Web Viewer (enable later)
+  <section class="viewer">
     <iframe
-      id="omniverseFrame"
-      src="/viewer/"
+      src="/viewer/?node=001"
       loading="lazy"
       allow="autoplay; fullscreen; clipboard-read; clipboard-write">
     </iframe>
-
-    <div class="viewer-fallback" id="viewerFallback">
-      <p>Viewer cannot be embedded due to security restrictions.</p>
-      <a href="/viewer/" target="_blank" rel="noopener">
-        OPEN SIMULATION IN NEW TAB →
-      </a>
-    </div>
-
   </section>
-
-  <!-- ===== INFO ===== -->
-  <section class="info">
-    <div class="kicker">NVIDIA Omniverse · Simulation</div>
-    <h1 class="title">Node 001</h1>
-
-    <p class="text">
-      This environment is a simulation built using NVIDIA Omniverse technology to
-      analyse and visualise operational processes in a controlled, real-time context.
-    </p>
-
-    <p class="text">
-      The purpose of this node is to demonstrate system behaviour, automation flows
-      and scalability scenarios to investors during early and intermediate project phases.
-    </p>
-
-    <div class="hr"></div>
-
-    <p class="text">
-      This is not a final production model. Access to the full interactive system
-      will be restricted and granted exclusively to authorised parties once the
-      underlying model and infrastructure are completed.
-    </p>
-
-    <div class="tags">
-      <span class="tag">Simulation</span>
-      <span class="tag">Operational Analysis</span>
-      <span class="tag">Automation</span>
-      <span class="tag">Scalability</span>
-      <span class="tag">Investor Access</span>
-    </div>
-  </section>
+  -->
 
 </main>
 
 <footer class="footer">
   © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION AND DOES NOT CONSTITUTE A LEGAL ENTITY
 </footer>
-
-<script>
-  const iframe = document.getElementById("omniverseFrame");
-  const fallback = document.getElementById("viewerFallback");
-  const box = document.getElementById("viewerBox");
-
-  let loaded = false;
-
-  iframe.onload = () => {
-    loaded = true;
-    box.classList.remove("loading");
-  };
-
-  setTimeout(() => {
-    if (!loaded) {
-      fallback.style.display = "grid";
-      box.classList.remove("loading");
-    }
-  }, 2500);
-</script>
 
 </body>
 </html>
