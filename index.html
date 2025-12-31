@@ -97,7 +97,7 @@
   }
   .node:hover::after{ width:66%; opacity:.85; }
 
-  /* ===== ABOUT overlay container (only opens on click) ===== */
+  /* ===== ABOUT overlay ===== */
   .about-overlay{
     position:fixed;
     inset:0;
@@ -110,7 +110,6 @@
     pointer-events:auto;
   }
 
-  /* subtle dim (keeps video visible) */
   .about-dim{
     position:absolute;
     inset:0;
@@ -119,30 +118,37 @@
     -webkit-backdrop-filter: blur(6px);
   }
 
-  /* Centered stage */
+  /* Centered stage — now NO lateral padding (full width look) */
   .about-stage{
     position:absolute;
     inset:0;
     display:grid;
     place-items:center;
-    padding: min(6vh, 48px) 28px;
+    padding: min(6vh, 48px) 0;        /* ✅ no left/right padding */
   }
 
+  /* SHELL: full width, no lateral borders */
   .about-shell{
     position:relative;
-    width:min(1180px, calc(100vw - 56px));
+    width:100vw;                       /* ✅ expand laterals to max */
+    max-width:none;
     background:rgba(0,0,0,.78);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:32px;
-    overflow:hidden;
+
+    border-top:1px solid rgba(255,255,255,.08);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    border-left:none;                  /* ✅ remove side borders */
+    border-right:none;                 /* ✅ remove side borders */
+
+    border-radius:32px;                /* keep soft top/bottom feel */
     box-shadow: 0 60px 220px rgba(0,0,0,.75);
+    overflow:hidden;
   }
 
-  /* Edge glow layers (appear only when there is content) */
+  /* Edge glow layers */
   .edge-glow{
     position:absolute;
     top:0; bottom:0;
-    width:90px;
+    width:110px;
     pointer-events:none;
     opacity:0;
     transition: opacity .18s ease;
@@ -158,19 +164,25 @@
   }
   .edge-glow.on{ opacity:.65; }
 
-  /* Horizontal panels (arrow controlled; swipe allowed on mobile) */
+  /* Panels */
   .about-track{
     display:flex;
-    overflow:hidden;                 /* no manual drag */
+    overflow:hidden;                 /* no manual drag desktop */
     scroll-snap-type:x mandatory;
     scroll-behavior:smooth;
-    touch-action: pan-x;
+    touch-action: pan-x;             /* mobile swipe ok */
   }
   .about-panel{
     min-width:100%;
     scroll-snap-align:start;
     padding:56px;
     box-sizing:border-box;
+  }
+
+  /* Inner width to keep content centered like screenshot */
+  .about-inner{
+    width:min(1180px, calc(100vw - 96px));
+    margin:0 auto;
   }
 
   .about-grid{
@@ -250,7 +262,7 @@
     text-transform:uppercase;
     color:rgba(255,255,255,.86);
     cursor:pointer;
-    z-index:5;
+    z-index:6;
   }
   .about-close:hover{
     border-color:rgba(255,255,255,.22);
@@ -267,7 +279,7 @@
     text-transform:uppercase;
     opacity:.55;
     pointer-events:none;
-    z-index:5;
+    z-index:6;
   }
 
   /* Premium edge arrows (auto-hide) */
@@ -287,15 +299,14 @@
     user-select:none;
     -webkit-user-select:none;
 
-    opacity:0;                      /* hidden by default */
-    pointer-events:none;            /* avoid accidental */
+    opacity:0;
+    pointer-events:none;
     transition: opacity .16s ease, transform .16s ease, border-color .16s ease;
-    z-index:6;
+    z-index:7;
   }
   .edge-arrow.left{ left:18px; }
   .edge-arrow.right{ right:18px; }
 
-  /* show arrows when hovering near shell */
   .about-shell.is-hot .edge-arrow{
     opacity:.9;
     pointer-events:auto;
@@ -309,21 +320,34 @@
     transform:translateY(-50%) scale(.99);
   }
   .edge-arrow svg{ width:22px; height:22px; opacity:.9; }
-
-  /* disabled arrow */
   .edge-arrow.is-disabled{
     opacity:.18 !important;
     pointer-events:none !important;
     transform:translateY(-50%) scale(1) !important;
   }
 
+  /* Footer (original style, centered, inside overlay) */
+  .about-footer{
+    margin-top:22px;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.55;
+    mix-blend-mode:difference;
+    padding: 0 24px 10px;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
   @media (max-width: 980px){
     .about-panel{ padding:28px; }
+    .about-inner{ width:min(1180px, calc(100vw - 44px)); }
     .about-grid{ grid-template-columns:1fr; }
     .about-media{ height:44vh; }
     .edge-arrow{
       height:92px; width:52px;
-      opacity:.92; pointer-events:auto; /* on mobile: always visible */
+      opacity:.92; pointer-events:auto;
     }
     .about-shell.is-hot .edge-arrow{ opacity:.92; pointer-events:auto; }
   }
@@ -374,72 +398,83 @@
 
       <div class="about-track" id="aboutTrack">
         <section class="about-panel" data-panel="about">
-          <div class="about-grid">
-            <div class="about-media">
-              <video autoplay muted loop playsinline preload="metadata">
-                <source src="CT.mp4" type="video/mp4">
-              </video>
-            </div>
+          <div class="about-inner">
+            <div class="about-grid">
+              <div class="about-media">
+                <video autoplay muted loop playsinline preload="metadata">
+                  <source src="CT.mp4" type="video/mp4">
+                </video>
+              </div>
 
-            <div>
-              <div class="about-kicker">ABOUT</div>
-              <h2 class="about-title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
+              <div>
+                <div class="about-kicker">ABOUT</div>
+                <h2 class="about-title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
 
-              <p class="about-p">
-                This is not a new page. It’s the same world — reframed. Live video becomes a controlled surface, and content becomes a system layer.
-              </p>
+                <p class="about-p">
+                  This is not a new page. It’s the same world — reframed. Live video becomes a controlled surface, and content becomes a system layer.
+                </p>
 
-              <div class="about-hr"></div>
+                <div class="about-hr"></div>
 
-              <p class="about-p">
-                The interface is designed as a sequence: reveal, focus, expand. Information appears without breaking immersion.
-              </p>
+                <p class="about-p">
+                  The interface is designed as a sequence: reveal, focus, expand. Information appears without breaking immersion.
+                </p>
 
-              <p class="about-p">
-                The user doesn’t navigate — the space transforms.
-              </p>
+                <p class="about-p">
+                  The user doesn’t navigate — the space transforms.
+                </p>
 
-              <div class="about-tags">
-                <span class="about-tag" data-jump="ceo">CEO</span>
-                <span class="about-tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
-                <span class="about-tag">R&amp;D</span>
-                <span class="about-tag">CINEMATIC UI</span>
+                <div class="about-tags">
+                  <span class="about-tag" data-jump="ceo">CEO</span>
+                  <span class="about-tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
+                  <span class="about-tag">R&amp;D</span>
+                  <span class="about-tag">CINEMATIC UI</span>
+                </div>
               </div>
             </div>
+
+            <div class="about-footer">© 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION</div>
           </div>
         </section>
 
         <section class="about-panel" data-panel="ceo">
-          <div class="about-kicker">CEO</div>
-          <h2 class="about-title">WHO WE ARE</h2>
+          <div class="about-inner">
+            <div class="about-kicker">CEO</div>
+            <h2 class="about-title">WHO WE ARE</h2>
 
-          <p class="about-p">
-            MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
-          </p>
+            <p class="about-p">
+              MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
+            </p>
 
-          <div class="about-hr"></div>
+            <div class="about-hr"></div>
 
-          <p class="about-p">
-            We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as a deployable operating system for space.
-          </p>
+            <p class="about-p">
+              We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as a deployable operating system for space.
+            </p>
+
+            <div class="about-footer">© 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION</div>
+          </div>
         </section>
 
         <section class="about-panel" data-panel="gov">
-          <div class="about-kicker">GOVERNMENTS</div>
-          <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
+          <div class="about-inner">
+            <div class="about-kicker">GOVERNMENTS</div>
+            <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
 
-          <p class="about-p">
-            A globally deployable framework for public-sector and institutional partners: pilot environments, regulatory alignment, operational governance, and long-term resilience.
-          </p>
+            <p class="about-p">
+              A globally deployable framework for public-sector and institutional partners: pilot environments, regulatory alignment, operational governance, and long-term resilience.
+            </p>
 
-          <div class="about-hr"></div>
+            <div class="about-hr"></div>
 
-          <p class="about-p">
-            (When you decide the channel, we embed a minimal institutional contact mechanism here — without exposing unnecessary data.)
-          </p>
+            <p class="about-p">
+              (When you decide the channel, we embed a minimal institutional contact mechanism here — without exposing unnecessary data.)
+            </p>
+
+            <div class="about-footer">© 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION</div>
+          </div>
         </section>
       </div>
-
     </div>
   </div>
 </div>
@@ -468,11 +503,9 @@
     indexEl.textContent =
       String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
 
-    // glows: show if there is content in that direction
     glowL.classList.toggle("on", i > 0);
     glowR.classList.toggle("on", i < panels.length - 1);
 
-    // disable arrows at ends
     prevBtn.classList.toggle("is-disabled", i === 0);
     nextBtn.classList.toggle("is-disabled", i === panels.length - 1);
   }
@@ -503,30 +536,26 @@
     document.body.style.overflow = "";
   }
 
-  // Open/Close
   aboutBtn.addEventListener("click", ()=> openAbout("about"));
   aboutDim.addEventListener("click", closeAbout);
   aboutClose.addEventListener("click", closeAbout);
+
   document.addEventListener("keydown", (e)=>{
     if(!aboutOverlay.classList.contains("is-open")) return;
-
     if(e.key === "Escape") closeAbout();
     if(e.key === "ArrowLeft") scrollToIndex(idx() - 1);
     if(e.key === "ArrowRight") scrollToIndex(idx() + 1);
   });
 
-  // Buttons
   prevBtn.addEventListener("click", ()=> scrollToIndex(idx() - 1));
   nextBtn.addEventListener("click", ()=> scrollToIndex(idx() + 1));
 
-  // Tags jump INSIDE overlay
   document.querySelectorAll("[data-jump]").forEach(el=>{
     el.addEventListener("click", ()=>{
       openAbout(el.getAttribute("data-jump"));
     });
   });
 
-  // Sync on mobile swipe
   track.addEventListener("scroll", ()=> updateNav(), { passive:true });
 
   // Auto-hide arrows: show only when cursor is near shell edges
@@ -540,31 +569,25 @@
   }
 
   aboutShell.addEventListener("mousemove", (e)=>{
-    // only show when mouse is within 90px of left/right edge
     const r = aboutShell.getBoundingClientRect();
     const x = e.clientX - r.left;
-    const near = (x < 110) || (x > r.width - 110);
+    const near = (x < 130) || (x > r.width - 130);
     if(near) setHot(true);
   });
-
   aboutShell.addEventListener("mouseleave", ()=>{
     aboutShell.classList.remove("is-hot");
   });
 
-  // Keep consistent on resize
   window.addEventListener("resize", ()=>{
     scrollToIndex(idx());
     updateNav();
   });
 
-  // Init
   updateNav();
 
   // Nodes click placeholders
   document.querySelectorAll(".node").forEach(n=>{
-    n.addEventListener("click", (e)=>{
-      e.stopPropagation();
-    });
+    n.addEventListener("click", (e)=> e.stopPropagation());
   });
 </script>
 
