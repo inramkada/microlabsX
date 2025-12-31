@@ -48,7 +48,7 @@
   }
   .toplink.muted{ color:rgba(255,255,255,.72); }
 
-  /* Smaller utility links (LANG label) */
+  /* Smaller utility label (LANG label) */
   .topmini{
     font-size:12px;
     font-weight:700;
@@ -310,29 +310,36 @@
     }
   }
 
-  /* ===== LANG stealth (no container, horizontal on hover) ===== */
+  /* ===== LANG stealth (opens LEFT, bigger options) ===== */
   .lang{
     position:relative;
     display:flex;
     align-items:center;
-    gap:12px;
     user-select:none;
     -webkit-user-select:none;
   }
+
+  /* Options appear to the LEFT of LANG so ABOUT/NODES remain untouched */
   .lang-row{
+    position:absolute;
+    right:100%;
+    top:50%;
+    transform:translateY(-50%) translateX(-14px);
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:18px;
     opacity:0;
     pointer-events:none;
-    transform: translateY(1px);
+    white-space:nowrap;
   }
   .lang:hover .lang-row{
     opacity:1;
     pointer-events:auto;
   }
+
+  /* Bigger when open */
   .lang-chip{
-    font-size:12px;
+    font-size:15px;            /* bigger */
     font-weight:700;
     letter-spacing:.22em;
     text-transform:uppercase;
@@ -344,11 +351,11 @@
   .lang-chip:hover{
     opacity:.95;
     text-decoration: underline;
-    text-underline-offset: 6px;
+    text-underline-offset: 7px;
     text-decoration-thickness: 2px;
   }
 
-  /* ===== SOUND FAB (bottom-right) ===== */
+  /* ===== SOUND FAB (bigger + thicker stroke) ===== */
   .sound-fab{
     position:fixed;
     right:18px;
@@ -357,19 +364,19 @@
 
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
 
     cursor:pointer;
     user-select:none;
     -webkit-user-select:none;
 
     mix-blend-mode:difference; /* RGB feel */
-    color:rgba(255,255,255,.92);
+    color:rgba(255,255,255,.95);
   }
   .sound-ico{
-    width:22px;
-    height:22px;
-    opacity:.90;
+    width:34px;               /* bigger */
+    height:34px;
+    opacity:.98;
   }
   .sound-off{ display:none; }
   .sound-fab.is-muted .sound-on{ display:none; }
@@ -382,7 +389,7 @@
     text-transform:uppercase;
     opacity:0;
     pointer-events:none;
-    transform:translateX(6px);
+    transform:translateX(8px);
     white-space:nowrap;
   }
   .sound-fab:hover .sound-label{
@@ -392,7 +399,7 @@
 
   /* RTL support */
   html[dir="rtl"] .sound-fab{ flex-direction:row-reverse; }
-  html[dir="rtl"] .sound-label{ transform:translateX(-6px); }
+  html[dir="rtl"] .sound-label{ transform:translateX(-8px); }
   html[dir="rtl"] .sound-fab:hover .sound-label{ transform:translateX(0); }
 
   /* Basic anti-save UX (best-effort) */
@@ -412,9 +419,8 @@
 </video>
 
 <div class="topbar">
-  <div class="toplink muted" id="aboutBtn" data-i18n="top_about">ABOUT</div>
 
-  <!-- LANG (stealth) -->
+  <!-- LANG FIRST -->
   <div class="lang" id="langWrap" aria-label="Language">
     <div class="topmini muted" id="langBtn"><span data-i18n="top_lang_label">LANG</span></div>
     <div class="lang-row" aria-hidden="true">
@@ -427,7 +433,10 @@
     </div>
   </div>
 
-  <!-- NODES (original structure kept) -->
+  <!-- ABOUT SECOND (unchanged structure) -->
+  <div class="toplink muted" id="aboutBtn" data-i18n="top_about">ABOUT</div>
+
+  <!-- NODES THIRD (original structure kept) -->
   <div class="toplink nodes"><span data-i18n="top_nodes">NODES</span>
     <div class="nodes-bridge" aria-hidden="true"></div>
     <div class="nodes-stack" aria-hidden="true">
@@ -545,19 +554,22 @@
 <div class="sound-fab is-muted" id="soundFab" role="button" tabindex="0" aria-label="Sound toggle">
   <span class="sound-label" id="soundLabel">SOUND OFF</span>
 
-  <!-- Speaker (ON) -->
+  <!-- Speaker (ON) - thicker strokes -->
   <svg class="sound-ico sound-on" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M11 5.5L7.8 8H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2.8L11 18.5a1 1 0 0 0 1.6-.8V6.3a1 1 0 0 0-1.6-.8Z"
-          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M15 9.2c1 .8 1 .8 1 2.8s0 2-1 2.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-    <path d="M17.2 7.5c1.7 1.5 1.7 1.5 1.7 4.5s0 3-1.7 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" opacity=".9"/>
+          fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M15 9.1c1.15.9 1.15.9 1.15 2.9s0 2-1.15 2.9"
+          fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M17.5 7.2c1.9 1.65 1.9 1.65 1.9 4.8s0 3.15-1.9 4.8"
+          fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" opacity=".92"/>
   </svg>
 
-  <!-- Speaker (MUTED) — Dumbar diagonal slash -->
+  <!-- Speaker (MUTED) — Dumbar diagonal slash (thicker) -->
   <svg class="sound-ico sound-off" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M11 5.5L7.8 8H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2.8L11 18.5a1 1 0 0 0 1.6-.8V6.3a1 1 0 0 0-1.6-.8Z"
-          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-    <path d="M20 6L6 20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M20.4 5.6L5.6 20.4"
+          fill="none" stroke="currentColor" stroke-width="3.0" stroke-linecap="round"/>
   </svg>
 </div>
 
