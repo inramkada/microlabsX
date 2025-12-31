@@ -116,11 +116,11 @@
   /* ===== Page ===== */
   .page{ position:relative; z-index:2; }
 
-  /* IMPORTANT: do NOT paint black over the video */
+  /* keep video visible */
   .about-section{
     margin-top:100vh;
     padding:120px 0 70px;
-    background:transparent; /* ✅ keep video visible */
+    background:transparent;
   }
 
   .wrap{
@@ -129,10 +129,6 @@
   }
 
   /* ===== ABOUT rail (no box) ===== */
-  .about-rail{
-    position:relative;
-  }
-
   .about-track{
     display:flex;
     overflow-x:auto;
@@ -141,10 +137,10 @@
     scroll-behavior:smooth;
     -webkit-overflow-scrolling:touch;
     touch-action:pan-x;
-
-    /* ✅ no border, no background */
     background:transparent;
+    cursor:grab;
   }
+  .about-track:active{ cursor:grabbing; }
 
   .about-panel{
     min-width:100%;
@@ -232,60 +228,70 @@
     background: rgba(0,0,0,.32);
   }
 
-  /* ===== Minimal manual rail line + arrows ===== */
+  /* ===== Ultra-minimal rail UI ===== */
   .rail-ui{
-    margin-top:26px;
+    margin-top:28px;
     display:flex;
     align-items:center;
-    gap:16px;
+    gap:14px;
     user-select:none;
     -webkit-user-select:none;
     mix-blend-mode:difference;
   }
 
-  .arrow{
-    width:44px;
-    height:44px;
+  /* invisible hit area, visible chevron */
+  .chev{
+    width:42px;
+    height:42px;
     border-radius:999px;
-    border:1px solid rgba(255,255,255,.16);
-    background:rgba(0,0,0,.18);
-    color:rgba(255,255,255,.86);
-    cursor:pointer;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(0,0,0,.10);
     display:grid;
     place-items:center;
-    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    cursor:pointer;
+    transition: transform .16s ease, border-color .16s ease, background .16s ease, opacity .16s ease;
+    opacity:.9;
   }
-  .arrow:hover{
+  .chev:hover{
     transform: translateY(-1px);
-    border-color: rgba(255,255,255,.26);
-    background: rgba(0,0,0,.26);
+    border-color: rgba(255,255,255,.22);
+    background:rgba(0,0,0,.18);
+    opacity:1;
   }
-  .arrow:active{ transform: translateY(0); }
+  .chev svg{
+    width:18px;height:18px;
+    opacity:.9;
+  }
 
+  /* The line: 1px, deep black */
   .rail-line{
     position:relative;
-    height:3px;
     flex:1;
-    border-radius:999px;
-    background:rgba(0,0,0,.75); /* ✅ "línea negra" */
-    border:1px solid rgba(255,255,255,.08);
-    overflow:hidden;
+    height:1px;
+    background:rgba(0,0,0,.95);
+    border-top:1px solid rgba(255,255,255,.06); /* micro highlight */
   }
 
-  .rail-thumb{
+  /* Tick indicator */
+  .rail-tick{
     position:absolute;
-    top:-6px;
-    height:12px;
-    width:56px;
-    border-radius:999px;
+    top:-9px;
+    width:2px;
+    height:18px;
     background:rgba(255,255,255,.92);
-    opacity:.18;
-    left:0;
+    opacity:.22;
     transform: translateX(0);
-    transition: transform .18s ease;
+    transition: transform .24s cubic-bezier(.22,.61,.36,1), opacity .24s ease;
+    box-shadow: 0 0 18px rgba(255,255,255,.08);
   }
 
-  .rail-label{
+  /* “pulse” on change */
+  .rail-tick.pulse{
+    opacity:.40;
+    box-shadow: 0 0 24px rgba(255,255,255,.14);
+  }
+
+  .rail-meta{
     font-size:11px;
     letter-spacing:.14em;
     text-transform:uppercase;
@@ -335,101 +341,104 @@
   <section id="aboutSection" class="about-section">
     <div class="wrap">
 
-      <div class="about-rail">
-        <div class="about-track" id="aboutTrack">
+      <div class="about-track" id="aboutTrack">
 
-          <!-- PANEL 0 -->
-          <div class="about-panel" data-panel="overview">
-            <div class="about-grid">
-              <div class="media">
-                <video autoplay muted loop playsinline preload="metadata">
-                  <source src="CT.mp4" type="video/mp4">
-                </video>
-              </div>
-
-              <div>
-                <div class="kicker">SOLUTIONS</div>
-
-                <h2 class="title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
-
-                <p class="p">
-                  Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
-                </p>
-
-                <div class="hr"></div>
-
-                <p class="p">
-                  The system is designed to transform physical space into fully automated operational environments,
-                  aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
-                </p>
-
-                <p class="p">
-                  By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
-                </p>
-
-                <div class="tags">
-                  <span class="tag" data-jump="ceo">CEO</span>
-                  <span class="tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
-                </div>
-
-                <!-- Manual rail UI -->
-                <div class="rail-ui">
-                  <button class="arrow" id="prevBtn" type="button" aria-label="Previous">
-                    &#8592;
-                  </button>
-
-                  <div class="rail-line" aria-hidden="true">
-                    <div class="rail-thumb" id="railThumb"></div>
-                  </div>
-
-                  <button class="arrow" id="nextBtn" type="button" aria-label="Next">
-                    &#8594;
-                  </button>
-
-                  <div class="rail-label" id="railLabel">01 / 03</div>
-                </div>
-
-              </div>
+        <!-- PANEL 0 -->
+        <div class="about-panel" data-panel="overview">
+          <div class="about-grid">
+            <div class="media">
+              <video autoplay muted loop playsinline preload="metadata">
+                <source src="CT.mp4" type="video/mp4">
+              </video>
             </div>
-          </div>
 
-          <!-- PANEL 1 -->
-          <div class="about-panel" data-panel="ceo">
             <div>
-              <div class="kicker">CEO</div>
-              <h2 class="title">WHO WE ARE</h2>
+              <div class="kicker">SOLUTIONS</div>
+
+              <h2 class="title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
 
               <p class="p">
-                MicroretailX LLC is the legal entity behind this initiative. We design automation-first systems for controlled, scalable biotech operations across institutional environments.
+                Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
               </p>
 
               <div class="hr"></div>
 
               <p class="p">
-                We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as the foundation for deployable production environments.
+                The system is designed to transform physical space into fully automated operational environments,
+                aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
               </p>
-            </div>
-          </div>
-
-          <!-- PANEL 2 -->
-          <div class="about-panel" data-panel="gov">
-            <div>
-              <div class="kicker">GOVERNMENTS</div>
-              <h2 class="title">INSTITUTIONAL CONTACT</h2>
 
               <p class="p">
-                This channel is intended for public-sector, agencies, and institutional partners: deployment frameworks, pilot environments, regulatory alignment, and collaboration models.
+                By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
               </p>
 
-              <div class="hr"></div>
+              <div class="tags">
+                <span class="tag" data-jump="ceo">CEO</span>
+                <span class="tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
+              </div>
 
-              <p class="p" style="opacity:.62;">
-                (We can embed your preferred contact mechanism here later. For now, keep it minimal and controlled.)
-              </p>
+              <!-- Ultra minimal manual rail -->
+              <div class="rail-ui">
+                <button class="chev" id="prevBtn" type="button" aria-label="Previous">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+
+                <div class="rail-line" aria-hidden="true">
+                  <div class="rail-tick" id="railTick"></div>
+                </div>
+
+                <button class="chev" id="nextBtn" type="button" aria-label="Next">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9.5 5L16 12l-6.5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+
+                <div class="rail-meta" id="railMeta">01 / 03</div>
+              </div>
+
             </div>
           </div>
-
         </div>
+
+        <!-- PANEL 1 -->
+        <div class="about-panel" data-panel="ceo">
+          <div>
+            <div class="kicker">CEO</div>
+            <h2 class="title">WHO WE ARE</h2>
+
+            <p class="p">
+              MicroretailX LLC is the legal entity behind this initiative. We design automation-first systems for controlled, scalable biotech operations across institutional environments.
+            </p>
+
+            <div class="hr"></div>
+
+            <p class="p">
+              We focus on the structural layer of the next industrial shift: robotics, software orchestration, and measurable execution as the foundation for deployable production environments.
+            </p>
+          </div>
+        </div>
+
+        <!-- PANEL 2 -->
+        <div class="about-panel" data-panel="gov">
+          <div>
+            <div class="kicker">GOVERNMENTS</div>
+            <h2 class="title">INSTITUTIONAL CONTACT</h2>
+
+            <p class="p">
+              This channel is intended for public-sector, agencies, and institutional partners: deployment frameworks, pilot environments, regulatory alignment, and collaboration models.
+            </p>
+
+            <div class="hr"></div>
+
+            <p class="p" style="opacity:.62;">
+              Keep this minimal for now. When you decide the channel (email, encrypted form, institutional address),
+              we integrate it here without exposing unnecessary data.
+            </p>
+          </div>
+        </div>
+
       </div>
 
       <div class="footer">© 2023–2025 MicroretailX LLC · All rights reserved</div>
@@ -445,75 +454,84 @@
 
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
-  const railThumb = document.getElementById("railThumb");
-  const railLabel = document.getElementById("railLabel");
+  const railTick = document.getElementById("railTick");
+  const railMeta = document.getElementById("railMeta");
 
-  function scrollToIndex(idx){
-    const w = aboutTrack.clientWidth || window.innerWidth;
-    const clamped = Math.max(0, Math.min(panels.length - 1, idx));
-    aboutTrack.scrollTo({ left: clamped * w, behavior:"smooth" });
-  }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
   function currentIndex(){
     const w = aboutTrack.clientWidth || window.innerWidth;
     return Math.round(aboutTrack.scrollLeft / w);
   }
 
-  function updateRailUI(){
-    const idx = currentIndex();
-    railLabel.textContent = String(idx + 1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
-
-    // move thumb across the line (0..1)
-    const pct = (panels.length <= 1) ? 0 : idx / (panels.length - 1);
-    const line = railThumb.parentElement;
-    const maxX = Math.max(0, line.clientWidth - railThumb.clientWidth);
-    railThumb.style.transform = `translateX(${Math.round(maxX * pct)}px)`;
+  function scrollToIndex(idx){
+    const w = aboutTrack.clientWidth || window.innerWidth;
+    const i = clamp(idx, 0, panels.length - 1);
+    aboutTrack.scrollTo({ left: i * w, behavior:"smooth" });
   }
 
-  // ABOUT button scrolls down to section
+  function updateRailUI(pulse=false){
+    const idx = currentIndex();
+    railMeta.textContent = String(idx + 1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
+
+    const line = railTick.parentElement;
+    const maxX = Math.max(0, line.clientWidth - railTick.clientWidth);
+    const pct = (panels.length <= 1) ? 0 : idx / (panels.length - 1);
+    railTick.style.transform = `translateX(${Math.round(maxX * pct)}px)`;
+
+    if(pulse){
+      railTick.classList.add("pulse");
+      clearTimeout(updateRailUI._t);
+      updateRailUI._t = setTimeout(()=> railTick.classList.remove("pulse"), 180);
+    }
+  }
+
   aboutBtn.addEventListener("click", () => {
     document.getElementById("aboutSection").scrollIntoView({ behavior:"smooth", block:"start" });
   });
 
-  // arrows (manual)
-  prevBtn.addEventListener("click", () => scrollToIndex(currentIndex() - 1));
-  nextBtn.addEventListener("click", () => scrollToIndex(currentIndex() + 1));
+  prevBtn.addEventListener("click", () => {
+    scrollToIndex(currentIndex() - 1);
+    updateRailUI(true);
+  });
+  nextBtn.addEventListener("click", () => {
+    scrollToIndex(currentIndex() + 1);
+    updateRailUI(true);
+  });
 
-  // tags jump inside the track
+  // Tags jump
   document.querySelectorAll("[data-jump]").forEach(el => {
     el.addEventListener("click", () => {
       const key = el.getAttribute("data-jump");
       const idx = panels.findIndex(p => p.dataset.panel === key);
-      if (idx >= 0) scrollToIndex(idx);
+      if (idx >= 0) { scrollToIndex(idx); updateRailUI(true); }
     });
   });
 
-  // keep UI updated while scrolling (swipe or drag)
-  aboutTrack.addEventListener("scroll", () => {
-    // lightweight: update on scroll
-    updateRailUI();
-  }, { passive:true });
-
-  // ensure snap on end (nice finish)
+  // Snap at scroll end (clean)
   let snapT;
   aboutTrack.addEventListener("scroll", () => {
+    updateRailUI(false);
     clearTimeout(snapT);
-    snapT = setTimeout(() => scrollToIndex(currentIndex()), 80);
+    snapT = setTimeout(() => {
+      scrollToIndex(currentIndex());
+      updateRailUI(false);
+    }, 80);
   }, { passive:true });
 
   window.addEventListener("resize", () => {
     scrollToIndex(currentIndex());
-    updateRailUI();
+    updateRailUI(false);
   });
 
-  // init
-  updateRailUI();
+  // Init
+  updateRailUI(false);
 
-  // nodes click placeholders (no navigation)
+  // Nodes click placeholders
   document.querySelectorAll(".node").forEach(n => {
     n.addEventListener("click", (e) => {
       e.stopPropagation();
-      // placeholder
+      // hook later
       // console.log("Node:", n.dataset.node);
     });
   });
