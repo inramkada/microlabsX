@@ -74,12 +74,24 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   filter: saturate(1.05) contrast(1.02);
 }
 
+/* subtle depth overlays */
+.viewer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
+    linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.55));
+}
+
+/* PREVIEW badge */
 .viewer::after{
-  content:"PREVIEW";
+  content:"PLACEHOLDER";
   position:absolute;
   top:18px;
   left:18px;
-  padding:10px 12px;
+  padding:9px 12px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.18);
   background:rgba(0,0,0,0.35);
@@ -90,15 +102,22 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   mix-blend-mode:difference;
 }
 
-/* subtle bottom fade for premium depth */
-.viewer::before{
-  content:"";
+/* ================= OVERLAY TEXT ================= */
+.viewer-note{
   position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
-    linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.35));
+  bottom:22px;
+  left:22px;
+  right:22px;
+  max-width:720px;
+  font-size:12px;
+  line-height:1.6;
+  letter-spacing:0.04em;
+  color:rgba(255,255,255,0.72);
+  background:rgba(0,0,0,0.35);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px;
+  padding:14px 16px;
+  backdrop-filter: blur(6px);
 }
 
 /* ================= FOOTER (same as index) ================= */
@@ -116,6 +135,7 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 /* ================= RESPONSIVE ================= */
 @media(max-width:1100px){
   .viewer{ min-height:52vh; }
+  .viewer-note{ font-size:11px; }
 }
 </style>
 </head>
@@ -129,19 +149,27 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 <main class="wrapper">
 
-  <!-- PREVIEW IMAGE (placeholder until Omniverse viewer is enabled) -->
-  <section class="viewer" aria-label="Node 001 preview">
+  <!-- PREVIEW IMAGE (reserved space for Omniverse tool) -->
+  <section class="viewer" aria-label="Node 001 placeholder">
+
     <img
-      src="https://developer.download.nvidia.com/images/omniverse/ai-factories-ari.jpg"
-      alt="NVIDIA Omniverse preview image"
+      src="https://blogs.nvidia.com/wp-content/uploads/2025/01/Nvidia_Press_1600x900.jpg"
+      alt="NVIDIA Omniverse conceptual preview"
       loading="eager"
       decoding="async"
       referrerpolicy="no-referrer"
     >
+
+    <div class="viewer-note">
+      This space is reserved for the interactive NVIDIA Omniverse tool.
+      The image shown is a visual placeholder only, intended to illustrate
+      the potential of the platform once the live simulation environment is enabled.
+    </div>
+
   </section>
 
   <!--
-  FUTURE: NVIDIA Omniverse Web Viewer (enable later)
+  FUTURE: NVIDIA Omniverse Web Viewer
   <section class="viewer">
     <iframe
       src="/viewer/?node=001"
