@@ -109,7 +109,7 @@
     mix-blend-mode:difference;
     padding:0 18px;
 
-    pointer-events:auto;
+    pointer-events:auto;              /* link clickable */
     user-select:none;
     -webkit-user-select:none;
   }
@@ -271,7 +271,7 @@
     .about-shell.is-hot .edge-arrow{ opacity:.92; pointer-events:auto; }
   }
 
-  /* ===== LANG globe (click-to-open; opens LEFT) ===== */
+  /* ===== LANG globe (click-to-open) ===== */
   .lang{
     position:relative;
     display:flex;
@@ -291,7 +291,7 @@
   }
   .lang-btn svg{ width:18px; height:18px; opacity:.9; }
 
-  /* opens to the LEFT */
+  /* Default (LTR): opens to the LEFT */
   .lang-row{
     position:absolute;
     right:100%;
@@ -341,6 +341,7 @@
     mix-blend-mode:difference;
     color:rgba(255,255,255,.95);
     transform:translateZ(0);
+    pointer-events:auto; /* safety */
   }
   .sound-ico{
     width:38px;
@@ -367,7 +368,7 @@
     transform:translateX(0);
   }
 
-  /* Micro pulse (80–120ms feel) */
+  /* Micro pulse */
   .sound-fab.is-pulse .sound-ico{
     animation: soundPulse 120ms ease-out;
   }
@@ -377,18 +378,21 @@
     100%{ transform: scale(1); }
   }
 
-  /* RTL support */
+  /* RTL support (sound layout) */
   html[dir="rtl"] .sound-fab{ flex-direction:row-reverse; }
   html[dir="rtl"] .sound-label{ transform:translateX(-8px); }
   html[dir="rtl"] .sound-fab:hover .sound-label{ transform:translateX(0); }
 
-  /* ===== RTL: topbar order + LANG opens RIGHT + globe mirrored ===== */
+  /* ===== RTL: topbar order + LANG opens RIGHT + globe mirrored + language order flipped ===== */
   html[dir="rtl"] .topbar{ flex-direction: row-reverse; }
+
   html[dir="rtl"] .lang-row{
     right:auto;
     left:100%;
     transform:translateY(-50%) translateX(14px);
+    flex-direction: row-reverse; /* flip visual order in Arabic */
   }
+
   html[dir="rtl"] .lang-btn svg{ transform: scaleX(-1); }
 
   /* Anti-save best-effort */
@@ -411,7 +415,6 @@
   <!-- LANG (globe) FIRST -->
   <div class="lang" id="langWrap" aria-label="Language">
     <div class="lang-btn" id="langBtn" title="Language" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
-      <!-- Globe icon -->
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="1.9"/>
         <path d="M2.5 12h19" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
@@ -559,11 +562,10 @@
           fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" opacity=".92"/>
   </svg>
 
-  <!-- Speaker (MUTED) — centered diagonal slash -->
+  <!-- Speaker (MUTED) -->
   <svg class="sound-ico sound-off" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M11 5.5L7.8 8H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h2.8L11 18.5a1 1 0 0 0 1.6-.8V6.3a1 1 0 0 0-1.6-.8Z"
           fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/>
-    <!-- more centered slash -->
     <path d="M18.8 7.2L7.2 18.8"
           fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/>
   </svg>
@@ -591,7 +593,6 @@
     const i = idx();
     indexEl.textContent =
       String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
-
     prevBtn.classList.toggle("is-disabled", i === 0);
     nextBtn.classList.toggle("is-disabled", i === panels.length - 1);
   }
@@ -772,6 +773,7 @@
     const footer = document.querySelector("[data-i18n='footer_html']");
     if(footer && dict.footer_html) footer.innerHTML = dict.footer_html;
 
+    // safe: this function exists below and doesn't TDZ-crash
     syncSoundUI();
   }
 
@@ -814,23 +816,31 @@
   // init language
   applyLanguage(localStorage.getItem("mrx_lang") || "en");
 
-  // ===== SOUND (robust toggle + pulse) =====
-  const bgVideo = document.getElementById("bg");
-  const soundFab = document.getElementById("soundFab");
-  const soundLabel = document.getElementById("soundLabel");
+  // ===== SOUND (NO TDZ CRASH) =====
+  function getSoundRefs(){
+    return {
+      v: document.getElementById("bg"),
+      fab: document.getElementById("soundFab"),
+      label: document.getElementById("soundLabel")
+    };
+  }
 
   function syncSoundUI(){
-    if(!bgVideo || !soundFab || !soundLabel) return;
+    const { v, fab, label } = getSoundRefs();
+    if(!v || !fab || !label) return;
 
-    const muted = !!bgVideo.muted;
-    soundFab.classList.toggle("is-muted", muted);
+    const muted = !!v.muted;
+    fab.classList.toggle("is-muted", muted);
 
-    const dict = currentDict();
-    const txt = dict && dict.top_sound_on_off
-      ? dict.top_sound_on_off[muted ? "off" : "on"]
-      : (muted ? "SOUND OFF" : "SOUND ON");
+    let txt = muted ? "SOUND OFF" : "SOUND ON";
+    try{
+      const dict = currentDict();
+      if(dict && dict.top_sound_on_off){
+        txt = dict.top_sound_on_off[muted ? "off" : "on"];
+      }
+    }catch(_){}
 
-    soundLabel.textContent = txt;
+    label.textContent = txt;
   }
 
   let lastToggleAt = 0;
@@ -839,44 +849,47 @@
     if(e){ e.stopPropagation(); e.preventDefault(); }
 
     const now = performance.now();
-    if(now - lastToggleAt < 220) return; // avoid double-fire (pointerdown+click)
+    if(now - lastToggleAt < 220) return; // avoid double fire
     lastToggleAt = now;
 
-    if(!bgVideo || !soundFab) return;
+    const { v, fab } = getSoundRefs();
+    if(!v || !fab) return;
 
     // pulse feedback
-    soundFab.classList.remove("is-pulse");
-    void soundFab.offsetWidth; // restart animation reliably
-    soundFab.classList.add("is-pulse");
-    setTimeout(()=> soundFab.classList.remove("is-pulse"), 140);
+    fab.classList.remove("is-pulse");
+    void fab.offsetWidth;
+    fab.classList.add("is-pulse");
+    setTimeout(()=> fab.classList.remove("is-pulse"), 140);
 
-    // toggle muted
-    bgVideo.muted = !bgVideo.muted;
+    // toggle
+    v.muted = !v.muted;
 
     // ensure audible playback after user gesture
-    if(!bgVideo.muted){
+    if(!v.muted){
       try{
-        bgVideo.volume = 1;
-        await bgVideo.play();
+        v.volume = 1;
+        await v.play();
       }catch(_){}
     }
 
     syncSoundUI();
   }
 
-  if(soundFab){
-    soundFab.addEventListener("pointerdown", toggleSound, { passive:false });
-    soundFab.addEventListener("click", toggleSound, { passive:false });
-    soundFab.addEventListener("keydown", (e)=>{
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const { fab } = getSoundRefs();
+    if(!fab) return;
+
+    fab.addEventListener("pointerdown", toggleSound, { passive:false });
+    fab.addEventListener("click", toggleSound, { passive:false });
+    fab.addEventListener("keydown", (e)=>{
       if(e.key === "Enter" || e.key === " "){
         e.preventDefault();
         toggleSound(e);
       }
     });
-  }
 
-  // init sound state
-  syncSoundUI();
+    syncSoundUI();
+  });
 
   // ===== Anti-save (best-effort) =====
   document.addEventListener("contextmenu", e => e.preventDefault());
