@@ -1,369 +1,458 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<title>MicroretailX — Systems for the Next Industrial Era</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>MicroretailX</title>
 
 <style>
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  height:100%;
-  background:#000;
-  color:#fff;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  overflow-x:hidden;
-}
+  html, body{
+    margin:0; height:100%; background:#000; color:#fff;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    overflow-x:hidden;
+  }
+  html,body{scrollbar-width:none;-ms-overflow-style:none}
+  ::-webkit-scrollbar{width:0;height:0}
 
-/* hide scrollbars */
-html,body{scrollbar-width:none;-ms-overflow-style:none}
-::-webkit-scrollbar{width:0;height:0}
+  /* background */
+  #bg{
+    position:fixed; inset:0; width:100vw; height:100vh; object-fit:cover;
+    z-index:1; pointer-events:none;
+  }
 
-/* hero background */
-#bg{
-  position:fixed;
-  inset:0;
-  width:100vw;
-  height:100vh;
-  object-fit:cover;
-  z-index:1;
-  pointer-events:none;
-}
+  /* topbar */
+  .topbar{
+    position:fixed; top:18px; right:18px; z-index:30;
+    display:flex; gap:56px; align-items:center;
+    mix-blend-mode:difference;
+    user-select:none;
+  }
+  .about,.nodes{
+    font-size:22px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
+    cursor:pointer;
+  }
 
-/* top navigation */
-.topbar{
-  position:fixed;
-  top:18px;
-  right:18px;
-  z-index:30;
-  display:flex;
-  gap:56px;
-  align-items:center;
-  mix-blend-mode:difference;
-}
+  /* about section */
+  .page{position:relative; z-index:2;}
+  .about-section{
+    margin-top:100vh;
+    padding:140px 0 160px;
+    border-top:1px solid rgba(255,255,255,.08);
+    background:#000;
+  }
+  .wrap{width:min(1180px, calc(100vw - 56px)); margin:0 auto;}
+  .grid{
+    display:grid; grid-template-columns: 1.05fr .95fr; gap:48px;
+    align-items:start;
+  }
+  .media{
+    position:sticky; top:96px;
+    height:min(56vh, 520px);
+    border-radius:26px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 32px 140px rgba(0,0,0,.72);
+    background:#000;
+  }
+  .media video{width:100%;height:100%;object-fit:cover}
+  .kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.6; margin:0 0 14px;}
+  .title{margin:0 0 18px; font-size:28px; line-height:1.15; letter-spacing:.06em; text-transform:uppercase;}
+  .p{margin:0 0 18px; font-size:14px; line-height:1.65; opacity:.72; max-width:68ch;}
+  .hr{height:1px; background:rgba(255,255,255,.1); margin:22px 0;}
+  .tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;}
+  .tag{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    padding:9px 14px; border-radius:999px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.03);
+    cursor:pointer;
+  }
+  .tag:hover{border-color:rgba(255,255,255,.28); background:rgba(255,255,255,.06);}
 
-.about,.nodes{
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  cursor:pointer;
-  user-select:none;
-}
+  .footer{
+    text-align:center; padding:80px 0 40px;
+    font-size:11px; letter-spacing:.14em; opacity:.45;
+    mix-blend-mode:difference;
+  }
 
-.nodes{position:relative}
+  @media (max-width: 980px){
+    .grid{grid-template-columns:1fr;}
+    .media{position:relative; top:auto; height:44vh;}
+  }
 
-/* nodes dropdown */
-.nodes-stack{
-  position:absolute;
-  top:calc(100% + 18px);
-  left:50%;
-  transform:translateX(-50%);
-  display:grid;
-  gap:22px;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s ease;
-}
-.nodes:hover .nodes-stack{opacity:1;pointer-events:auto}
+  /* =========================
+     OVERLAY HORIZONTAL SWIPE
+  ========================== */
+  .rail{
+    position:fixed; inset:0;
+    z-index:9999;
+    background:#000;                 /* <-- BLACK BACKGROUND ALWAYS */
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .18s ease;
+  }
+  .rail.is-open{
+    opacity:1;
+    pointer-events:auto;
+  }
 
-.nodes-bridge{
-  position:absolute;
-  top:100%;
-  left:-30px;
-  right:-30px;
-  height:30px;
-}
+  .rail-close{
+    position:absolute; top:18px; right:18px; z-index:3;
+    background:transparent;
+    color:rgba(255,255,255,.86);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:999px;
+    padding:10px 14px;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    cursor:pointer;
+    mix-blend-mode:difference;
+  }
+  .rail-close:hover{border-color:rgba(255,255,255,.28); color:rgba(255,255,255,.96);}
 
-.node{
-  font-size:40px;
-  text-align:center;
-  letter-spacing:.04em;
-  opacity:.9;
-}
+  .rail-track{
+    position:absolute; inset:0;
+    display:flex;
 
-/* page */
-.page{position:relative;z-index:2}
+    overflow-x:auto;                 /* <-- SWIPE */
+    overflow-y:hidden;
+    -webkit-overflow-scrolling: touch; /* <-- iOS momentum */
+    scroll-snap-type: x mandatory;   /* <-- snap panels */
+    scroll-behavior: smooth;
+    touch-action: pan-x;             /* <-- enable horizontal gestures */
+  }
 
-/* about section */
-.about-section{
-  margin-top:100vh;
-  padding:140px 0;
-  border-top:1px solid rgba(255,255,255,.08);
-}
+  .panel{
+    min-width:100vw; height:100vh;
+    scroll-snap-align:start;
+  }
 
-.about-wrap{
-  width:min(1180px,calc(100vw - 56px));
-  margin:auto;
-}
+  .panel-inner{
+    width:min(1100px, calc(100vw - 56px));
+    margin:0 auto;
+    padding:120px 0 70px;
+  }
+  .panel-kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.6; margin:0 0 14px;}
+  .panel-title{margin:0 0 18px; font-size:28px; line-height:1.15; letter-spacing:.06em; text-transform:uppercase; opacity:.92;}
+  .panel-p{margin:0 0 18px; font-size:14px; line-height:1.65; opacity:.72; max-width:74ch;}
+  .panel-hr{height:1px; background:rgba(255,255,255,.10); margin:22px 0;}
 
-.about-grid{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:48px;
-}
+  .form{
+    margin-top:22px;
+    display:grid;
+    gap:12px;
+    max-width:720px;
+  }
+  .label{
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.62;
+    margin:0 0 6px;
+  }
+  input, textarea{
+    width:100%;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    color:rgba(255,255,255,.92);
+    padding:12px 14px;
+    font-size:14px;
+    outline:none;
+  }
+  textarea{min-height:140px; resize:vertical;}
+  input:focus, textarea:focus{border-color:rgba(255,255,255,.28); box-shadow:0 0 0 2px rgba(255,255,255,.10);}
 
-.about-media{
-  position:sticky;
-  top:96px;
-  height:56vh;
-  border-radius:26px;
-  overflow:hidden;
-  border:1px solid rgba(255,255,255,.12);
-}
-.about-media video{width:100%;height:100%;object-fit:cover}
+  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;}
+  .btn{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.08);
+    color:rgba(255,255,255,.90);
+    border-radius:999px;
+    padding:12px 14px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+  .btn:hover{background:rgba(255,255,255,.11); border-color:rgba(255,255,255,.22);}
+  .btn-ghost{background:transparent;}
 
-.about-kicker{
-  font-size:12px;
-  letter-spacing:.18em;
-  opacity:.6;
-  margin-bottom:14px;
-}
+  .draft{
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);
+    font-size:13px;
+    line-height:1.55;
+    opacity:.85;
+    white-space:pre-wrap;
+  }
 
-.about-title{
-  font-size:28px;
-  line-height:1.15;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  margin:0 0 18px;
-}
-
-.about-p{
-  font-size:14px;
-  line-height:1.65;
-  opacity:.72;
-  max-width:64ch;
-  margin-bottom:18px;
-}
-
-.about-hr{
-  height:1px;
-  background:rgba(255,255,255,.1);
-  margin:22px 0;
-}
-
-.about-tags{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.about-tag{
-  font-size:11px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  padding:9px 14px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.16);
-  cursor:pointer;
-}
-
-/* footer */
-.footer{
-  text-align:center;
-  padding:80px 0 40px;
-  font-size:11px;
-  letter-spacing:.14em;
-  opacity:.45;
-}
-
-/* overlay rail */
-.rail{
-  position:fixed;
-  inset:0;
-  background:#000;
-  z-index:60;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s ease;
-}
-.rail.is-open{opacity:1;pointer-events:auto}
-
-.rail-track{
-  display:flex;
-  height:100%;
-  overflow-x:auto;
-  scroll-snap-type:x mandatory;
-}
-
-.rail-panel{
-  min-width:100vw;
-  height:100vh;
-  scroll-snap-align:start;
-}
-
-.panel-inner{
-  width:min(1100px,calc(100vw - 56px));
-  margin:auto;
-  padding:120px 0;
-}
-
-.panel-title{
-  font-size:28px;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-}
-
-.panel-p{
-  font-size:14px;
-  line-height:1.65;
-  opacity:.72;
-  max-width:72ch;
-}
-
-.form{
-  max-width:680px;
-  margin-top:24px;
-  display:grid;
-  gap:14px;
-}
-input,textarea{
-  background:#111;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:14px;
-  padding:12px;
-  color:#fff;
-}
-
-.btn{
-  padding:12px 16px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.18);
-  background:#111;
-  color:#fff;
-  cursor:pointer;
-}
+  .hint{
+    margin-top:12px;
+    font-size:12px;
+    opacity:.55;
+    max-width:72ch;
+  }
 </style>
 </head>
 
 <body>
 
-<video id="bg" autoplay muted loop playsinline>
+<!-- HERO VIDEO BACKGROUND -->
+<video id="bg" autoplay muted loop playsinline preload="metadata">
   <source src="CT.mp4" type="video/mp4">
 </video>
 
+<!-- TOP -->
 <div class="topbar">
-  <div class="about" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">ABOUT</div>
-  <div class="nodes">NODES
-    <div class="nodes-bridge"></div>
-    <div class="nodes-stack">
-      <div class="node">001</div>
-      <div class="node">002</div>
-      <div class="node">003</div>
-    </div>
-  </div>
+  <div class="about" id="aboutBtn">ABOUT</div>
+  <div class="nodes">NODES</div>
 </div>
 
 <div class="page">
+  <section id="aboutSection" class="about-section">
+    <div class="wrap">
+      <div class="grid">
 
-<section id="about" class="about-section">
-  <div class="about-wrap">
-    <div class="about-grid">
-
-      <div class="about-media">
-        <video autoplay muted loop playsinline>
-          <source src="CT.mp4" type="video/mp4">
-        </video>
-      </div>
-
-      <div class="about-copy">
-        <div class="about-kicker">SOLUTIONS</div>
-
-        <h2 class="about-title">
-          A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.
-        </h2>
-
-        <p class="about-p">
-          Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
-        </p>
-
-        <div class="about-hr"></div>
-
-        <p class="about-p">
-          The system transforms physical space into fully automated operational environments, aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
-        </p>
-
-        <p class="about-p">
-          Automation is treated as a foundational layer, enabling efficiency, resilience, and long-term institutional sovereignty.
-        </p>
-
-        <div class="about-tags">
-          <span class="about-tag" onclick="openRail(0)">WHO WE ARE</span>
-          <span class="about-tag" onclick="openRail(1)">INVESTORS & GOVERNMENTS</span>
+        <div class="media">
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="CT.mp4" type="video/mp4">
+          </video>
         </div>
-      </div>
 
+        <div>
+          <div class="kicker">SOLUTIONS</div>
+
+          <h2 class="title">
+            A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.
+          </h2>
+
+          <p class="p">
+            Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
+          </p>
+
+          <div class="hr"></div>
+
+          <p class="p">
+            The system is designed to transform physical space into fully automated operational environments,
+            aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
+          </p>
+
+          <p class="p">
+            By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
+          </p>
+
+          <div class="tags">
+            <!-- ✅ opens rail + goes to panel 0 -->
+            <span class="tag" data-open="ceo">CEO</span>
+            <!-- ✅ opens rail + goes to panel 1 -->
+            <span class="tag" data-open="gov">INVESTORS &amp; GOVERNMENTS</span>
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="footer">
-  © 2023–2025 MicroretailX LLC · All rights reserved
+  <div class="footer">© 2023–2025 MicroretailX LLC · All rights reserved</div>
 </div>
 
-</div>
+<!-- =========================
+     OVERLAY: SWIPE RAIL
+========================== -->
+<div id="rail" class="rail" aria-hidden="true">
+  <button class="rail-close" id="railClose" type="button">CLOSE</button>
 
-<div id="rail" class="rail">
-  <div class="rail-track">
-
-    <section class="rail-panel">
+  <div class="rail-track" id="railTrack">
+    <!-- Panel 0: CEO -->
+    <section class="panel" data-panel="ceo">
       <div class="panel-inner">
+        <div class="panel-kicker">CEO</div>
         <h2 class="panel-title">WHO WE ARE</h2>
+
         <p class="panel-p">
-          MicroretailX LLC is the legal entity behind this initiative. We design automation-first systems for controlled, scalable biotech operations across institutional and public-sector environments.
+          MicroretailX LLC is the legal entity behind this initiative. We design automation-first systems for controlled, scalable biotech operations across institutional environments.
         </p>
+
+        <div class="panel-hr"></div>
+
         <p class="panel-p">
-          Our work focuses on the structural layer of the next industrial revolution: systems that can be deployed, governed, and audited globally.
+          Our focus is the new industrial shift: robotics, software orchestration, and measurable execution as the foundation for deployable production environments.
         </p>
-        <button class="btn" onclick="openRail(1)">GOVERNMENT CONTACT</button>
-        <button class="btn" onclick="closeRail()">CLOSE</button>
+
+        <div class="actions">
+          <button class="btn" type="button" data-jump="gov">GO TO GOVERNMENT</button>
+          <button class="btn btn-ghost" type="button" id="railBack">BACK</button>
+        </div>
+
+        <div class="hint">Tip: swipe left/right (mobile) or scroll horizontally (trackpad) to switch panels.</div>
       </div>
     </section>
 
-    <section class="rail-panel">
+    <!-- Panel 1: Governments -->
+    <section class="panel" data-panel="gov">
       <div class="panel-inner">
+        <div class="panel-kicker">GOVERNMENTS</div>
         <h2 class="panel-title">INSTITUTIONAL CONTACT</h2>
+
         <p class="panel-p">
-          For governments, agencies, and institutional partners only.
+          This channel is intended for public-sector, agencies, and institutional partners: deployment frameworks, pilot environments, regulatory alignment, and collaboration models.
         </p>
 
-        <form class="form" onsubmit="sendMail(event)">
-          <input placeholder="Institution / Organization" required>
-          <input placeholder="Contact name" required>
-          <input type="email" placeholder="Email" required>
-          <textarea placeholder="Context and objectives" required></textarea>
-          <button class="btn" type="submit">SEND EMAIL</button>
-          <button class="btn" type="button" onclick="closeRail()">CLOSE</button>
+        <div class="panel-hr"></div>
+
+        <form class="form" id="govForm">
+          <div>
+            <div class="label">ORGANIZATION</div>
+            <input name="org" autocomplete="organization" placeholder="Agency / Ministry / Institution" required>
+          </div>
+
+          <div>
+            <div class="label">CONTACT NAME</div>
+            <input name="name" autocomplete="name" placeholder="Full name" required>
+          </div>
+
+          <div>
+            <div class="label">EMAIL</div>
+            <input type="email" name="email" autocomplete="email" placeholder="name@institution.gov" required>
+          </div>
+
+          <div>
+            <div class="label">MESSAGE</div>
+            <textarea name="message" placeholder="Context, objectives, jurisdiction, timeline." required></textarea>
+          </div>
+
+          <div class="actions">
+            <button class="btn" type="submit">GENERATE DRAFT</button>
+            <button class="btn btn-ghost" type="button" data-jump="ceo">WHO WE ARE</button>
+          </div>
+
+          <div id="draftBox" class="draft" style="display:none;"></div>
+
+          <div class="actions" id="draftActions" style="display:none;">
+            <button class="btn" type="button" id="copyDraft">COPY DRAFT</button>
+            <!-- Optional: if later you want mailto, we can enable a button.
+                 For now: stays INSIDE and doesn't open anything external. -->
+          </div>
+
+          <div class="hint">
+            No data is stored on the website. You can copy the draft and send it via your preferred institutional channel.
+          </div>
         </form>
-
-        <p class="panel-p" style="font-size:12px;opacity:.55">
-          Messages are sent via email. No data is stored on this website.
-        </p>
       </div>
     </section>
-
   </div>
 </div>
 
 <script>
-const rail=document.getElementById("rail");
-const track=document.querySelector(".rail-track");
+  const aboutBtn = document.getElementById("aboutBtn");
+  const rail = document.getElementById("rail");
+  const railTrack = document.getElementById("railTrack");
+  const railClose = document.getElementById("railClose");
+  const railBack = document.getElementById("railBack");
 
-function openRail(i){
-  rail.classList.add("is-open");
-  document.body.style.overflow="hidden";
-  track.scrollTo({left:i*innerWidth,behavior:"smooth"});
-}
-function closeRail(){
-  rail.classList.remove("is-open");
-  document.body.style.overflow="";
-}
-function sendMail(e){
-  e.preventDefault();
-  location.href="mailto:hello@microretailx.com?subject=Institutional Inquiry";
-}
+  function lockBody(lock){
+    document.documentElement.style.overflow = lock ? "hidden" : "";
+    document.body.style.overflow = lock ? "hidden" : "";
+  }
+
+  function openRail(panelKey){
+    rail.classList.add("is-open");
+    rail.setAttribute("aria-hidden", "false");
+    lockBody(true);
+
+    const index = (panelKey === "gov") ? 1 : 0;
+    railTrack.scrollTo({ left: index * window.innerWidth, behavior: "smooth" });
+  }
+
+  function closeRail(){
+    rail.classList.remove("is-open");
+    rail.setAttribute("aria-hidden", "true");
+    lockBody(false);
+  }
+
+  // open from tags
+  document.querySelectorAll("[data-open]").forEach(el => {
+    el.addEventListener("click", () => openRail(el.getAttribute("data-open")));
+  });
+
+  // inside rail jumps
+  document.querySelectorAll("[data-jump]").forEach(el => {
+    el.addEventListener("click", () => openRail(el.getAttribute("data-jump")));
+  });
+
+  // close handlers
+  railClose.addEventListener("click", closeRail);
+  railBack?.addEventListener("click", closeRail);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && rail.classList.contains("is-open")) closeRail();
+  });
+
+  // about scroll
+  aboutBtn.addEventListener("click", () => {
+    document.getElementById("aboutSection").scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  // form draft generator (NO navigation)
+  const govForm = document.getElementById("govForm");
+  const draftBox = document.getElementById("draftBox");
+  const draftActions = document.getElementById("draftActions");
+  const copyDraftBtn = document.getElementById("copyDraft");
+
+  let lastDraftText = "";
+
+  govForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const fd = new FormData(govForm);
+
+    const org = (fd.get("org") || "").toString().trim();
+    const name = (fd.get("name") || "").toString().trim();
+    const email = (fd.get("email") || "").toString().trim();
+    const msg = (fd.get("message") || "").toString().trim();
+
+    lastDraftText =
+`TO: MicroretailX LLC — Institutional Channel
+SUBJECT: Government / Institutional Inquiry — ${org}
+
+Organization: ${org}
+Contact: ${name}
+Email: ${email}
+
+Message:
+${msg}
+`;
+
+    draftBox.style.display = "block";
+    draftActions.style.display = "flex";
+    draftBox.textContent = lastDraftText;
+  });
+
+  copyDraftBtn.addEventListener("click", async () => {
+    try{
+      await navigator.clipboard.writeText(lastDraftText);
+      copyDraftBtn.textContent = "COPIED";
+      setTimeout(() => copyDraftBtn.textContent = "COPY DRAFT", 1200);
+    }catch{
+      // fallback
+      const ta = document.createElement("textarea");
+      ta.value = lastDraftText;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+      copyDraftBtn.textContent = "COPIED";
+      setTimeout(() => copyDraftBtn.textContent = "COPY DRAFT", 1200);
+    }
+  });
+
+  // keep snap correct on resize
+  window.addEventListener("resize", () => {
+    if (!rail.classList.contains("is-open")) return;
+    // snap to nearest panel
+    const idx = Math.round(railTrack.scrollLeft / window.innerWidth);
+    railTrack.scrollLeft = idx * window.innerWidth;
+  });
 </script>
 
 </body>
