@@ -533,12 +533,6 @@
   html[dir="rtl"] .sound-fab:hover .sound-label{
     transform:translateX(0);
   }
-
-  /* ===== RTL (AR) — Keep carousel scrolling LTR for consistent pagination ===== */
-  html[dir="rtl"] .about-track{ direction:ltr; }
-  html[dir="rtl"] .about-panel{ direction:rtl; }
-  html[dir="rtl"] .about-inner{ text-align:right; }
-
 </style>
 </head>
 
@@ -588,7 +582,7 @@
 
 <div class="index-footer" data-i18n="footer_html">
   <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
-· MICROLABSX IS A PROJECT UNDER DEVELOPMENT. NO COMMERCIAL ACTIVITY.
+  · MICROLABSX IS A PROJECT UNDER DEVELOPMENT. NO COMMERCIAL ACTIVITY.
 </div>
 
 <!-- ABOUT overlay -->
@@ -733,7 +727,7 @@ function $(id){ return document.getElementById(id); }
 const SUPPORTED = ["en","es","ca","ar","zh","ru"];
 const I18N = {
   en:{ top_about:"ABOUT", top_nodes:"NODES", ui_close:"CLOSE",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX IS A PROJECT UNDER DEVELOPMENT. NO COMMERCIAL ACTIVITY.`,
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX IS A PROJECT UNDER DEVELOPMENT. NO COMMERCIAL ACTIVITY.`,
     about_kicker:"ABOUT", about_title:"A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.",
     about_p1:"Our objective is to provide governments and institutions with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure, designed to reduce structural dependencies on strategic resources (including protein)",
     about_p2:"The system is designed to transform physical space into fully automated operational environments, aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.",
@@ -747,8 +741,8 @@ const I18N = {
     top_sound_on_off:{on:"SOUND ON",off:"SOUND OFF"}
   },
   es:{ top_about:"INFO", top_nodes:"NODES", ui_close:"CERRAR",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ES UN PROYECTO EN DESARROLLO. SIN ACTIVIDAD COMERCIAL.`,
-    about_kicker:"SOBRE NOSOTROS", about_title:"UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ES UN PROYECTO EN DESARROLLO. SIN ACTIVIDAD COMERCIAL.`,
+    about_kicker:"ABOUT", about_title:"UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
     about_p1:"Nuestro objetivo es ofrecer a gobiernos e instituciones una solución global, desplegable y escalable basada en automatización avanzada e infraestructura biotecnológica controlada, orientada a reducir dependencias estructurales en recursos estratégicos (incluida la proteína)",
     about_p2:"El sistema transforma el espacio físico en entornos operativos totalmente automatizados, alineados con el nuevo paradigma industrial donde el software, la robótica y la orquestación de datos redefinen la producción.",
     about_p3:"Al priorizar la automatización como capa fundacional, nuestro enfoque impulsa eficiencia, resiliencia y soberanía operativa a largo plazo en despliegues públicos e institucionales.",
@@ -761,8 +755,8 @@ const I18N = {
     top_sound_on_off:{on:"SONIDO ON",off:"SONIDO OFF"}
   },
   ca:{ top_about:"INFO", top_nodes:"NODES", ui_close:"TANCAR",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ÉS UN PROJECTE EN DESENVOLUPAMENT. SENSE ACTIVITAT COMERCIAL.`,
-    about_kicker:"SOBRE NOSALTRES", about_title:"UN SISTEMA GLOBAL I ESCALABLE PER A LA PROPERA ERA INDUSTRIAL.",
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ÉS UN PROJECTE EN DESENVOLUPAMENT. SENSE ACTIVITAT COMERCIAL.`,
+    about_kicker:"ABOUT", about_title:"UN SISTEMA GLOBAL I ESCALABLE PER A LA PROPERA ERA INDUSTRIAL.",
     about_p1:"El nostre objectiu és oferir als governs una solució global, desplegable i escalable basada en automatització avançada i infraestructura biotecnològica controlada, orientada a reduir dependències estructurals en recursos estratègics (inclosa la proteïna).",
     about_p2:"El sistema transforma l’espai físic en entorns operatius totalment automatitzats, alineats amb el nou paradigma industrial on el programari, la robòtica i l’orquestració de dades redefineixen la producció.",
     about_p3:"En prioritzar l’automatització com a capa fonamental, el nostre enfocament impulsa eficiència, resiliència i sobirania operativa a llarg termini en desplegaments públics i institucionals.",
@@ -775,7 +769,7 @@ const I18N = {
     top_sound_on_off:{on:"SO ON",off:"SO OFF"}
   },
   ar:{ top_about:"نبذة", top_nodes:"عُقَد", ui_close:"إغلاق",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · ‏MICROLABSX مشروع قيد التطوير. لا توجد أي أنشطة تجارية.`,
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX مشروع قيد التطوير. لا نشاط تجاري.`,
     about_kicker:"نبذة", about_title:"نظام عالمي قابل للتوسع لعصر صناعي جديد.",
     about_p1:"نهدف إلى تزويد الحكومات والمؤسسات بحل عالمي قابل للنشر والتوسع، قائم على الأتمتة المتقدمة وبنية تحتية للتقنية الحيوية مُحكَمة، يهدف إلى تقليل الاعتماد الهيكلي على الموارد الاستراتيجية — بما في ذلك البروتين —.",
     about_p2:"يحوّل النظام المساحات الفيزيائية إلى بيئات تشغيل مؤتمتة بالكامل، منسجمة مع التحول الصناعي حيث يعيد البرمجيات والروبوتات وتنسيق البيانات تعريف الإنتاج.",
@@ -789,7 +783,7 @@ const I18N = {
     top_sound_on_off:{on:"الصوت تشغيل",off:"الصوت إيقاف"}
   },
   zh:{ top_about:"关于", top_nodes:"节点", ui_close:"关闭",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX 为开发中的项目。无任何商业活动。`,
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX 项目开发中。无商业活动。`,
     about_kicker:"关于", about_title:"面向下一代工业时代的全球可扩展系统。",
     about_p1:"我们的目标是为政府和机构提供一种可全球部署、可扩展的解决方案，基于先进自动化与受控的生物技术基础设施，以降低对战略性资源（包括蛋白）的结构性依赖为目标。",
     about_p2:"该系统将物理空间转化为完全自动化的运营环境，契合新兴工业范式：软件、机器人与数据编排正在重塑生产。",
@@ -803,7 +797,7 @@ const I18N = {
     top_sound_on_off:{on:"声音开",off:"声音关"}
   },
   ru:{ top_about:"О НАС", top_nodes:"УЗЛЫ", ui_close:"ЗАКРЫТЬ",
-    footer_html:`© 2023–2026 <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX — проект на стадии разработки. Коммерческая деятельность отсутствует.`,
+    footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX — ПРОЕКТ В РАЗРАБОТКЕ. БЕЗ КОММЕРЧЕСКОЙ ДЕЯТЕЛЬНОСТИ.`,
     about_kicker:"О НАС", about_title:"ГЛОБАЛЬНАЯ МАСШТАБИРУЕМАЯ СИСТЕМА ДЛЯ НОВОЙ ИНДУСТРИАЛЬНОЙ ЭПОХИ.",
     about_p1:"Наша цель — предоставить правительствам и институциональным партнёрам глобально развёртываемое и масштабируемое решение на основе передовой автоматизации и контролируемой биотехнологической инфраструктуры, направленное на снижение структурной зависимости от стратегических ресурсов, включая белок.",
     about_p2:"Система превращает физическое пространство в полностью автоматизированные операционные среды, соответствующие новому индустриальному сдвигу, где ПО, робототехника и оркестрация данных переопределяют производство.",
@@ -984,7 +978,7 @@ function initAbout(){
 
   function scrollToIndex(i){
     const target = clamp(i,0,panels.length-1) * w();
-    track.scrollLeft = target;
+    setNormScrollLeft(target);
     setTimeout(updateNav, 120);
   }
 
@@ -1092,8 +1086,8 @@ function ttsLangFromApp(lang){
 function pickVoice(langTag){
   const voices = window.speechSynthesis?.getVoices?.() || [];
   if(!voices.length) return null;
+  const base = String(langTag || "").split("-")[0].toLowerCase();
   const primary = String(langTag || "").toLowerCase();
-  const base = primary.split("-")[0];
   return (
     voices.find(v => (v.lang||"").toLowerCase() === primary) ||
     voices.find(v => (v.lang||"").toLowerCase().startsWith(base)) ||
@@ -1111,7 +1105,12 @@ function buildAboutTextOnly(){
   if(!panels.length) return "";
 
   const w = track.clientWidth || window.innerWidth;
-  const iRaw = Math.round(track.scrollLeft / w);
+  const ms = Math.max(0, track.scrollWidth - track.clientWidth);
+  const rtl = document.documentElement.getAttribute("dir") === "rtl";
+  const sl = track.scrollLeft;
+  const norm = !rtl ? sl : (sl < 0 ? -sl : (ms - sl));
+
+  const iRaw = Math.round(norm / w);
   const i = Math.max(0, Math.min(iRaw, panels.length - 1));
   const currentPanel = panels[i];
   if(!currentPanel) return "";
@@ -1154,7 +1153,10 @@ function initImmersiveTTSAboutOnly(){
 
   function speak(){
     const text = buildAboutTextOnly();
-    if(!text){ stop(); return; }
+    if(!text){ stop(); return;
+  // Anti-bug (Chrome): small delay after cancel()
+  setTimeout(()=>{ try{ speechSynthesis.speak(u); }catch(_){ } }, 50);
+}
 
     // Cancel any current utterance, then start fresh in current language
     try{ window.speechSynthesis.cancel(); }catch(_){}
