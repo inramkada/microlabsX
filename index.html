@@ -102,7 +102,7 @@
     position:fixed;
     inset:0;
     z-index:2000;
-    display:none;            /* hidden by default */
+    display:none;
     pointer-events:none;
   }
   .about-overlay.is-open{
@@ -128,7 +128,6 @@
     padding: min(6vh, 48px) 28px;
   }
 
-  /* This is the “same as screenshot” centered block */
   .about-shell{
     position:relative;
     width:min(1180px, calc(100vw - 56px));
@@ -139,15 +138,34 @@
     box-shadow: 0 60px 220px rgba(0,0,0,.75);
   }
 
-  /* Horizontal panels (arrow controlled) */
+  /* Edge glow layers (appear only when there is content) */
+  .edge-glow{
+    position:absolute;
+    top:0; bottom:0;
+    width:90px;
+    pointer-events:none;
+    opacity:0;
+    transition: opacity .18s ease;
+    mix-blend-mode: screen;
+  }
+  .edge-glow.left{
+    left:0;
+    background: linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+  }
+  .edge-glow.right{
+    right:0;
+    background: linear-gradient(270deg, rgba(255,255,255,.08), rgba(255,255,255,0));
+  }
+  .edge-glow.on{ opacity:.65; }
+
+  /* Horizontal panels (arrow controlled; swipe allowed on mobile) */
   .about-track{
     display:flex;
-    overflow:hidden;                /* no manual drag */
+    overflow:hidden;                 /* no manual drag */
     scroll-snap-type:x mandatory;
     scroll-behavior:smooth;
-    touch-action: pan-x;            /* allow swipe on mobile */
+    touch-action: pan-x;
   }
-
   .about-panel{
     min-width:100%;
     scroll-snap-align:start;
@@ -169,10 +187,7 @@
     background:#000;
     border:1px solid rgba(255,255,255,.10);
   }
-  .about-media video{
-    width:100%; height:100%;
-    object-fit:cover;
-  }
+  .about-media video{ width:100%; height:100%; object-fit:cover; }
 
   .about-kicker{
     font-size:12px;
@@ -181,7 +196,6 @@
     opacity:.6;
     margin:0 0 14px;
   }
-
   .about-title{
     margin:0 0 18px;
     font-size:28px;
@@ -190,7 +204,6 @@
     text-transform:uppercase;
     color:rgba(255,255,255,.92);
   }
-
   .about-p{
     margin:0 0 18px;
     font-size:14px;
@@ -198,20 +211,17 @@
     opacity:.72;
     max-width:70ch;
   }
-
   .about-hr{
     height:1px;
     background:rgba(255,255,255,.10);
     margin:22px 0;
   }
-
   .about-tags{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
     margin-top:10px;
   }
-
   .about-tag{
     font-size:11px;
     letter-spacing:.14em;
@@ -227,7 +237,40 @@
     background:rgba(255,255,255,.06);
   }
 
-  /* Premium edge arrows */
+  /* Close button */
+  .about-close{
+    position:absolute;
+    top:18px; right:18px;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(0,0,0,.22);
+    border-radius:999px;
+    padding:10px 14px;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.86);
+    cursor:pointer;
+    z-index:5;
+  }
+  .about-close:hover{
+    border-color:rgba(255,255,255,.22);
+    color:rgba(255,255,255,.95);
+  }
+
+  /* Index indicator */
+  .about-index{
+    position:absolute;
+    left:24px;
+    bottom:18px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.55;
+    pointer-events:none;
+    z-index:5;
+  }
+
+  /* Premium edge arrows (auto-hide) */
   .edge-arrow{
     position:absolute;
     top:50%;
@@ -241,10 +284,21 @@
     display:grid;
     place-items:center;
     cursor:pointer;
-    opacity:.88;
-    transition: transform .16s ease, opacity .16s ease, border-color .16s ease;
     user-select:none;
     -webkit-user-select:none;
+
+    opacity:0;                      /* hidden by default */
+    pointer-events:none;            /* avoid accidental */
+    transition: opacity .16s ease, transform .16s ease, border-color .16s ease;
+    z-index:6;
+  }
+  .edge-arrow.left{ left:18px; }
+  .edge-arrow.right{ right:18px; }
+
+  /* show arrows when hovering near shell */
+  .about-shell.is-hot .edge-arrow{
+    opacity:.9;
+    pointer-events:auto;
   }
   .edge-arrow:hover{
     opacity:1;
@@ -254,50 +308,24 @@
   .edge-arrow:active{
     transform:translateY(-50%) scale(.99);
   }
-  .edge-arrow.left{ left:18px; }
-  .edge-arrow.right{ right:18px; }
+  .edge-arrow svg{ width:22px; height:22px; opacity:.9; }
 
-  .edge-arrow svg{
-    width:22px; height:22px;
-    opacity:.9;
-  }
-
-  /* Close button (top-right inside overlay) */
-  .about-close{
-    position:absolute;
-    top:18px; right:18px;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(0,0,0,.22);
-    border-radius:999px;
-    padding:10px 14px;
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,.86);
-    cursor:pointer;
-  }
-  .about-close:hover{
-    border-color:rgba(255,255,255,.22);
-    color:rgba(255,255,255,.95);
-  }
-
-  /* Index indicator subtle */
-  .about-index{
-    position:absolute;
-    left:24px;
-    bottom:18px;
-    font-size:11px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    opacity:.55;
-    pointer-events:none;
+  /* disabled arrow */
+  .edge-arrow.is-disabled{
+    opacity:.18 !important;
+    pointer-events:none !important;
+    transform:translateY(-50%) scale(1) !important;
   }
 
   @media (max-width: 980px){
     .about-panel{ padding:28px; }
     .about-grid{ grid-template-columns:1fr; }
     .about-media{ height:44vh; }
-    .edge-arrow{ height:92px; width:52px; }
+    .edge-arrow{
+      height:92px; width:52px;
+      opacity:.92; pointer-events:auto; /* on mobile: always visible */
+    }
+    .about-shell.is-hot .edge-arrow{ opacity:.92; pointer-events:auto; }
   }
 </style>
 </head>
@@ -320,12 +348,13 @@
   </div>
 </div>
 
-<!-- ABOUT overlay (opens on click, centered) -->
 <div class="about-overlay" id="aboutOverlay" aria-hidden="true">
   <div class="about-dim" id="aboutDim"></div>
 
   <div class="about-stage">
-    <div class="about-shell" role="dialog" aria-modal="true" aria-label="About panels">
+    <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
+      <div class="edge-glow left" id="glowL" aria-hidden="true"></div>
+      <div class="edge-glow right" id="glowR" aria-hidden="true"></div>
 
       <button class="about-close" id="aboutClose" type="button">CLOSE</button>
 
@@ -344,7 +373,6 @@
       <div class="about-index" id="aboutIndex">01 / 03</div>
 
       <div class="about-track" id="aboutTrack">
-        <!-- Panel 1 (your screenshot style) -->
         <section class="about-panel" data-panel="about">
           <div class="about-grid">
             <div class="about-media">
@@ -381,7 +409,6 @@
           </div>
         </section>
 
-        <!-- Panel 2 -->
         <section class="about-panel" data-panel="ceo">
           <div class="about-kicker">CEO</div>
           <h2 class="about-title">WHO WE ARE</h2>
@@ -397,7 +424,6 @@
           </p>
         </section>
 
-        <!-- Panel 3 -->
         <section class="about-panel" data-panel="gov">
           <div class="about-kicker">GOVERNMENTS</div>
           <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
@@ -423,27 +449,38 @@
   const aboutOverlay = document.getElementById("aboutOverlay");
   const aboutDim = document.getElementById("aboutDim");
   const aboutClose = document.getElementById("aboutClose");
+  const aboutShell = document.getElementById("aboutShell");
 
   const track = document.getElementById("aboutTrack");
   const panels = Array.from(track.querySelectorAll(".about-panel"));
   const prevBtn = document.getElementById("prevBtn");
   const nextBtn = document.getElementById("nextBtn");
   const indexEl = document.getElementById("aboutIndex");
+  const glowL = document.getElementById("glowL");
+  const glowR = document.getElementById("glowR");
 
   function w(){ return track.clientWidth || window.innerWidth; }
   function idx(){ return Math.round(track.scrollLeft / w()); }
   function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
-  function updateIndex(){
+  function updateNav(){
     const i = idx();
-    indexEl.textContent = String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
+    indexEl.textContent =
+      String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
+
+    // glows: show if there is content in that direction
+    glowL.classList.toggle("on", i > 0);
+    glowR.classList.toggle("on", i < panels.length - 1);
+
+    // disable arrows at ends
+    prevBtn.classList.toggle("is-disabled", i === 0);
+    nextBtn.classList.toggle("is-disabled", i === panels.length - 1);
   }
 
   function scrollToIndex(i){
     const target = clamp(i,0,panels.length-1) * w();
     track.scrollTo({ left: target, behavior:"smooth" });
-    // update a bit later to reflect snap
-    setTimeout(updateIndex, 180);
+    setTimeout(updateNav, 140);
   }
 
   function openAbout(panelKey){
@@ -451,14 +488,13 @@
     aboutOverlay.setAttribute("aria-hidden","false");
     document.body.style.overflow = "hidden";
 
+    let i = 0;
     if(panelKey){
-      const i = panels.findIndex(p => p.dataset.panel === panelKey);
-      if(i >= 0) scrollToIndex(i);
-      else scrollToIndex(0);
-    }else{
-      scrollToIndex(0);
+      const found = panels.findIndex(p => p.dataset.panel === panelKey);
+      i = found >= 0 ? found : 0;
     }
-    updateIndex();
+    scrollToIndex(i);
+    updateNav();
   }
 
   function closeAbout(){
@@ -467,34 +503,67 @@
     document.body.style.overflow = "";
   }
 
+  // Open/Close
   aboutBtn.addEventListener("click", ()=> openAbout("about"));
   aboutDim.addEventListener("click", closeAbout);
   aboutClose.addEventListener("click", closeAbout);
   document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape" && aboutOverlay.classList.contains("is-open")) closeAbout();
+    if(!aboutOverlay.classList.contains("is-open")) return;
+
+    if(e.key === "Escape") closeAbout();
+    if(e.key === "ArrowLeft") scrollToIndex(idx() - 1);
+    if(e.key === "ArrowRight") scrollToIndex(idx() + 1);
   });
 
+  // Buttons
   prevBtn.addEventListener("click", ()=> scrollToIndex(idx() - 1));
   nextBtn.addEventListener("click", ()=> scrollToIndex(idx() + 1));
 
-  // tags jump INSIDE the same centered about container
+  // Tags jump INSIDE overlay
   document.querySelectorAll("[data-jump]").forEach(el=>{
     el.addEventListener("click", ()=>{
       openAbout(el.getAttribute("data-jump"));
     });
   });
 
-  // Keep index in sync when user swipes on mobile
-  track.addEventListener("scroll", ()=> {
-    // lightweight
-    updateIndex();
-  }, { passive:true });
+  // Sync on mobile swipe
+  track.addEventListener("scroll", ()=> updateNav(), { passive:true });
 
-  // NODES click placeholders
+  // Auto-hide arrows: show only when cursor is near shell edges
+  let hotT = null;
+  function setHot(on){
+    aboutShell.classList.toggle("is-hot", on);
+    if(on){
+      clearTimeout(hotT);
+      hotT = setTimeout(()=> aboutShell.classList.remove("is-hot"), 1200);
+    }
+  }
+
+  aboutShell.addEventListener("mousemove", (e)=>{
+    // only show when mouse is within 90px of left/right edge
+    const r = aboutShell.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const near = (x < 110) || (x > r.width - 110);
+    if(near) setHot(true);
+  });
+
+  aboutShell.addEventListener("mouseleave", ()=>{
+    aboutShell.classList.remove("is-hot");
+  });
+
+  // Keep consistent on resize
+  window.addEventListener("resize", ()=>{
+    scrollToIndex(idx());
+    updateNav();
+  });
+
+  // Init
+  updateNav();
+
+  // Nodes click placeholders
   document.querySelectorAll(".node").forEach(n=>{
     n.addEventListener("click", (e)=>{
       e.stopPropagation();
-      // hook later
     });
   });
 </script>
