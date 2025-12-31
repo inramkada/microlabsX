@@ -20,7 +20,7 @@
   ::-webkit-scrollbar { width: 0; height: 0; }
   ::-webkit-scrollbar-thumb { background: transparent; }
 
-  /* ===== HERO VIDEO ===== */
+  /* ===== BACKGROUND VIDEO ===== */
   #bg{
     position:fixed;
     inset:0;
@@ -71,7 +71,6 @@
     position:relative;
     color:rgba(255,255,255,0.92);
     cursor:default;
-    outline:none;
   }
 
   /* ===== NODES DROPDOWN ===== */
@@ -113,7 +112,6 @@
     transform: translateY(-6px) scale(.97);
     transition: opacity .3s ease, transform .18s cubic-bezier(.22,.61,.36,1);
     position:relative;
-    cursor:pointer;
   }
 
   .nodes:hover .node,
@@ -149,7 +147,7 @@
   .about-section{
     background:#000;
     padding:140px 0 160px;
-    margin-top:100vh; /* after hero */
+    margin-top:100vh; /* empieza después del hero vídeo */
     border-top:1px solid rgba(255,255,255,0.06);
   }
 
@@ -160,7 +158,7 @@
 
   .about-grid{
     display:grid;
-    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-columns: 1.05fr 0.95fr; /* ajuste premium */
     gap:46px;
     align-items:start;
   }
@@ -192,7 +190,7 @@
     font-size:12px;
     letter-spacing:0.18em;
     text-transform:uppercase;
-    color: rgba(255,255,255,0.62);
+    opacity:.6;
     margin:0 0 14px;
   }
 
@@ -209,7 +207,7 @@
     margin:0 0 18px;
     font-size:14px;
     line-height:1.65;
-    color: rgba(255,255,255,0.72);
+    opacity:.72;
     max-width:64ch;
   }
 
@@ -234,7 +232,7 @@
     border-radius:999px;
     border:1px solid rgba(255,255,255,0.16);
     background:rgba(255,255,255,0.03);
-    color: rgba(255,255,255,0.78);
+    opacity:.85;
   }
 
   /* Scroll reveal */
@@ -249,229 +247,30 @@
     transform: translateY(0);
   }
 
-  /* ===== NODES SECTION ===== */
-  .nodes-section{
-    background:#000;
-    padding: 120px 0 140px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .nodes-wrap{
-    width: min(1180px, calc(100vw - 56px));
-    margin: 0 auto;
-  }
-
-  .nodes-kicker{
-    margin: 0 0 10px;
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.62);
-  }
-
-  .nodes-title{
-    margin: 0 0 10px;
-    font-size: 28px;
-    line-height: 1.12;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.92);
-  }
-
-  .nodes-sub{
-    margin: 0 0 18px;
-    font-size: 14px;
-    line-height: 1.6;
-    letter-spacing: 0.02em;
-    color: rgba(255,255,255,0.72);
-    max-width: 76ch;
-  }
-
-  .node-card{
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.03);
-    box-shadow: 0 26px 110px rgba(0,0,0,0.55);
-    overflow: hidden;
-    margin-top: 18px;
-  }
-
-  .node-head{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 18px;
-    align-items: center;
-    padding: 18px 18px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    background: rgba(0,0,0,0.30);
-  }
-
-  .node-code{
-    font-size: 22px;
-    letter-spacing: 0.12em;
-    font-weight: 700;
-    color: rgba(255,255,255,0.92);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .node-name{
-    margin: 0 0 6px;
-    font-size: 14px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.88);
-  }
-
-  .node-desc{
-    margin: 0;
-    font-size: 14px;
-    line-height: 1.55;
-    letter-spacing: 0.02em;
-    color: rgba(255,255,255,0.70);
-    max-width: 82ch;
-  }
-
-  .node-tool{
-    padding: 16px 18px 18px;
-  }
-
-  .tool-grid{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-items: stretch;
-  }
-
-  .tool-panel{
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(0,0,0,0.35);
-    overflow:hidden;
-    min-height: 360px;
-  }
-
-  /* Video tool */
-  .tool-video-wrap{
-    position:relative;
-    height: 260px;
-    background:#000;
-  }
-  .tool-video-wrap video{
-    width:100%;
-    height:100%;
-    object-fit: cover;
-    transform: scale(1.01);
-    filter: saturate(1.06) contrast(1.02);
-  }
-
-  .tool-controls{
-    padding: 12px 12px 14px;
-    display:grid;
-    gap:10px;
-  }
-
-  .ctrl-row{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex-wrap:wrap;
-  }
-
-  .btn{
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.16);
-    background: rgba(255,255,255,0.04);
-    color: rgba(255,255,255,0.86);
-    padding: 9px 12px;
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    cursor: pointer;
-    user-select:none;
-    -webkit-user-select:none;
-  }
-  .btn:hover{ border-color: rgba(255,255,255,0.26); background: rgba(255,255,255,0.06); }
-
-  .range{
-    width: 100%;
-    accent-color: auto;
-  }
-
-  .meta-line{
-    font-size: 11px;
-    letter-spacing: 0.10em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.60);
-    display:flex;
-    justify-content:space-between;
-    gap:10px;
-  }
-
-  /* Canvas “Omni-like” viewer */
-  .viewer-head{
-    padding: 12px 12px 10px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-  .viewer-title{
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.78);
-  }
-  .viewer-hint{
-    font-size: 11px;
-    letter-spacing: 0.10em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-  }
-  canvas.viewer{
-    width:100%;
-    height: calc(360px - 44px);
-    display:block;
-    background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
-                rgba(0,0,0,0.35);
-  }
-
   /* Footer */
   .footer{
     text-align:center;
     padding:80px 0 40px;
     font-size:11px;
     letter-spacing:0.14em;
-    color: rgba(255,255,255,0.45);
+    opacity:.45;
     mix-blend-mode:difference;
   }
 
-  @media(max-width: 980px){
+  @media(max-width:980px){
     .about-grid{ grid-template-columns:1fr; }
     .about-media{
       position:relative;
       top:auto;
       height:44vh;
     }
-    .tool-grid{ grid-template-columns: 1fr; }
-    .tool-panel{ min-height: 320px; }
-    .tool-video-wrap{ height: 220px; }
-    canvas.viewer{ height: 260px; }
   }
-
-  @media(max-width: 768px){
-    .topbar{ gap:44px; }
-    .about, .nodes{ font-size:19px; }
-    .node{ font-size:30px; width:10ch; }
-    .nodes-stack{ row-gap:16px; top:calc(100% + 14px); min-width:10ch; }
-  }
-
 </style>
 </head>
 
 <body>
 
-<!-- HERO background video -->
+<!-- BACKGROUND VIDEO -->
 <video id="bg" autoplay muted loop playsinline preload="metadata">
   <source src="CT.mp4" type="video/mp4">
 </video>
@@ -483,9 +282,9 @@
   <div class="nodes" id="nodesBtn" tabindex="0" role="button" aria-label="Nodes">
     NODES
     <div class="nodes-stack" aria-hidden="true">
-      <div class="node" data-target="node-001">001</div>
-      <div class="node" data-target="node-002">002</div>
-      <div class="node" data-target="node-003">003</div>
+      <div class="node">001</div>
+      <div class="node">002</div>
+      <div class="node">003</div>
     </div>
   </div>
 </div>
@@ -508,13 +307,18 @@
           <h2 class="about-title reveal">A SYSTEM THAT TRANSFORMS SPACE.</h2>
 
           <p class="about-p reveal">
-            Same page. Same world. Live video becomes a controlled surface, while content reveals in modules.
+            This is not a new page. It’s the same world — reframed. Live video becomes a controlled surface,
+            and content becomes a system layer.
           </p>
 
           <div class="about-hr reveal"></div>
 
           <p class="about-p reveal">
-            The goal: no “navigation feeling”. The interface transforms the space instead.
+            The interface is designed as a sequence: reveal, focus, expand. Information appears without breaking immersion.
+          </p>
+
+          <p class="about-p reveal">
+            The user doesn’t navigate — the space transforms.
           </p>
 
           <div class="about-tags reveal">
@@ -529,167 +333,6 @@
     </div>
   </section>
 
-  <!-- NODES SECTION -->
-  <section id="nodesSection" class="nodes-section" aria-label="Nodes section">
-    <div class="nodes-wrap">
-      <p class="nodes-kicker reveal">NODES</p>
-      <h2 class="nodes-title reveal">001 / 002 / 003</h2>
-      <p class="nodes-sub reveal">
-        Interactive demo blocks to show the potential: video control + a mini “Omni-like viewer” you can rotate by dragging.
-      </p>
-
-      <!-- NODE 001 -->
-      <article id="node-001" class="node-card reveal">
-        <header class="node-head">
-          <div class="node-code">001</div>
-          <div>
-            <h3 class="node-name">NVIDIA Omniverse — Node 001</h3>
-            <p class="node-desc">Brief intro: show a live clip + interactive viewport. Drag the cube. Scrub the clip.</p>
-          </div>
-        </header>
-
-        <div class="node-tool">
-          <div class="tool-grid">
-
-            <!-- Video Tool -->
-            <div class="tool-panel" data-video-tool>
-              <div class="tool-video-wrap">
-                <video class="tool-video" muted playsinline preload="metadata">
-                  <source src="CT.mp4" type="video/mp4">
-                </video>
-              </div>
-
-              <div class="tool-controls">
-                <div class="ctrl-row">
-                  <button class="btn" data-play>PLAY</button>
-                  <button class="btn" data-mute>MUTE</button>
-                  <button class="btn" data-restart>RESTART</button>
-                  <button class="btn" data-speed>1.0x</button>
-                </div>
-
-                <input class="range" type="range" min="0" max="1000" value="0" data-scrub>
-
-                <div class="meta-line">
-                  <span data-time>0:00</span>
-                  <span data-status>READY</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Canvas Viewer -->
-            <div class="tool-panel">
-              <div class="viewer-head">
-                <div class="viewer-title">VIEWPORT</div>
-                <div class="viewer-hint">DRAG TO ROTATE</div>
-              </div>
-              <canvas class="viewer" data-viewer></canvas>
-            </div>
-
-          </div>
-        </div>
-      </article>
-
-      <!-- NODE 002 -->
-      <article id="node-002" class="node-card reveal">
-        <header class="node-head">
-          <div class="node-code">002</div>
-          <div>
-            <h3 class="node-name">NVIDIA Omniverse — Node 002</h3>
-            <p class="node-desc">Brief intro: same tool pattern, different node. Replace later with your real Omniverse embed/stream.</p>
-          </div>
-        </header>
-
-        <div class="node-tool">
-          <div class="tool-grid">
-
-            <div class="tool-panel" data-video-tool>
-              <div class="tool-video-wrap">
-                <video class="tool-video" muted playsinline preload="metadata">
-                  <source src="CT.mp4" type="video/mp4">
-                </video>
-              </div>
-
-              <div class="tool-controls">
-                <div class="ctrl-row">
-                  <button class="btn" data-play>PLAY</button>
-                  <button class="btn" data-mute>MUTE</button>
-                  <button class="btn" data-restart>RESTART</button>
-                  <button class="btn" data-speed>1.0x</button>
-                </div>
-
-                <input class="range" type="range" min="0" max="1000" value="0" data-scrub>
-
-                <div class="meta-line">
-                  <span data-time>0:00</span>
-                  <span data-status>READY</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="tool-panel">
-              <div class="viewer-head">
-                <div class="viewer-title">VIEWPORT</div>
-                <div class="viewer-hint">DRAG TO ROTATE</div>
-              </div>
-              <canvas class="viewer" data-viewer></canvas>
-            </div>
-
-          </div>
-        </div>
-      </article>
-
-      <!-- NODE 003 -->
-      <article id="node-003" class="node-card reveal">
-        <header class="node-head">
-          <div class="node-code">003</div>
-          <div>
-            <h3 class="node-name">NVIDIA Omniverse — Node 003</h3>
-            <p class="node-desc">Brief intro: you’ll later swap the cube viewport for a real USD/Omniverse streamed viewport.</p>
-          </div>
-        </header>
-
-        <div class="node-tool">
-          <div class="tool-grid">
-
-            <div class="tool-panel" data-video-tool>
-              <div class="tool-video-wrap">
-                <video class="tool-video" muted playsinline preload="metadata">
-                  <source src="CT.mp4" type="video/mp4">
-                </video>
-              </div>
-
-              <div class="tool-controls">
-                <div class="ctrl-row">
-                  <button class="btn" data-play>PLAY</button>
-                  <button class="btn" data-mute>MUTE</button>
-                  <button class="btn" data-restart>RESTART</button>
-                  <button class="btn" data-speed>1.0x</button>
-                </div>
-
-                <input class="range" type="range" min="0" max="1000" value="0" data-scrub>
-
-                <div class="meta-line">
-                  <span data-time>0:00</span>
-                  <span data-status>READY</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="tool-panel">
-              <div class="viewer-head">
-                <div class="viewer-title">VIEWPORT</div>
-                <div class="viewer-hint">DRAG TO ROTATE</div>
-              </div>
-              <canvas class="viewer" data-viewer></canvas>
-            </div>
-
-          </div>
-        </div>
-      </article>
-
-    </div>
-  </section>
-
   <div class="footer">
     © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION
   </div>
@@ -697,281 +340,35 @@
 </div>
 
 <script>
-  // Smooth scroll helpers
-  function scrollToId(id){
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior:"smooth", block:"start" });
-  }
-
-  // ABOUT -> scroll to about
-  document.getElementById("aboutBtn").addEventListener("click", () => scrollToId("aboutSection"));
-
-  // NODES dropdown clicks -> scroll to node anchors
-  document.querySelectorAll(".nodes-stack .node").forEach(el => {
-    el.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const target = el.getAttribute("data-target");
-      scrollToId(target);
-    });
+  // ABOUT button -> smooth scroll
+  document.getElementById("aboutBtn").addEventListener("click", () => {
+    document.getElementById("aboutSection").scrollIntoView({ behavior:"smooth", block:"start" });
   });
 
-  // NODES: toggle for touch devices
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) e.target.classList.add("in");
+    }
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  // NODES: enable click toggle for touch devices
   const nodesBtn = document.getElementById("nodesBtn");
   const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+
   if (isCoarse) {
     nodesBtn.style.cursor = "pointer";
     nodesBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       nodesBtn.classList.toggle("is-open");
     });
-    document.addEventListener("click", () => nodesBtn.classList.remove("is-open"));
+
+    document.addEventListener("click", () => {
+      nodesBtn.classList.remove("is-open");
+    });
   }
-
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting) e.target.classList.add("in");
-  }, { threshold: 0.15 });
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
-
-  // =========================
-  // Interactive VIDEO TOOL
-  // =========================
-  function fmtTime(s){
-    if (!isFinite(s)) return "0:00";
-    s = Math.max(0, s);
-    const m = Math.floor(s/60);
-    const r = Math.floor(s%60);
-    return `${m}:${String(r).padStart(2,"0")}`;
-  }
-
-  document.querySelectorAll("[data-video-tool]").forEach(tool => {
-    const v = tool.querySelector(".tool-video");
-    const playBtn = tool.querySelector("[data-play]");
-    const muteBtn = tool.querySelector("[data-mute]");
-    const restartBtn = tool.querySelector("[data-restart]");
-    const speedBtn = tool.querySelector("[data-speed]");
-    const scrub = tool.querySelector("[data-scrub]");
-    const timeEl = tool.querySelector("[data-time]");
-    const statusEl = tool.querySelector("[data-status]");
-
-    const speeds = [0.75, 1.0, 1.25, 1.5];
-    let speedIdx = 1;
-
-    v.addEventListener("loadedmetadata", () => {
-      statusEl.textContent = "READY";
-      timeEl.textContent = fmtTime(0);
-      scrub.value = 0;
-    });
-
-    v.addEventListener("timeupdate", () => {
-      const p = v.duration ? (v.currentTime / v.duration) : 0;
-      scrub.value = Math.round(p * 1000);
-      timeEl.textContent = `${fmtTime(v.currentTime)} / ${fmtTime(v.duration || 0)}`;
-    });
-
-    v.addEventListener("play", () => {
-      playBtn.textContent = "PAUSE";
-      statusEl.textContent = "PLAYING";
-    });
-
-    v.addEventListener("pause", () => {
-      playBtn.textContent = "PLAY";
-      statusEl.textContent = "PAUSED";
-    });
-
-    playBtn.addEventListener("click", async () => {
-      try {
-        if (v.paused) await v.play();
-        else v.pause();
-      } catch {
-        statusEl.textContent = "BLOCKED";
-      }
-    });
-
-    muteBtn.addEventListener("click", () => {
-      v.muted = !v.muted;
-      muteBtn.textContent = v.muted ? "MUTE" : "UNMUTE";
-    });
-
-    restartBtn.addEventListener("click", () => {
-      v.currentTime = 0;
-      if (v.paused) v.play().catch(()=>{});
-    });
-
-    speedBtn.addEventListener("click", () => {
-      speedIdx = (speedIdx + 1) % speeds.length;
-      v.playbackRate = speeds[speedIdx];
-      speedBtn.textContent = `${v.playbackRate.toFixed(2)}x`.replace(".00","");
-    });
-
-    let scrubbing = false;
-    scrub.addEventListener("input", () => {
-      scrubbing = true;
-      const p = Number(scrub.value) / 1000;
-      if (v.duration) v.currentTime = p * v.duration;
-    });
-    scrub.addEventListener("change", () => { scrubbing = false; });
-  });
-
-  // =========================
-  // Mini “Omni-like” VIEWER (wireframe cube)
-  // Drag to rotate
-  // =========================
-  function initViewer(canvas){
-    const ctx = canvas.getContext("2d", { alpha: true });
-    let w=0,h=0, dpr=1;
-
-    function resize(){
-      const r = canvas.getBoundingClientRect();
-      dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      w = Math.max(1, Math.floor(r.width * dpr));
-      h = Math.max(1, Math.floor(r.height * dpr));
-      canvas.width = w; canvas.height = h;
-    }
-    resize();
-    window.addEventListener("resize", resize, { passive:true });
-
-    // cube vertices
-    const V = [
-      [-1,-1,-1], [ 1,-1,-1], [ 1, 1,-1], [-1, 1,-1],
-      [-1,-1, 1], [ 1,-1, 1], [ 1, 1, 1], [-1, 1, 1]
-    ];
-    const E = [
-      [0,1],[1,2],[2,3],[3,0],
-      [4,5],[5,6],[6,7],[7,4],
-      [0,4],[1,5],[2,6],[3,7]
-    ];
-
-    let rotX = 0.65, rotY = 0.75;
-    let targetX = rotX, targetY = rotY;
-    let dragging = false;
-    let lastX=0,lastY=0;
-
-    function project([x,y,z]){
-      // rotate
-      const cx=Math.cos(rotX), sx=Math.sin(rotX);
-      const cy=Math.cos(rotY), sy=Math.sin(rotY);
-
-      // rotate around X
-      let y1 = y*cx - z*sx;
-      let z1 = y*sx + z*cx;
-      let x1 = x;
-
-      // rotate around Y
-      let z2 = z1*cy - x1*sy;
-      let x2 = z1*sy + x1*cy;
-      let y2 = y1;
-
-      const dist = 4.2;
-      const f = 1 / (dist - z2);
-      const px = x2 * f;
-      const py = y2 * f;
-
-      return [px, py, z2];
-    }
-
-    function draw(){
-      // ease rotation
-      rotX += (targetX - rotX) * 0.12;
-      rotY += (targetY - rotY) * 0.12;
-
-      ctx.clearRect(0,0,w,h);
-
-      // background subtle grid
-      ctx.save();
-      ctx.globalAlpha = 0.18;
-      ctx.lineWidth = 1 * dpr;
-      for(let i=0;i<14;i++){
-        const yy = (i/13)*h;
-        ctx.beginPath();
-        ctx.moveTo(0,yy); ctx.lineTo(w,yy);
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // compute projected points
-      const pts = V.map(v => project(v));
-      const sx = w*0.5, sy = h*0.52;
-      const scale = Math.min(w,h) * 0.22;
-
-      // edges
-      ctx.save();
-      ctx.lineWidth = 1.6 * dpr;
-      ctx.globalAlpha = 0.95;
-
-      // depth-based alpha
-      for(const [a,b] of E){
-        const pa = pts[a], pb = pts[b];
-        const za = pa[2], zb = pb[2];
-        const depth = (za+zb)*0.5; // -? to +?
-        const alpha = 0.55 + (1 - (depth+1.5)/3.0) * 0.45; // heuristic
-        ctx.globalAlpha = Math.max(0.25, Math.min(0.95, alpha));
-
-        ctx.beginPath();
-        ctx.moveTo(sx + pa[0]*scale, sy + pa[1]*scale);
-        ctx.lineTo(sx + pb[0]*scale, sy + pb[1]*scale);
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // nodes points
-      ctx.save();
-      for(let i=0;i<pts.length;i++){
-        const p = pts[i];
-        const x = sx + p[0]*scale;
-        const y = sy + p[1]*scale;
-        const depth = p[2];
-        const r = (3.2 + (1 - (depth+1.5)/3.0)*2.2) * dpr;
-        ctx.globalAlpha = 0.75;
-        ctx.beginPath();
-        ctx.arc(x,y,r,0,Math.PI*2);
-        ctx.fill();
-      }
-      ctx.restore();
-
-      // auto drift if not dragging
-      if(!dragging){
-        targetY += 0.004;
-        targetX += 0.0016;
-      }
-
-      requestAnimationFrame(draw);
-    }
-    draw();
-
-    function onDown(clientX, clientY){
-      dragging = true;
-      lastX = clientX; lastY = clientY;
-    }
-    function onMove(clientX, clientY){
-      if(!dragging) return;
-      const dx = clientX - lastX;
-      const dy = clientY - lastY;
-      lastX = clientX; lastY = clientY;
-      targetY += dx * 0.006;
-      targetX += dy * 0.006;
-    }
-    function onUp(){ dragging = false; }
-
-    canvas.addEventListener("mousedown", (e)=> onDown(e.clientX,e.clientY));
-    window.addEventListener("mousemove", (e)=> onMove(e.clientX,e.clientY));
-    window.addEventListener("mouseup", onUp);
-
-    canvas.addEventListener("touchstart", (e)=>{
-      const t = e.touches[0];
-      onDown(t.clientX, t.clientY);
-    }, { passive:true });
-
-    canvas.addEventListener("touchmove", (e)=>{
-      const t = e.touches[0];
-      onMove(t.clientX, t.clientY);
-    }, { passive:true });
-
-    canvas.addEventListener("touchend", onUp, { passive:true });
-  }
-
-  document.querySelectorAll("canvas[data-viewer]").forEach(initViewer);
 </script>
 
 </body>
