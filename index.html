@@ -17,6 +17,10 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    body.panel-open {
+      overflow: hidden; /* bloquea scroll cuando ABOUT está abierto */
+    }
+
     video {
       position: fixed;
       inset: 0;
@@ -36,28 +40,34 @@
       position: fixed;
       top: 18px;
       right: 18px;
-      z-index: 10;
+      z-index: 30;
       display: inline-flex;
       align-items: center;
-      gap: 58px;                 /* separación */
+      gap: 58px;
       white-space: nowrap;
       pointer-events: auto;
 
-      mix-blend-mode: difference; /* fusión general */
-      opacity: 1;                 /* no aplanar */
-      filter: none;               /* no aplanar */
+      /* RGB fusion con vídeo */
+      mix-blend-mode: difference;
+      opacity: 1;
+      filter: none;
+      transition: opacity .18s ease;
     }
 
-    /* ABOUT: diferente, pero con RGB fundido */
+    .topbar.is-hidden {
+      opacity: 0;             /* al abrir ABOUT, ocultamos la barra */
+      pointer-events: none;
+    }
+
     .about{
-      font-size: 20px;
-      font-weight: 700;            /* mismo cuerpo que NODES */
+      font-size: 22px;                /* un pelín más grande */
+      font-weight: 700;               /* mismo cuerpo */
       text-transform: uppercase;
 
-      letter-spacing: 0.18em;      /* diferente */
-      color: rgba(255,255,255,0.75);/* diferente SIN opacity */
+      letter-spacing: 0.18em;         /* diferente */
+      color: rgba(255,255,255,0.75);  /* diferente sin opacity */
 
-      mix-blend-mode: difference;  /* ✅ fuerza el fundido */
+      mix-blend-mode: difference;     /* RGB fusion */
       cursor: pointer;
       outline: none;
       touch-action: manipulation;
@@ -72,7 +82,7 @@
     .nodes {
       position: relative;
       z-index: 10;
-      font-size: 20px;
+      font-size: 22px;                /* un pelín más grande */
       font-weight: 700;
       letter-spacing: 0.22em;
       text-transform: uppercase;
@@ -115,9 +125,9 @@
     .node {
       width: 11.5ch;
       text-align: center;
-      font-size: 38px;
+      font-size: 40px; /* más grande */
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.04em; /* menos interespaciado */
       font-variant-numeric: tabular-nums;
       color: rgba(255,255,255,0.92);
       mix-blend-mode: difference;
@@ -257,35 +267,108 @@
       pointer-events: auto;
     }
 
+    /* =========================
+       ABOUT PANEL (cinematic reveal)
+       ========================= */
+    .about-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 25; /* por encima del vídeo, por debajo de topbar cuando no está hidden */
+      background: #000;
+      opacity: 1;
+
+      /* Reveal via mask */
+      clip-path: circle(0px at var(--cx, 96vw) var(--cy, 40px));
+      transition: clip-path .72s cubic-bezier(.22,.61,.36,1);
+      pointer-events: none;
+
+      /* contenido */
+      display: grid;
+      place-items: center;
+      padding: 56px 20px;
+    }
+
+    .about-panel.open {
+      pointer-events: auto;
+      clip-path: circle(150vmax at var(--cx, 96vw) var(--cy, 40px));
+    }
+
+    /* click fuera para cerrar (backdrop) */
+    .about-panel-backdrop {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+    }
+
+    .about-card {
+      position: relative;
+      width: min(920px, calc(100vw - 48px));
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.82);
+      box-shadow: 0 22px 80px rgba(0,0,0,0.55);
+      padding: 28px 28px 26px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateY(10px);
+      opacity: 0;
+      transition: opacity .32s ease .18s, transform .32s ease .18s;
+    }
+
+    .about-panel.open .about-card {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-title {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .about-text {
+      margin: 0;
+      line-height: 1.55;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      color: rgba(255,255,255,0.72);
+      max-width: 78ch;
+    }
+
+    .about-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.40);
+      color: rgba(255,255,255,0.9);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .about-close:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.26);
+    }
+
     @media (max-width: 768px) {
       .topbar { gap: 44px; }
-      .about, .nodes { font-size: 18px; }
-
-      .node {
-        font-size: 28px;
-        letter-spacing: 0.04em;
-        width: 10ch;
-      }
-
-      .nodes-stack {
-        row-gap: 16px;
-        min-width: 10ch;
-        top: calc(100% + 14px);
-      }
-
-      .footer {
-        bottom: 18px;
-        font-size: 10px;
-        letter-spacing: 0.12em;
-      }
-
-      .node.is-active::before {
-        inset: -14px -16px -14px -16px;
-      }
+      .about, .nodes { font-size: 19px; }
+      .node { font-size: 30px; width: 10ch; }
+      .nodes-stack { row-gap: 16px; top: calc(100% + 14px); min-width: 10ch; }
+      .footer { bottom: 18px; font-size: 10px; letter-spacing: 0.12em; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .node, .nodes-stack, video, .sound { transition: none; }
+      .node, .nodes-stack, video, .sound, .about-panel, .about-card { transition: none !important; }
     }
   </style>
 </head>
@@ -295,7 +378,7 @@
     <source src="/CT.mp4" type="video/mp4">
   </video>
 
-  <div class="topbar" aria-label="Top controls">
+  <div class="topbar" id="topbar" aria-label="Top controls">
     <div class="about" id="about" tabindex="0" role="button" aria-label="About">ABOUT</div>
 
     <div class="nodes" id="nodes" tabindex="0" role="button" aria-label="Nodes">
@@ -318,6 +401,21 @@
     <a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a>
     · MICROLABSX IS A PROJECT DESIGNATION AND IS NOT A SEPARATE LEGAL ENTITY. NO COMMERCIAL ACTIVITY.
   </div>
+
+  <!-- ABOUT PANEL -->
+  <section class="about-panel" id="aboutPanel" aria-hidden="true">
+    <div class="about-panel-backdrop" id="aboutBackdrop" aria-hidden="true"></div>
+
+    <div class="about-card" role="dialog" aria-modal="true" aria-label="About">
+      <button class="about-close" id="aboutClose" type="button" aria-label="Close about">✕</button>
+
+      <h2 class="about-title">ABOUT</h2>
+      <p class="about-text">
+        Put your ABOUT content here. This is the “black fixed panel” layer that expands over the live video,
+        creating a cinematic UI transition without leaving the page. Keep it short, structured, and lethal.
+      </p>
+    </div>
+  </section>
 
   <script>
     const video = document.getElementById("bg");
@@ -495,6 +593,65 @@
         nodes.addEventListener("mouseleave", stopBreath, { passive: true });
       }
     }
+
+    /* =========================
+       ABOUT PANEL logic
+       ========================= */
+    const aboutBtn = document.getElementById("about");
+    const aboutPanel = document.getElementById("aboutPanel");
+    const aboutBackdrop = document.getElementById("aboutBackdrop");
+    const aboutClose = document.getElementById("aboutClose");
+    const topbar = document.getElementById("topbar");
+
+    function setRevealOriginFromEl(el) {
+      const r = el.getBoundingClientRect();
+      const cx = (r.left + r.right) / 2;
+      const cy = (r.top + r.bottom) / 2;
+      aboutPanel.style.setProperty("--cx", cx + "px");
+      aboutPanel.style.setProperty("--cy", cy + "px");
+    }
+
+    function openAbout() {
+      setRevealOriginFromEl(aboutBtn);
+      document.body.classList.add("panel-open");
+      topbar.classList.add("is-hidden");      // deja el panel limpio
+      aboutPanel.classList.add("open");
+      aboutPanel.setAttribute("aria-hidden", "false");
+    }
+
+    function closeAbout() {
+      aboutPanel.classList.remove("open");
+      aboutPanel.setAttribute("aria-hidden", "true");
+
+      // restaurar barra al final de la animación
+      setTimeout(() => {
+        document.body.classList.remove("panel-open");
+        topbar.classList.remove("is-hidden");
+      }, prefersReduced ? 0 : 740);
+    }
+
+    aboutBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openAbout();
+    });
+
+    aboutBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openAbout();
+      }
+    });
+
+    aboutClose.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeAbout();
+    });
+
+    aboutBackdrop.addEventListener("click", () => closeAbout());
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && aboutPanel.classList.contains("open")) closeAbout();
+    });
   </script>
 </body>
 </html>
