@@ -592,11 +592,7 @@
     <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
       <div class="about-actions">
 
-        <button class="about-close" id="aboutClose" type="button" data-i18n="ui_close">CLOSE</button>
-
-        
-
-              <!-- IMMERSIVE READER (ABOUT only) -->
+      <!-- IMMERSIVE READER (carousel panels) -->
       <button class="about-tts" id="aboutSpeak" type="button"
         aria-label="Immersive reader"
         aria-pressed="false"
@@ -606,7 +602,9 @@
         <span class="tts-icon tts-pause" aria-hidden="true">⏸</span>
       </button>
 
-      </div>
+      <button class="about-close" id="aboutClose" type="button" data-i18n="ui_close">CLOSE</button>
+
+    </div>
 
       <span class="sr-only" id="ttsStatus" aria-live="polite" aria-atomic="true"></span>
 <div class="edge-arrow left" id="prevBtn" title="Previous">
@@ -730,7 +728,7 @@ const I18N = {
   en:{ top_about:"ABOUT", top_nodes:"NODES", ui_close:"CLOSE",
     footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX IS A PROJECT UNDER DEVELOPMENT. NO COMMERCIAL ACTIVITY.`,
     about_kicker:"ABOUT", about_title:"A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.",
-    about_p1:"Our objective is to provide governments and institutions with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure, designed to reduce structural dependencies on strategic resources (including protein).",
+    about_p1:"Our objective is to provide governments and institutions with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure, designed to reduce structural dependencies on strategic resources (including protein)",
     about_p2:"The system is designed to transform physical space into fully automated operational environments, aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.",
     about_p3:"By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term operational capacity across public and institutional deployments.",
     ceo_kicker:"microlabsX", ceo_title:"WHO WE ARE",
@@ -1099,13 +1097,25 @@ function pickVoice(langTag){
 }
 
 function buildAboutTextOnly(){
-  const panel = document.querySelector('.about-panel[data-panel="about"]');
-  if(!panel) return "";
-  const title = panel.querySelector(".about-title")?.textContent?.trim() || "";
-  const paras = Array.from(panel.querySelectorAll(".about-p"))
+  const track = $("aboutTrack");
+  if(!track) return "";
+
+  const panels = Array.from(track.querySelectorAll(".about-panel"));
+  if(!panels.length) return "";
+
+  const w = track.clientWidth || window.innerWidth;
+  const iRaw = Math.round(track.scrollLeft / w);
+  const i = Math.max(0, Math.min(iRaw, panels.length - 1));
+  const currentPanel = panels[i];
+  if(!currentPanel) return "";
+
+  const kicker = currentPanel.querySelector(".about-kicker")?.textContent?.trim() || "";
+  const title = currentPanel.querySelector(".about-title")?.textContent?.trim() || "";
+  const paras = Array.from(currentPanel.querySelectorAll(".about-p"))
     .map(p => (p.textContent || "").trim())
     .filter(Boolean);
-  return [title, ...paras].filter(Boolean).join(". ");
+
+  return [kicker, title, ...paras].filter(Boolean).join(". ");
 }
 
 function initImmersiveTTSAboutOnly(){
