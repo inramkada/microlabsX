@@ -16,16 +16,14 @@ html,body{
   color:#fff;
 }
 
-/* hide scrollbars */
+/* hide scrollbar */
 html, body { scrollbar-width:none; -ms-overflow-style:none; }
 ::-webkit-scrollbar{ width:0; height:0; }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 .header{
   position:fixed;
-  top:0;
-  left:0;
-  right:0;
+  top:0; left:0; right:0;
   padding:18px 22px;
   display:flex;
   justify-content:space-between;
@@ -43,31 +41,30 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   color:rgba(255,255,255,0.75);
   letter-spacing:0.18em;
   font-weight:700;
-  font-size:14px;
+  font-size:13px;
 }
 
-.header a:hover{
-  color:#fff;
-}
+.header a:hover{ color:#fff; }
 
-/* ===== LAYOUT ===== */
+/* ================= LAYOUT ================= */
 .wrapper{
   display:grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap:32px;
-  padding:110px 32px 32px;
-  max-width:1400px;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap:36px;
+  padding:110px 32px 40px;
+  max-width:1480px;
   margin:0 auto;
 }
 
-/* ===== VIEWER ===== */
+/* ================= VIEWER ================= */
 .viewer{
-  border-radius:22px;
+  position:relative;
+  border-radius:24px;
   overflow:hidden;
   border:1px solid rgba(255,255,255,0.12);
   background:#000;
-  box-shadow:0 40px 160px rgba(0,0,0,0.75);
-  min-height:68vh;
+  box-shadow:0 44px 180px rgba(0,0,0,0.78);
+  min-height:70vh;
 }
 
 .viewer iframe{
@@ -77,9 +74,29 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   background:#000;
 }
 
-/* ===== INFO ===== */
+/* loading overlay */
+.viewer::after{
+  content:"CONNECTING TO GPU STREAM…";
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  font-size:12px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .3s ease;
+}
+
+.viewer.loading::after{
+  opacity:1;
+}
+
+/* ================= INFO ================= */
 .info{
-  padding-top:8px;
+  padding-top:10px;
 }
 
 .kicker{
@@ -102,7 +119,13 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   line-height:1.65;
   color:rgba(255,255,255,0.72);
   margin-bottom:16px;
-  max-width:60ch;
+  max-width:62ch;
+}
+
+.hr{
+  height:1px;
+  background:rgba(255,255,255,0.1);
+  margin:22px 0;
 }
 
 .tags{
@@ -123,13 +146,13 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   color:rgba(255,255,255,0.8);
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:1000px){
+/* ================= RESPONSIVE ================= */
+@media(max-width:1100px){
   .wrapper{
     grid-template-columns:1fr;
   }
   .viewer{
-    min-height:48vh;
+    min-height:52vh;
   }
 }
 </style>
@@ -144,12 +167,14 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 <main class="wrapper">
 
-  <!-- NVIDIA OMNIVERSE VIEWER -->
-  <section class="viewer">
+  <!-- ===== NVIDIA OMNIVERSE VIEWER ===== -->
+  <section class="viewer loading" id="viewerBox">
     <!--
-      Aquí va el visor REAL de NVIDIA Omniverse
-      Ejemplo:
-      src="/viewer/?scene=asia_001"
+      AQUÍ VA EL VISOR REAL DE NVIDIA OMNIVERSE
+      Ejemplos de src cuando lo tengas:
+        /viewer/
+        /viewer/?node=001
+        https://viewer.tudominio.com/?scene=asia_001
     -->
     <iframe
       src="/viewer/"
@@ -158,31 +183,48 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
     </iframe>
   </section>
 
-  <!-- INFO -->
+  <!-- ===== INFO ===== -->
   <section class="info">
     <div class="kicker">NVIDIA OMNIVERSE</div>
     <h1 class="title">NODE 001</h1>
 
     <p class="text">
-      This node exposes a live NVIDIA Omniverse viewport streamed to the browser.
-      The goal is to demonstrate real-time collaboration, RTX rendering,
-      and USD-based workflows directly inside the web.
+      This node exposes a live NVIDIA Omniverse viewport streamed directly to the browser.
+      The scene runs remotely on a GPU server and is delivered using WebRTC.
     </p>
 
     <p class="text">
-      This is not a video. The scene runs remotely on a GPU server and is
-      streamed interactively using WebRTC.
+      Users can navigate, inspect and interact with the scene in real time.
+      This is not a video — it is a live RTX-rendered environment.
+    </p>
+
+    <div class="hr"></div>
+
+    <p class="text">
+      Node 001 focuses on demonstrating how Omniverse can be integrated as a web-native tool
+      while preserving high-end rendering, USD workflows and collaborative potential.
     </p>
 
     <div class="tags">
       <span class="tag">OMNIVERSE</span>
       <span class="tag">USD</span>
-      <span class="tag">WEBRTC</span>
       <span class="tag">RTX</span>
+      <span class="tag">WEBRTC</span>
+      <span class="tag">GPU STREAMING</span>
     </div>
   </section>
 
 </main>
+
+<script>
+  // Remove loading overlay once iframe starts loading
+  const iframe = document.querySelector(".viewer iframe");
+  const box = document.getElementById("viewerBox");
+
+  iframe.addEventListener("load", () => {
+    box.classList.remove("loading");
+  });
+</script>
 
 </body>
 </html>
