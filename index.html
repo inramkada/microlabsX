@@ -742,7 +742,7 @@ const I18N = {
   },
   es:{ top_about:"INFO", top_nodes:"NODES", ui_close:"CERRAR",
     footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ES UN PROYECTO EN DESARROLLO. SIN ACTIVIDAD COMERCIAL.`,
-    about_kicker:"ABOUT", about_title:"UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
+    about_kicker:"SOBRE NOSOTROS", about_title:"UN SISTEMA GLOBAL Y ESCALABLE PARA LA PRÓXIMA ERA INDUSTRIAL.",
     about_p1:"Nuestro objetivo es ofrecer a gobiernos e instituciones una solución global, desplegable y escalable basada en automatización avanzada e infraestructura biotecnológica controlada, orientada a reducir dependencias estructurales en recursos estratégicos (incluida la proteína)",
     about_p2:"El sistema transforma el espacio físico en entornos operativos totalmente automatizados, alineados con el nuevo paradigma industrial donde el software, la robótica y la orquestación de datos redefinen la producción.",
     about_p3:"Al priorizar la automatización como capa fundacional, nuestro enfoque impulsa eficiencia, resiliencia y soberanía operativa a largo plazo en despliegues públicos e institucionales.",
@@ -756,7 +756,7 @@ const I18N = {
   },
   ca:{ top_about:"INFO", top_nodes:"NODES", ui_close:"TANCAR",
     footer_html:`<a href="https://www.microretailx.com" target="_blank" rel="noopener">MICRORETAILX LLC</a> · MICROLABSX ÉS UN PROJECTE EN DESENVOLUPAMENT. SENSE ACTIVITAT COMERCIAL.`,
-    about_kicker:"ABOUT", about_title:"UN SISTEMA GLOBAL I ESCALABLE PER A LA PROPERA ERA INDUSTRIAL.",
+    about_kicker:"SOBRE NOSALTRES", about_title:"UN SISTEMA GLOBAL I ESCALABLE PER A LA PROPERA ERA INDUSTRIAL.",
     about_p1:"El nostre objectiu és oferir als governs una solució global, desplegable i escalable basada en automatització avançada i infraestructura biotecnològica controlada, orientada a reduir dependències estructurals en recursos estratègics (inclosa la proteïna).",
     about_p2:"El sistema transforma l’espai físic en entorns operatius totalment automatitzats, alineats amb el nou paradigma industrial on el programari, la robòtica i l’orquestració de dades redefineixen la producció.",
     about_p3:"En prioritzar l’automatització com a capa fonamental, el nostre enfocament impulsa eficiència, resiliència i sobirania operativa a llarg termini en desplegaments públics i institucionals.",
@@ -978,7 +978,7 @@ function initAbout(){
 
   function scrollToIndex(i){
     const target = clamp(i,0,panels.length-1) * w();
-    track.scrollTo({ left: target, behavior:"smooth" });
+    setNormScrollLeft(target);
     setTimeout(updateNav, 120);
   }
 
@@ -1105,14 +1105,19 @@ function buildAboutTextOnly(){
   if(!panels.length) return "";
 
   const w = track.clientWidth || window.innerWidth;
-  const iRaw = Math.round(track.scrollLeft / w);
+  const ms = Math.max(0, track.scrollWidth - track.clientWidth);
+  const rtl = document.documentElement.getAttribute("dir") === "rtl";
+  const sl = track.scrollLeft;
+  const norm = !rtl ? sl : (sl < 0 ? -sl : (ms - sl));
+
+  const iRaw = Math.round(norm / w);
   const i = Math.max(0, Math.min(iRaw, panels.length - 1));
   const currentPanel = panels[i];
   if(!currentPanel) return "";
 
   const kicker = currentPanel.querySelector(".about-kicker")?.textContent?.trim() || "";
-  const title = currentPanel.querySelector(".about-title")?.textContent?.trim() || "";
-  const paras = Array.from(currentPanel.querySelectorAll(".about-p"))
+  const title  = currentPanel.querySelector(".about-title")?.textContent?.trim() || "";
+  const paras  = Array.from(currentPanel.querySelectorAll(".about-p"))
     .map(p => (p.textContent || "").trim())
     .filter(Boolean);
 
