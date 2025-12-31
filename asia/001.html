@@ -3,172 +3,252 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
 <title>ASIA · NODE 001</title>
 
 <style>
-/* ===== RESET / BASE ===== */
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  background:#000;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color:#fff;
-  overflow:hidden; /* NO SCROLL */
-}
+  :root{
+    --bg:#000;
+    --fg:rgba(255,255,255,.92);
+    --muted:rgba(255,255,255,.58);
+    --line:rgba(255,255,255,.10);
+    --line2:rgba(255,255,255,.06);
+    --card:rgba(255,255,255,.03);
+  }
 
-/* ===== HEADER ===== */
-.header{
-  position:absolute;
-  top:18px; left:22px; right:22px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  z-index:10;
-  mix-blend-mode:difference;
-}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    background:var(--bg);
+    color:var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow:hidden; /* NO SCROLL */
+  }
 
-.header a,
-.header span{
-  text-decoration:none;
-  color:rgba(255,255,255,0.85);
-  letter-spacing:0.22em;
-  font-weight:700;
-  font-size:12px;
-  text-transform:uppercase;
-}
+  /* subtle dumbar-ish grid */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(to right, var(--line2) 1px, transparent 1px) 0 0 / 120px 120px,
+      linear-gradient(to bottom, var(--line2) 1px, transparent 1px) 0 0 / 120px 120px;
+    opacity:.22;
+  }
 
-.header a:hover{ color:#fff; }
+  /* ===== HEADER ===== */
+  .header{
+    position:absolute;
+    top:18px; left:22px; right:22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    z-index:10;
+    mix-blend-mode:difference;
+  }
+  .header a,
+  .header span{
+    text-decoration:none;
+    color:rgba(255,255,255,.85);
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .header a:hover{ color:#fff; }
 
-/* ===== MAIN PANEL ===== */
-.panel{
-  position:absolute;
-  inset:0;
-  display:grid;
-  grid-template-columns: 0.42fr 0.58fr;
-  gap:0;
-}
-
-/* ===== LEFT: INFO ===== */
-.info{
-  padding:110px 48px 48px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.info-top{}
-
-.title{
-  font-size:26px;
-  letter-spacing:0.22em;
-  text-transform:uppercase;
-  margin:0 0 28px;
-  color:rgba(255,255,255,0.95);
-}
-
-.metrics{
-  display:grid;
-  gap:14px;
-  max-width:360px;
-}
-
-.metric{
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  border-bottom:1px solid rgba(255,255,255,0.12);
-  padding-bottom:8px;
-}
-
-.metric-label{
-  font-size:11px;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.55);
-}
-
-.metric-value{
-  font-size:13px;
-  letter-spacing:0.06em;
-  color:rgba(255,255,255,0.85);
-}
-
-/* status */
-.status{
-  margin-top:28px;
-  font-size:11px;
-  letter-spacing:0.16em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.55);
-}
-
-/* ===== RIGHT: VISUAL ===== */
-.visual{
-  position:relative;
-  overflow:hidden;
-}
-
-.visual img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transform:scale(1.02);
-  filter:saturate(1.05) contrast(1.02);
-}
-
-/* overlays */
-.visual::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
-    linear-gradient(to right, rgba(0,0,0,0.45), rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.0));
-}
-
-.badge{
-  position:absolute;
-  top:18px;
-  right:18px;
-  padding:9px 12px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,0.18);
-  background:rgba(0,0,0,0.35);
-  font-size:10px;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.78);
-  mix-blend-mode:difference;
-}
-
-/* ===== FOOTER (same as index) ===== */
-.footer{
-  position:absolute;
-  bottom:18px;
-  left:0; right:0;
-  text-align:center;
-  font-size:11px;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-  mix-blend-mode:difference;
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:1000px){
+  /* ===== LAYOUT ===== */
   .panel{
-    grid-template-columns:1fr;
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr; /* more balanced, more air */
   }
+
+  /* a clean vertical separator */
+  .panel::after{
+    content:"";
+    position:absolute;
+    top:78px;
+    bottom:78px;
+    left:50%;
+    width:1px;
+    background:var(--line2);
+    transform:translateX(-0.5px);
+    pointer-events:none;
+    opacity:.7;
+  }
+
+  /* ===== LEFT ===== */
   .info{
-    padding:96px 28px 28px;
+    padding:118px 64px 88px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
   }
-  .visual{
-    display:none; /* móvil: solo panel informativo */
+
+  .title{
+    margin:0 0 26px;
+    font-size:26px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    font-weight:800;
   }
-}
+
+  .sub{
+    margin:0 0 22px;
+    font-size:12px;
+    line-height:1.7;
+    color:var(--muted);
+    letter-spacing:.06em;
+    max-width:56ch;
+  }
+
+  .metrics{
+    margin-top:22px;
+    max-width:420px;
+    display:grid;
+    gap:12px;
+  }
+
+  .metric{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    gap:14px;
+    align-items:baseline;
+    padding:10px 0;
+    border-bottom:1px solid var(--line2);
+  }
+
+  .metric-label{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.52);
+  }
+
+  .metric-value{
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.82);
+    white-space:nowrap;
+  }
+
+  .status{
+    margin-top:26px;
+    font-size:11px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.52);
+    max-width:62ch;
+  }
+
+  /* ===== RIGHT ===== */
+  .right{
+    padding:118px 64px 88px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  /* image card (smaller, positioned) */
+  .card{
+    width:min(560px, 100%);
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 44px 160px rgba(0,0,0,.76);
+    position:relative;
+  }
+
+  /* dumbar-ish top bar */
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 16px;
+    border-bottom:1px solid var(--line2);
+    background:rgba(0,0,0,.35);
+    color:rgba(255,255,255,.72);
+    font-size:10px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  .dot{
+    display:inline-block;
+    width:8px;height:8px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.24);
+    margin-right:8px;
+    opacity:.9;
+  }
+
+  .media{
+    position:relative;
+    aspect-ratio: 16 / 10;
+    background:#000;
+  }
+
+  .media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transform:scale(1.01);
+    filter:saturate(1.04) contrast(1.03);
+  }
+
+  /* subtle vignette */
+  .media::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 20% 25%, rgba(255,255,255,.06), rgba(0,0,0,0) 55%),
+      linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.40));
+  }
+
+  .note{
+    padding:14px 16px 16px;
+    border-top:1px solid var(--line2);
+    color:rgba(255,255,255,.62);
+    font-size:11px;
+    line-height:1.6;
+    letter-spacing:.06em;
+    background:rgba(0,0,0,.22);
+  }
+
+  /* ===== FOOTER (same as index) ===== */
+  .footer{
+    position:absolute;
+    bottom:18px;
+    left:0; right:0;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.45);
+    mix-blend-mode:difference;
+    z-index:10;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:1100px){
+    .panel{
+      grid-template-columns:1fr;
+    }
+    .panel::after{ display:none; }
+    .right{ display:none; } /* mobile: keep it ultra clean */
+    .info{ padding:104px 28px 80px; }
+  }
 </style>
 </head>
 
@@ -181,54 +261,62 @@ html,body{
 
 <main class="panel">
 
-  <!-- LEFT: INFO -->
+  <!-- LEFT -->
   <section class="info">
-    <div class="info-top">
+    <div>
       <h1 class="title">ASIA · NODE 001</h1>
+
+      <p class="sub">
+        Public preview. This module is currently being built. The interactive Omniverse tool will replace the placeholder.
+      </p>
 
       <div class="metrics">
         <div class="metric">
-          <span class="metric-label">Area (m²)</span>
+          <span class="metric-label">Site Area (m²)</span>
           <span class="metric-value">TBD</span>
         </div>
-
         <div class="metric">
           <span class="metric-label">Production Capacity</span>
-          <span class="metric-value">In Definition</span>
+          <span class="metric-value">TBD</span>
         </div>
-
         <div class="metric">
-          <span class="metric-label">Operational Scope</span>
-          <span class="metric-value">Simulation Phase</span>
+          <span class="metric-label">Automation</span>
+          <span class="metric-value">In Design</span>
         </div>
-
         <div class="metric">
-          <span class="metric-label">Automation Level</span>
-          <span class="metric-value">Conceptual</span>
-        </div>
-
-        <div class="metric">
-          <span class="metric-label">Deployment Status</span>
-          <span class="metric-value">In Progress</span>
+          <span class="metric-label">Phase</span>
+          <span class="metric-value">Build</span>
         </div>
       </div>
 
       <div class="status">
-        This node is currently under development.
+        Work in progress — specifications and interactive access will evolve over time.
       </div>
     </div>
   </section>
 
-  <!-- RIGHT: VISUAL -->
-  <section class="visual" aria-label="Omniverse placeholder">
-    <img
-      src="https://blogs.nvidia.com/wp-content/uploads/2025/01/Nvidia_Press_1600x900.jpg"
-      alt="NVIDIA Omniverse conceptual placeholder"
-      loading="eager"
-      decoding="async"
-      referrerpolicy="no-referrer"
-    >
-    <div class="badge">Placeholder</div>
+  <!-- RIGHT -->
+  <section class="right" aria-label="Placeholder media">
+    <div class="card">
+      <div class="card-top">
+        <span><span class="dot"></span>Placeholder · Omniverse</span>
+        <span>Preview</span>
+      </div>
+
+      <div class="media">
+        <img
+          src="https://developer.download.nvidia.com/images/isaac/sim/nvidia-physical-ai-ari.jpg"
+          alt="NVIDIA Isaac Sim / Omniverse placeholder"
+          loading="eager"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        >
+      </div>
+
+      <div class="note">
+        This image is a visual placeholder only. This space is reserved for the interactive NVIDIA Omniverse tool.
+      </div>
+    </div>
   </section>
 
 </main>
