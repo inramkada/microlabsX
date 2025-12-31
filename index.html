@@ -7,160 +7,321 @@
 
 <style>
   html, body{
-    margin:0; height:100%; background:#000; color:#fff;
+    margin:0; height:100%;
+    background:#000; color:#fff;
     font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     overflow-x:hidden;
   }
   html,body{scrollbar-width:none;-ms-overflow-style:none}
   ::-webkit-scrollbar{width:0;height:0}
 
-  /* background */
+  /* ===== Video background ===== */
   #bg{
-    position:fixed; inset:0; width:100vw; height:100vh; object-fit:cover;
-    z-index:1; pointer-events:none;
+    position:fixed; inset:0;
+    width:100vw; height:100vh;
+    object-fit:cover;
+    z-index:1;
+    pointer-events:none;
   }
 
-  /* topbar */
+  /* ===== Topbar ===== */
   .topbar{
-    position:fixed; top:18px; right:18px; z-index:30;
-    display:flex; gap:56px; align-items:center;
+    position:fixed;
+    top:18px; right:18px;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:56px;
     mix-blend-mode:difference;
     user-select:none;
-  }
-  .about,.nodes{
-    font-size:22px; font-weight:700; letter-spacing:.22em; text-transform:uppercase;
-    cursor:pointer;
+    -webkit-user-select:none;
   }
 
-  /* about section */
-  .page{position:relative; z-index:2;}
+  .about-btn, .nodes{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  .about-btn{
+    color:rgba(255,255,255,.78);
+    transition: transform .18s ease, opacity .18s ease;
+  }
+  .about-btn:hover{
+    opacity:.95;
+    transform: translateY(-1px);
+  }
+
+  /* ===== Nodes dropdown (fix hover-drop) ===== */
+  .nodes{ position:relative; color:rgba(255,255,255,.92); cursor:default; }
+  .nodes-bridge{
+    position:absolute;
+    top:100%;
+    left:-30px;
+    right:-30px;
+    height:28px;
+    background:transparent;
+  }
+  .nodes-stack{
+    position:absolute;
+    top:calc(100% + 18px);
+    left:50%;
+    transform: translateX(-50%) translateY(-6px);
+    display:grid;
+    gap:22px;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .22s ease, transform .22s ease;
+  }
+  .nodes:hover .nodes-stack{
+    opacity:1;
+    pointer-events:auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .node{
+    width:11.5ch;
+    text-align:center;
+    font-size:40px;
+    font-weight:700;
+    letter-spacing:.04em;
+    opacity:.92;
+    cursor:pointer;
+    position:relative;
+  }
+  .node::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-12px;
+    width:0;
+    height:2px;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,.9);
+    opacity:0;
+    transition: width .18s ease, opacity .18s ease;
+  }
+  .node:hover::after{ width:66%; opacity:.85; }
+
+  /* ===== Page layout ===== */
+  .page{ position:relative; z-index:2; }
+
   .about-section{
     margin-top:100vh;
     padding:140px 0 160px;
-    border-top:1px solid rgba(255,255,255,.08);
     background:#000;
+    border-top:1px solid rgba(255,255,255,.08);
   }
-  .wrap{width:min(1180px, calc(100vw - 56px)); margin:0 auto;}
+
+  .wrap{
+    width:min(1180px, calc(100vw - 56px));
+    margin:0 auto;
+  }
+
   .grid{
-    display:grid; grid-template-columns: 1.05fr .95fr; gap:48px;
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap:48px;
     align-items:start;
   }
+
   .media{
-    position:sticky; top:96px;
+    position:sticky;
+    top:96px;
     height:min(56vh, 520px);
-    border-radius:26px; overflow:hidden;
+    border-radius:26px;
+    overflow:hidden;
     border:1px solid rgba(255,255,255,.12);
     box-shadow:0 32px 140px rgba(0,0,0,.72);
     background:#000;
   }
-  .media video{width:100%;height:100%;object-fit:cover}
-  .kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.6; margin:0 0 14px;}
-  .title{margin:0 0 18px; font-size:28px; line-height:1.15; letter-spacing:.06em; text-transform:uppercase;}
-  .p{margin:0 0 18px; font-size:14px; line-height:1.65; opacity:.72; max-width:68ch;}
-  .hr{height:1px; background:rgba(255,255,255,.1); margin:22px 0;}
-  .tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;}
+  .media video{ width:100%; height:100%; object-fit:cover; }
+
+  .kicker{
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+    margin:0 0 14px;
+  }
+
+  .title{
+    margin:0 0 18px;
+    font-size:28px;
+    line-height:1.15;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.92);
+  }
+
+  .p{
+    margin:0 0 18px;
+    font-size:14px;
+    line-height:1.65;
+    opacity:.72;
+    max-width:68ch;
+  }
+
+  .hr{
+    height:1px;
+    background:rgba(255,255,255,.10);
+    margin:22px 0;
+  }
+
+  .tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:10px;
+  }
+
   .tag{
-    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
-    padding:9px 14px; border-radius:999px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:9px 14px;
+    border-radius:999px;
     border:1px solid rgba(255,255,255,.16);
     background:rgba(255,255,255,.03);
     cursor:pointer;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
   }
-  .tag:hover{border-color:rgba(255,255,255,.28); background:rgba(255,255,255,.06);}
+  .tag:hover{
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,.28);
+    background: rgba(255,255,255,.06);
+  }
 
   .footer{
-    text-align:center; padding:80px 0 40px;
-    font-size:11px; letter-spacing:.14em; opacity:.45;
+    text-align:center;
+    padding:80px 0 40px;
+    font-size:11px;
+    letter-spacing:.14em;
+    opacity:.45;
     mix-blend-mode:difference;
   }
 
   @media (max-width: 980px){
-    .grid{grid-template-columns:1fr;}
-    .media{position:relative; top:auto; height:44vh;}
+    .grid{ grid-template-columns:1fr; }
+    .media{ position:relative; top:auto; height:44vh; }
   }
 
   /* =========================
-     OVERLAY HORIZONTAL SWIPE
+     BOTTOM RAIL (SWIPE)
   ========================== */
   .rail{
-    position:fixed; inset:0;
-    z-index:9999;
-    background:#000;                 /* <-- BLACK BACKGROUND ALWAYS */
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:min(72vh, 640px);
+    z-index:90;
+
+    background:rgba(0,0,0,.86);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top:1px solid rgba(255,255,255,.10);
+
     opacity:0;
+    transform: translateY(18px);
     pointer-events:none;
-    transition: opacity .18s ease;
+
+    transition: opacity .18s ease, transform .18s ease;
   }
   .rail.is-open{
     opacity:1;
+    transform: translateY(0);
     pointer-events:auto;
   }
 
   .rail-close{
-    position:absolute; top:18px; right:18px; z-index:3;
+    position:absolute;
+    top:14px; right:14px;
+    z-index:3;
+
     background:transparent;
     color:rgba(255,255,255,.86);
     border:1px solid rgba(255,255,255,.14);
     border-radius:999px;
-    padding:10px 14px;
+    padding:9px 12px;
+
     font-size:12px;
     letter-spacing:.14em;
     text-transform:uppercase;
     cursor:pointer;
     mix-blend-mode:difference;
   }
-  .rail-close:hover{border-color:rgba(255,255,255,.28); color:rgba(255,255,255,.96);}
-
-  .rail-track{
-    position:absolute; inset:0;
-    display:flex;
-
-    overflow-x:auto;                 /* <-- SWIPE */
-    overflow-y:hidden;
-    -webkit-overflow-scrolling: touch; /* <-- iOS momentum */
-    scroll-snap-type: x mandatory;   /* <-- snap panels */
-    scroll-behavior: smooth;
-    touch-action: pan-x;             /* <-- enable horizontal gestures */
+  .rail-close:hover{
+    border-color:rgba(255,255,255,.28);
+    color:rgba(255,255,255,.96);
   }
 
+  .rail-track{
+    position:absolute;
+    inset:0;
+    padding-top:54px; /* space for close button */
+    display:flex;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    touch-action: pan-x;
+
+    cursor: grab;
+  }
+  .rail-track:active{ cursor: grabbing; }
+
   .panel{
-    min-width:100vw; height:100vh;
+    min-width:100%;
+    height:100%;
     scroll-snap-align:start;
   }
 
   .panel-inner{
     width:min(1100px, calc(100vw - 56px));
     margin:0 auto;
-    padding:120px 0 70px;
+    padding:38px 0 44px;
   }
-  .panel-kicker{font-size:12px; letter-spacing:.18em; text-transform:uppercase; opacity:.6; margin:0 0 14px;}
-  .panel-title{margin:0 0 18px; font-size:28px; line-height:1.15; letter-spacing:.06em; text-transform:uppercase; opacity:.92;}
-  .panel-p{margin:0 0 18px; font-size:14px; line-height:1.65; opacity:.72; max-width:74ch;}
-  .panel-hr{height:1px; background:rgba(255,255,255,.10); margin:22px 0;}
 
-  .form{
-    margin-top:22px;
-    display:grid;
-    gap:12px;
-    max-width:720px;
+  .panel-kicker{
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+    margin:0 0 14px;
   }
-  .label{
-    font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.62;
-    margin:0 0 6px;
-  }
-  input, textarea{
-    width:100%;
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:14px;
+
+  .panel-title{
+    margin:0 0 18px;
+    font-size:26px;
+    line-height:1.15;
+    letter-spacing:.06em;
+    text-transform:uppercase;
     color:rgba(255,255,255,.92);
-    padding:12px 14px;
-    font-size:14px;
-    outline:none;
   }
-  textarea{min-height:140px; resize:vertical;}
-  input:focus, textarea:focus{border-color:rgba(255,255,255,.28); box-shadow:0 0 0 2px rgba(255,255,255,.10);}
 
-  .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px;}
+  .panel-p{
+    margin:0 0 18px;
+    font-size:14px;
+    line-height:1.65;
+    opacity:.72;
+    max-width:74ch;
+  }
+
+  .panel-hr{
+    height:1px;
+    background:rgba(255,255,255,.10);
+    margin:22px 0;
+  }
+
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:6px;
+  }
   .btn{
     appearance:none;
     border:1px solid rgba(255,255,255,.14);
@@ -173,8 +334,41 @@
     text-transform:uppercase;
     cursor:pointer;
   }
-  .btn:hover{background:rgba(255,255,255,.11); border-color:rgba(255,255,255,.22);}
-  .btn-ghost{background:transparent;}
+  .btn:hover{
+    background:rgba(255,255,255,.11);
+    border-color:rgba(255,255,255,.22);
+  }
+  .btn-ghost{ background:transparent; }
+
+  /* Form (kept internal, no navigation) */
+  .form{
+    margin-top:18px;
+    display:grid;
+    gap:12px;
+    max-width:740px;
+  }
+  .label{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.62;
+    margin:0 0 6px;
+  }
+  input, textarea{
+    width:100%;
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:14px;
+    color:rgba(255,255,255,.92);
+    padding:12px 14px;
+    font-size:14px;
+    outline:none;
+  }
+  textarea{ min-height:120px; resize:vertical; }
+  input:focus, textarea:focus{
+    border-color:rgba(255,255,255,.28);
+    box-shadow: 0 0 0 2px rgba(255,255,255,.10);
+  }
 
   .draft{
     margin-top:14px;
@@ -199,18 +393,28 @@
 
 <body>
 
-<!-- HERO VIDEO BACKGROUND -->
+<!-- Background video -->
 <video id="bg" autoplay muted loop playsinline preload="metadata">
   <source src="CT.mp4" type="video/mp4">
 </video>
 
-<!-- TOP -->
+<!-- Topbar -->
 <div class="topbar">
-  <div class="about" id="aboutBtn">ABOUT</div>
-  <div class="nodes">NODES</div>
+  <div class="about-btn" id="aboutBtn">ABOUT</div>
+
+  <div class="nodes" aria-label="Nodes">
+    NODES
+    <div class="nodes-bridge" aria-hidden="true"></div>
+    <div class="nodes-stack" aria-hidden="true">
+      <div class="node" data-node="001">001</div>
+      <div class="node" data-node="002">002</div>
+      <div class="node" data-node="003">003</div>
+    </div>
+  </div>
 </div>
 
 <div class="page">
+
   <section id="aboutSection" class="about-section">
     <div class="wrap">
       <div class="grid">
@@ -244,9 +448,7 @@
           </p>
 
           <div class="tags">
-            <!-- ✅ opens rail + goes to panel 0 -->
             <span class="tag" data-open="ceo">CEO</span>
-            <!-- ✅ opens rail + goes to panel 1 -->
             <span class="tag" data-open="gov">INVESTORS &amp; GOVERNMENTS</span>
           </div>
         </div>
@@ -258,14 +460,12 @@
   <div class="footer">© 2023–2025 MicroretailX LLC · All rights reserved</div>
 </div>
 
-<!-- =========================
-     OVERLAY: SWIPE RAIL
-========================== -->
+<!-- Bottom swipe rail -->
 <div id="rail" class="rail" aria-hidden="true">
   <button class="rail-close" id="railClose" type="button">CLOSE</button>
 
   <div class="rail-track" id="railTrack">
-    <!-- Panel 0: CEO -->
+    <!-- Panel LEFT (index 0) -->
     <section class="panel" data-panel="ceo">
       <div class="panel-inner">
         <div class="panel-kicker">CEO</div>
@@ -278,19 +478,21 @@
         <div class="panel-hr"></div>
 
         <p class="panel-p">
-          Our focus is the new industrial shift: robotics, software orchestration, and measurable execution as the foundation for deployable production environments.
+          We focus on the new industrial shift: robotics, software orchestration, and measurable execution as the foundation for globally deployable production environments.
         </p>
 
         <div class="actions">
-          <button class="btn" type="button" data-jump="gov">GO TO GOVERNMENT</button>
+          <button class="btn" type="button" data-jump="gov">SWIPE / GO RIGHT → GOVERNMENTS</button>
           <button class="btn btn-ghost" type="button" id="railBack">BACK</button>
         </div>
 
-        <div class="hint">Tip: swipe left/right (mobile) or scroll horizontally (trackpad) to switch panels.</div>
+        <div class="hint">
+          Swipe left/right on mobile. On desktop: mouse wheel or drag to switch panels.
+        </div>
       </div>
     </section>
 
-    <!-- Panel 1: Governments -->
+    <!-- Panel RIGHT (index 1) -->
     <section class="panel" data-panel="gov">
       <div class="panel-inner">
         <div class="panel-kicker">GOVERNMENTS</div>
@@ -325,19 +527,17 @@
 
           <div class="actions">
             <button class="btn" type="submit">GENERATE DRAFT</button>
-            <button class="btn btn-ghost" type="button" data-jump="ceo">WHO WE ARE</button>
+            <button class="btn btn-ghost" type="button" data-jump="ceo">← SWIPE / GO LEFT</button>
           </div>
 
           <div id="draftBox" class="draft" style="display:none;"></div>
 
           <div class="actions" id="draftActions" style="display:none;">
             <button class="btn" type="button" id="copyDraft">COPY DRAFT</button>
-            <!-- Optional: if later you want mailto, we can enable a button.
-                 For now: stays INSIDE and doesn't open anything external. -->
           </div>
 
           <div class="hint">
-            No data is stored on the website. You can copy the draft and send it via your preferred institutional channel.
+            No data is stored on the website. Copy the draft and send via your institutional channel.
           </div>
         </form>
       </div>
@@ -346,45 +546,38 @@
 </div>
 
 <script>
-  const aboutBtn = document.getElementById("aboutBtn");
   const rail = document.getElementById("rail");
   const railTrack = document.getElementById("railTrack");
   const railClose = document.getElementById("railClose");
   const railBack = document.getElementById("railBack");
-
-  function lockBody(lock){
-    document.documentElement.style.overflow = lock ? "hidden" : "";
-    document.body.style.overflow = lock ? "hidden" : "";
-  }
+  const aboutBtn = document.getElementById("aboutBtn");
 
   function openRail(panelKey){
     rail.classList.add("is-open");
-    rail.setAttribute("aria-hidden", "false");
-    lockBody(true);
+    rail.setAttribute("aria-hidden","false");
 
-    const index = (panelKey === "gov") ? 1 : 0;
-    railTrack.scrollTo({ left: index * window.innerWidth, behavior: "smooth" });
+    const idx = (panelKey === "gov") ? 1 : 0;
+    railTrack.scrollTo({ left: idx * railTrack.clientWidth, behavior: "smooth" });
   }
 
   function closeRail(){
     rail.classList.remove("is-open");
-    rail.setAttribute("aria-hidden", "true");
-    lockBody(false);
+    rail.setAttribute("aria-hidden","true");
   }
 
-  // open from tags
+  // open rail from tags
   document.querySelectorAll("[data-open]").forEach(el => {
     el.addEventListener("click", () => openRail(el.getAttribute("data-open")));
   });
 
-  // inside rail jumps
+  // jump within rail
   document.querySelectorAll("[data-jump]").forEach(el => {
     el.addEventListener("click", () => openRail(el.getAttribute("data-jump")));
   });
 
-  // close handlers
   railClose.addEventListener("click", closeRail);
-  railBack?.addEventListener("click", closeRail);
+  railBack.addEventListener("click", closeRail);
+
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && rail.classList.contains("is-open")) closeRail();
   });
@@ -394,12 +587,56 @@
     document.getElementById("aboutSection").scrollIntoView({ behavior:"smooth", block:"start" });
   });
 
-  // form draft generator (NO navigation)
+  // Desktop: wheel vertical -> horizontal scroll inside rail
+  railTrack.addEventListener("wheel", (e) => {
+    if (!rail.classList.contains("is-open")) return;
+    const absX = Math.abs(e.deltaX);
+    const absY = Math.abs(e.deltaY);
+    if (absY > absX) {
+      e.preventDefault();
+      railTrack.scrollLeft += e.deltaY;
+    }
+  }, { passive:false });
+
+  // Desktop: drag-to-swipe
+  let isDown = false, startX = 0, startLeft = 0;
+
+  railTrack.addEventListener("mousedown", (e) => {
+    if (!rail.classList.contains("is-open")) return;
+    isDown = true;
+    startX = e.pageX;
+    startLeft = railTrack.scrollLeft;
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    const dx = e.pageX - startX;
+    railTrack.scrollLeft = startLeft - dx;
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (!isDown) return;
+    isDown = false;
+    snapToNearest();
+  });
+
+  // Snap helper
+  function snapToNearest(){
+    const w = railTrack.clientWidth || window.innerWidth;
+    const idx = Math.round(railTrack.scrollLeft / w);
+    railTrack.scrollTo({ left: idx * w, behavior: "smooth" });
+  }
+  railTrack.addEventListener("touchend", snapToNearest);
+  window.addEventListener("resize", () => {
+    if (!rail.classList.contains("is-open")) return;
+    snapToNearest();
+  });
+
+  // Form: generate draft, stay on page
   const govForm = document.getElementById("govForm");
   const draftBox = document.getElementById("draftBox");
   const draftActions = document.getElementById("draftActions");
   const copyDraftBtn = document.getElementById("copyDraft");
-
   let lastDraftText = "";
 
   govForm.addEventListener("submit", (e) => {
@@ -434,7 +671,6 @@ ${msg}
       copyDraftBtn.textContent = "COPIED";
       setTimeout(() => copyDraftBtn.textContent = "COPY DRAFT", 1200);
     }catch{
-      // fallback
       const ta = document.createElement("textarea");
       ta.value = lastDraftText;
       document.body.appendChild(ta);
@@ -446,12 +682,13 @@ ${msg}
     }
   });
 
-  // keep snap correct on resize
-  window.addEventListener("resize", () => {
-    if (!rail.classList.contains("is-open")) return;
-    // snap to nearest panel
-    const idx = Math.round(railTrack.scrollLeft / window.innerWidth);
-    railTrack.scrollLeft = idx * window.innerWidth;
+  // Nodes click placeholders (no navigation)
+  document.querySelectorAll(".node").forEach(n => {
+    n.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // placeholder: you can wire these later
+      // console.log("Node:", n.dataset.node);
+    });
   });
 </script>
 
