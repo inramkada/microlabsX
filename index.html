@@ -6,235 +6,360 @@
 <title>MicroretailX</title>
 
 <style>
-html, body{
-  margin:0; height:100%;
-  background:#000; color:#fff;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  overflow-x:hidden;
-}
-::-webkit-scrollbar{display:none}
+  html, body{
+    margin:0; height:100%;
+    background:#000; color:#fff;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    overflow-x:hidden;
+  }
+  html,body{scrollbar-width:none;-ms-overflow-style:none}
+  ::-webkit-scrollbar{width:0;height:0}
 
-/* Background video */
-#bg{
-  position:fixed; inset:0;
-  width:100vw; height:100vh;
-  object-fit:cover;
-  z-index:1;
-  pointer-events:none;
-}
+  /* Background video */
+  #bg{
+    position:fixed; inset:0;
+    width:100vw; height:100vh;
+    object-fit:cover;
+    z-index:1;
+    pointer-events:none;
+  }
 
-/* Topbar */
-.topbar{
-  position:fixed;
-  top:18px; right:18px;
-  z-index:9999;
-  display:flex;
-  gap:56px;
-  mix-blend-mode:difference;
-}
-.toplink{
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  cursor:pointer;
-}
+  /* Topbar */
+  .topbar{
+    position:fixed;
+    top:18px; right:18px;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    gap:56px;
+    mix-blend-mode:difference;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .toplink{
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    white-space:nowrap;
+    cursor:pointer;
+    color:rgba(255,255,255,.92);
+  }
+  .toplink.muted{ color:rgba(255,255,255,.72); }
 
-/* ABOUT overlay — PURE BLACK */
-.about-overlay{
-  position:fixed;
-  inset:0;
-  z-index:2000;
-  display:none;
-}
-.about-overlay.is-open{
-  display:block;
-}
+  /* Nodes dropdown */
+  .nodes{ position:relative; cursor:default; }
+  .nodes-bridge{
+    position:absolute; top:100%;
+    left:-30px; right:-30px;
+    height:28px;
+    background:transparent;
+    pointer-events:auto;
+  }
+  .nodes-stack{
+    position:absolute;
+    top:calc(100% + 18px);
+    left:50%;
+    transform:translateX(-50%);
+    display:grid;
+    gap:22px;
+    opacity:0;
+    pointer-events:none;
+    /* no transitions (test mode) */
+    z-index:99999;
+  }
+  .nodes:hover .nodes-stack{
+    opacity:1;
+    pointer-events:auto;
+  }
+  .node{
+    width:11.5ch;
+    text-align:center;
+    font-size:40px;
+    font-weight:700;
+    letter-spacing:.04em;
+    opacity:.92;
+    cursor:pointer;
+    position:relative;
+  }
+  .node::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-12px;
+    width:0;
+    height:2px;
+    transform:translateX(-50%);
+    background: rgba(255,255,255,.9);
+    opacity:.85;
+  }
+  .node:hover::after{ width:66%; }
 
-/* full black cut */
-.about-dim{
-  position:absolute;
-  inset:0;
-  background:#000;
-}
+  /* Footer fixed in index (outside overlay) */
+  .index-footer{
+    position:fixed;
+    left:0; right:0;
+    bottom:18px;
+    z-index:9998;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.55;
+    mix-blend-mode:difference;
+    pointer-events:none;
+    user-select:none;
+    -webkit-user-select:none;
+    padding:0 18px;
+  }
 
-/* centered stage */
-.about-stage{
-  position:absolute;
-  inset:0;
-  display:grid;
-  place-items:center;
-  padding:48px 0;
-}
+  /* ===== ABOUT overlay (only opens on click) ===== */
+  .about-overlay{
+    position:fixed;
+    inset:0;
+    z-index:2000;
+    display:none;
+    pointer-events:none;
+  }
+  .about-overlay.is-open{
+    display:block;
+    pointer-events:auto;
+  }
 
-/* shell: edge-to-edge, no borders */
-.about-shell{
-  position:relative;
-  width:100vw;
-  background:#000;
-  overflow:hidden;
-}
+  /* Keep background visible, just dim slightly (NOT full black) */
+  .about-dim{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.50);
+    /* no blur in this test */
+  }
 
-/* arrows (no animation) */
-.edge-arrow{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  width:56px;
-  height:120px;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-  opacity:.85;
-}
-.edge-arrow.left{ left:18px; }
-.edge-arrow.right{ right:18px; }
-.edge-arrow svg{
-  width:22px; height:22px;
-}
+  /* Stage: no side padding (edge-to-edge feel) */
+  .about-stage{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    padding:min(6vh, 48px) 0;
+  }
 
-/* close */
-.about-close{
-  position:absolute;
-  top:18px; right:18px;
-  border:1px solid rgba(255,255,255,.3);
-  background:transparent;
-  padding:10px 14px;
-  font-size:12px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  cursor:pointer;
-}
+  /* The ONLY thing that becomes pure black */
+  .about-shell{
+    position:relative;
+    width:100vw;
+    max-width:none;
+    background:#000;
 
-/* index */
-.about-index{
-  position:absolute;
-  left:24px;
-  bottom:18px;
-  font-size:11px;
-  letter-spacing:.14em;
-  opacity:.5;
-}
+    border:none;           /* ✅ no borders */
+    border-radius:0;       /* ✅ no radius */
+    box-shadow:none;       /* ✅ no shadow */
+    overflow:hidden;
+  }
 
-/* panels */
-.about-track{
-  display:flex;
-  overflow:hidden;
-  scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;
-}
-.about-panel{
-  min-width:100%;
-  scroll-snap-align:start;
-  padding:56px 0;
-}
+  /* Premium edge arrows — no transitions */
+  .edge-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:56px;
+    height:120px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    display:grid;
+    place-items:center;
+    cursor:pointer;
+    user-select:none;
+    -webkit-user-select:none;
 
-/* inner content width */
-.about-inner{
-  width:min(1180px, calc(100vw - 96px));
-  margin:0 auto;
-}
+    opacity:0;             /* auto-hide default */
+    pointer-events:none;
+    z-index:7;
+  }
+  .edge-arrow.left{ left:18px; }
+  .edge-arrow.right{ right:18px; }
+  .edge-arrow svg{ width:22px; height:22px; opacity:.9; }
 
-/* grid */
-.about-grid{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:48px;
-}
+  .about-shell.is-hot .edge-arrow{
+    opacity:.9;
+    pointer-events:auto;
+  }
+  .edge-arrow.is-disabled{
+    opacity:.18 !important;
+    pointer-events:none !important;
+  }
 
-/* media */
-.about-media{
-  height:min(52vh,520px);
-  overflow:hidden;
-}
-.about-media video{
-  width:100%; height:100%;
-  object-fit:cover;
-}
+  /* Close button — no transitions */
+  .about-close{
+    position:absolute;
+    top:18px; right:18px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    border-radius:999px;
+    padding:10px 14px;
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.86);
+    cursor:pointer;
+    z-index:6;
+  }
 
-/* text */
-.about-kicker{
-  font-size:12px;
-  letter-spacing:.18em;
-  opacity:.6;
-  margin-bottom:14px;
-}
-.about-title{
-  font-size:28px;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  margin-bottom:18px;
-}
-.about-p{
-  font-size:14px;
-  line-height:1.65;
-  opacity:.7;
-  margin-bottom:18px;
-}
-.about-hr{
-  height:1px;
-  background:rgba(255,255,255,.12);
-  margin:22px 0;
-}
+  /* Index indicator */
+  .about-index{
+    position:absolute;
+    left:24px;
+    bottom:18px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.55;
+    pointer-events:none;
+    z-index:6;
+  }
 
-/* tags */
-.about-tags{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.about-tag{
-  font-size:11px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  padding:9px 14px;
-  border:1px solid rgba(255,255,255,.25);
-}
+  /* Track & panels */
+  .about-track{
+    display:flex;
+    overflow:hidden;                 /* no drag */
+    scroll-snap-type:x mandatory;
+    scroll-behavior:smooth;
+    touch-action: pan-x;             /* mobile swipe ok */
+  }
+  .about-panel{
+    min-width:100%;
+    scroll-snap-align:start;
+    padding:56px 0;
+    box-sizing:border-box;
+  }
 
-/* footer */
-.about-footer{
-  margin-top:24px;
-  text-align:center;
-  font-size:11px;
-  letter-spacing:.14em;
-  opacity:.5;
-}
+  /* Inner content stays centered like your screenshot */
+  .about-inner{
+    width:min(1180px, calc(100vw - 96px));
+    margin:0 auto;
+  }
 
-/* mobile */
-@media(max-width:980px){
-  .about-grid{grid-template-columns:1fr;}
-  .about-panel{padding:32px 0;}
-}
+  .about-grid{
+    display:grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap:48px;
+    align-items:start;
+  }
+
+  .about-media{
+    height:min(52vh, 520px);
+    border-radius:26px;
+    overflow:hidden;
+    background:#000;
+    border:1px solid rgba(255,255,255,.10);
+  }
+  .about-media video{ width:100%; height:100%; object-fit:cover; }
+
+  .about-kicker{
+    font-size:12px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+    margin:0 0 14px;
+  }
+  .about-title{
+    margin:0 0 18px;
+    font-size:28px;
+    line-height:1.15;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.92);
+  }
+  .about-p{
+    margin:0 0 18px;
+    font-size:14px;
+    line-height:1.65;
+    opacity:.72;
+    max-width:70ch;
+  }
+  .about-hr{
+    height:1px;
+    background:rgba(255,255,255,.10);
+    margin:22px 0;
+  }
+
+  .about-tags{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .about-tag{
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:9px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.03);
+    cursor:pointer;
+  }
+
+  @media (max-width: 980px){
+    .about-inner{ width:min(1180px, calc(100vw - 44px)); }
+    .about-grid{ grid-template-columns:1fr; }
+    .about-media{ height:44vh; }
+
+    /* on mobile: arrows always visible */
+    .edge-arrow{
+      opacity:.92;
+      pointer-events:auto;
+      height:92px; width:52px;
+    }
+    .about-shell.is-hot .edge-arrow{
+      opacity:.92;
+      pointer-events:auto;
+    }
+  }
 </style>
 </head>
 
 <body>
 
-<video id="bg" autoplay muted loop playsinline>
+<video id="bg" autoplay muted loop playsinline preload="metadata">
   <source src="CT.mp4" type="video/mp4">
 </video>
 
 <div class="topbar">
-  <div class="toplink" id="aboutBtn">ABOUT</div>
+  <div class="toplink muted" id="aboutBtn">ABOUT</div>
+
+  <div class="toplink nodes">NODES
+    <div class="nodes-bridge" aria-hidden="true"></div>
+    <div class="nodes-stack" aria-hidden="true">
+      <div class="node" data-node="001">001</div>
+      <div class="node" data-node="002">002</div>
+      <div class="node" data-node="003">003</div>
+    </div>
+  </div>
 </div>
 
-<div class="about-overlay" id="aboutOverlay">
-  <div class="about-dim"></div>
+<div class="index-footer">
+  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION · NON-COMMERCIAL
+</div>
+
+<!-- ABOUT overlay -->
+<div class="about-overlay" id="aboutOverlay" aria-hidden="true">
+  <div class="about-dim" id="aboutDim"></div>
 
   <div class="about-stage">
-    <div class="about-shell">
+    <div class="about-shell" id="aboutShell" role="dialog" aria-modal="true" aria-label="About panels">
 
-      <button class="about-close" id="aboutClose">CLOSE</button>
+      <button class="about-close" id="aboutClose" type="button">CLOSE</button>
 
-      <div class="edge-arrow left" id="prevBtn">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.8"/>
+      <div class="edge-arrow left" id="prevBtn" title="Previous">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M14.5 5L8 12l6.5 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
 
-      <div class="edge-arrow right" id="nextBtn">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M9.5 5L16 12l-6.5 7" stroke="currentColor" stroke-width="1.8"/>
+      <div class="edge-arrow right" id="nextBtn" title="Next">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9.5 5L16 12l-6.5 7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
 
@@ -242,11 +367,11 @@ html, body{
 
       <div class="about-track" id="aboutTrack">
 
-        <section class="about-panel">
+        <section class="about-panel" data-panel="about">
           <div class="about-inner">
             <div class="about-grid">
               <div class="about-media">
-                <video autoplay muted loop playsinline>
+                <video autoplay muted loop playsinline preload="metadata">
                   <source src="CT.mp4" type="video/mp4">
                 </video>
               </div>
@@ -256,51 +381,62 @@ html, body{
                 <h2 class="about-title">A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.</h2>
 
                 <p class="about-p">
-                  This is a structural interface. No decoration. No illusion.
+                  Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
                 </p>
 
                 <div class="about-hr"></div>
 
                 <p class="about-p">
-                  Space, automation and execution — reduced to their core.
+                  The system is designed to transform physical space into fully automated operational environments,
+                  aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
+                </p>
+
+                <p class="about-p">
+                  By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
                 </p>
 
                 <div class="about-tags">
-                  <span class="about-tag">CEO</span>
-                  <span class="about-tag">GOVERNMENTS</span>
-                </div>
-
-                <div class="about-footer">
-                  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION
+                  <span class="about-tag" data-jump="ceo">CEO</span>
+                  <span class="about-tag" data-jump="gov">INVESTORS &amp; GOVERNMENTS</span>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="about-panel">
+        <section class="about-panel" data-panel="ceo">
           <div class="about-inner">
             <div class="about-kicker">CEO</div>
             <h2 class="about-title">WHO WE ARE</h2>
+
             <p class="about-p">
-              MicroretailX LLC designs automation-first industrial systems.
+              MicroretailX LLC is the legal entity behind this initiative. We develop automation-first systems for controlled, scalable biotech infrastructure across institutional environments.
             </p>
-            <div class="about-footer">
-              © 2023–2025 MICRORETAILX LLC
-            </div>
+
+            <div class="about-hr"></div>
+
+            <p class="about-p">
+              We focus on the structural layer of the next industrial shift: robotics, software orchestration,
+              and measurable execution as a deployable operating system for space.
+            </p>
           </div>
         </section>
 
-        <section class="about-panel">
+        <section class="about-panel" data-panel="gov">
           <div class="about-inner">
             <div class="about-kicker">GOVERNMENTS</div>
             <h2 class="about-title">INSTITUTIONAL DEPLOYMENT</h2>
+
             <p class="about-p">
-              Scalable frameworks for public and institutional environments.
+              A globally deployable framework for public-sector and institutional partners:
+              pilot environments, regulatory alignment, operational governance, and long-term resilience.
             </p>
-            <div class="about-footer">
-              © 2023–2025 MICRORETAILX LLC
-            </div>
+
+            <div class="about-hr"></div>
+
+            <p class="about-p">
+              (When you decide the channel, we embed a minimal institutional contact mechanism here — without exposing unnecessary data.)
+            </p>
           </div>
         </section>
 
@@ -310,41 +446,111 @@ html, body{
 </div>
 
 <script>
-const overlay = document.getElementById("aboutOverlay");
-const track = document.getElementById("aboutTrack");
-const panels = track.children;
-const indexEl = document.getElementById("aboutIndex");
+  const aboutBtn = document.getElementById("aboutBtn");
+  const aboutOverlay = document.getElementById("aboutOverlay");
+  const aboutDim = document.getElementById("aboutDim");
+  const aboutClose = document.getElementById("aboutClose");
+  const aboutShell = document.getElementById("aboutShell");
 
-let index = 0;
+  const track = document.getElementById("aboutTrack");
+  const panels = Array.from(track.querySelectorAll(".about-panel"));
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const indexEl = document.getElementById("aboutIndex");
 
-function update(){
-  indexEl.textContent = String(index+1).padStart(2,"0")+" / "+panels.length;
-}
+  function w(){ return track.clientWidth || window.innerWidth; }
+  function idx(){ return Math.round(track.scrollLeft / w()); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
 
-document.getElementById("aboutBtn").onclick = ()=>{
-  overlay.classList.add("is-open");
-  document.body.style.overflow="hidden";
-};
+  function updateNav(){
+    const i = idx();
+    indexEl.textContent =
+      String(i+1).padStart(2,"0") + " / " + String(panels.length).padStart(2,"0");
 
-document.getElementById("aboutClose").onclick = ()=>{
-  overlay.classList.remove("is-open");
-  document.body.style.overflow="";
-};
+    prevBtn.classList.toggle("is-disabled", i === 0);
+    nextBtn.classList.toggle("is-disabled", i === panels.length - 1);
+  }
 
-document.getElementById("prevBtn").onclick = ()=>{
-  if(index>0) index--;
-  track.scrollTo({left:index*track.clientWidth});
-  update();
-};
+  function scrollToIndex(i){
+    const target = clamp(i,0,panels.length-1) * w();
+    track.scrollTo({ left: target, behavior:"smooth" });
+    setTimeout(updateNav, 120);
+  }
 
-document.getElementById("nextBtn").onclick = ()=>{
-  if(index<panels.length-1) index++;
-  track.scrollTo({left:index*track.clientWidth});
-  update();
-};
+  function openAbout(panelKey){
+    aboutOverlay.classList.add("is-open");
+    aboutOverlay.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
 
-window.onresize=()=>track.scrollTo({left:index*track.clientWidth});
-update();
+    let i = 0;
+    if(panelKey){
+      const found = panels.findIndex(p => p.dataset.panel === panelKey);
+      i = found >= 0 ? found : 0;
+    }
+    scrollToIndex(i);
+    updateNav();
+  }
+
+  function closeAbout(){
+    aboutOverlay.classList.remove("is-open");
+    aboutOverlay.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+    aboutShell.classList.remove("is-hot");
+  }
+
+  aboutBtn.addEventListener("click", ()=> openAbout("about"));
+  aboutDim.addEventListener("click", closeAbout);
+  aboutClose.addEventListener("click", closeAbout);
+
+  document.addEventListener("keydown", (e)=>{
+    if(!aboutOverlay.classList.contains("is-open")) return;
+    if(e.key === "Escape") closeAbout();
+    if(e.key === "ArrowLeft") scrollToIndex(idx() - 1);
+    if(e.key === "ArrowRight") scrollToIndex(idx() + 1);
+  });
+
+  prevBtn.addEventListener("click", ()=> scrollToIndex(idx() - 1));
+  nextBtn.addEventListener("click", ()=> scrollToIndex(idx() + 1));
+
+  document.querySelectorAll("[data-jump]").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      openAbout(el.getAttribute("data-jump"));
+    });
+  });
+
+  track.addEventListener("scroll", ()=> updateNav(), { passive:true });
+
+  /* Auto-hide arrows: show when cursor near left/right edge of shell */
+  let hotT = null;
+  function setHot(on){
+    aboutShell.classList.toggle("is-hot", on);
+    if(on){
+      clearTimeout(hotT);
+      hotT = setTimeout(()=> aboutShell.classList.remove("is-hot"), 1000);
+    }
+  }
+
+  aboutShell.addEventListener("mousemove", (e)=>{
+    const r = aboutShell.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const near = (x < 140) || (x > r.width - 140);
+    if(near) setHot(true);
+  });
+  aboutShell.addEventListener("mouseleave", ()=>{
+    aboutShell.classList.remove("is-hot");
+  });
+
+  window.addEventListener("resize", ()=>{
+    scrollToIndex(idx());
+    updateNav();
+  });
+
+  updateNav();
+
+  // Nodes click placeholders (keep behavior)
+  document.querySelectorAll(".node").forEach(n=>{
+    n.addEventListener("click", (e)=> e.stopPropagation());
+  });
 </script>
 
 </body>
