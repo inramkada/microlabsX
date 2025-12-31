@@ -1,8 +1,9 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>ASIA · NODE 001</title>
 
 <style>
   html, body{
@@ -12,15 +13,10 @@
     background:#000;
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color:#fff;
-    overflow-x:hidden;
+    overflow:hidden; /* NO SCROLL */
   }
 
-  /* Hide scrollbar (max stealth) */
-  html, body { scrollbar-width: none; -ms-overflow-style: none; }
-  ::-webkit-scrollbar { width: 0; height: 0; }
-  ::-webkit-scrollbar-thumb { background: transparent; }
-
-  /* ===== BACKGROUND VIDEO ===== */
+  /* ===== BACKGROUND VIDEO (fixed, never expands) ===== */
   #bg{
     position:fixed;
     inset:0;
@@ -29,416 +25,341 @@
     object-fit:cover;
     z-index:1;
     pointer-events:none;
+    transform: translate3d(0,0,0) scale(1.03);
+    filter: blur(var(--bgBlur, 0px));
+    opacity: var(--bgOpacity, 1);
+    transition: filter .25s ease, opacity .25s ease;
+    will-change: transform, filter, opacity;
+  }
+  .bg-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    z-index:2;
+    pointer-events:none;
   }
 
-  /* ===== TOPBAR (RGB fusion) ===== */
+  /* ===== TOPBAR (same language as index) ===== */
   .topbar{
     position:fixed;
     top:18px;
+    left:18px;
     right:18px;
-    z-index:20;
+    z-index:40;
     display:flex;
+    justify-content:space-between;
     align-items:center;
-    gap:58px;
-    white-space:nowrap;
-    pointer-events:auto;
     mix-blend-mode:difference;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .topbar a,
+  .topbar span{
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.90);
+    text-decoration:none;
+  }
+  .topbar a:hover{ color:#fff; }
+
+  /* ===== FOOTER ===== */
+  .footer{
+    position:fixed;
+    bottom:18px;
+    left:0;
+    right:0;
+    text-align:center;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.45;
+    mix-blend-mode:difference;
+    z-index:40;
+    user-select:none;
+    -webkit-user-select:none;
+    pointer-events:none;
   }
 
-  .about,
-  .nodes{
-    font-size:22px;
-    font-weight:700;
+  /* ===== SLIDE SYSTEM (scroll without scroll) ===== */
+  .stage{
+    position:relative;
+    z-index:10;
+    height:100%;
+    width:100%;
+    padding:96px 0 86px; /* room for topbar/footer */
+    box-sizing:border-box;
+  }
+
+  .slide{
+    position:absolute;
+    inset:96px 0 86px 0; /* match stage padding to keep consistent layout */
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform: translateY(36px);
+    pointer-events:none;
+    transition:
+      opacity .55s ease,
+      transform .65s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .slide.active{
+    opacity:1;
+    transform: translateY(0);
+    pointer-events:auto;
+  }
+
+  .wrap{
+    width:min(1240px, calc(100vw - 56px));
+  }
+
+  /* ===== Shared typography ===== */
+  .kicker{
+    font-size:12px;
+    letter-spacing:.18em;
     text-transform:uppercase;
-    letter-spacing:0.22em;
+    opacity:.6;
+    margin-bottom:14px;
+  }
+  .h{
+    font-size:28px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin:0 0 18px;
+  }
+  .p{
+    font-size:14px;
+    line-height:1.65;
+    opacity:.75;
+    max-width:58ch;
+    margin:0 0 18px;
+  }
+  .hr{
+    height:1px;
+    background:rgba(255,255,255,.14);
+    margin:22px 0;
+  }
+
+  /* ===== Slide 1 grid (like your current) ===== */
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap:56px;
+    align-items:center;
+  }
+
+  .metrics{
+    display:grid;
+    gap:12px;
+    max-width:520px;
+  }
+  .row{
+    display:flex;
+    justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    padding-bottom:10px;
+  }
+  .label{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+  }
+  .value{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.9;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+  }
+
+  /* ===== Media card ===== */
+  .media{
+    position:relative;
+    height:min(62vh, 520px);
+    border-radius:26px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.18);
+    box-shadow:0 32px 140px rgba(0,0,0,.75);
+    background:#000;
+
+    transform: translate3d(var(--tx,0px), var(--ty,0px), 0) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));
+    transition: transform .25s ease;
+    will-change: transform;
+  }
+
+  .media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transform: translate3d(var(--ix,0px), var(--iy,0px), 0) scale(1.05);
+    filter:saturate(1.05) contrast(1.02);
+    will-change: transform;
+    transition: transform .25s ease;
+  }
+
+  .media::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      radial-gradient(circle at 30% 25%, rgba(255,255,255,.08), rgba(0,0,0,0) 55%),
+      linear-gradient(to bottom, rgba(0,0,0,.05), rgba(0,0,0,.60));
+  }
+
+  .chip{
+    position:absolute;
+    top:14px;
+    left:14px;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    padding:9px 12px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.35);
+    mix-blend-mode:difference;
     user-select:none;
     -webkit-user-select:none;
   }
 
-  .about{
-    letter-spacing:0.18em;
-    color:rgba(255,255,255,0.75);
-    cursor:pointer;
-    transition: color .18s ease, filter .18s ease, transform .18s ease;
-  }
-  .about:hover{
-    color:rgba(255,255,255,0.92);
-    filter:saturate(1.06);
-    transform: translateY(-1px);
-  }
-
-  .nodes{
-    position:relative;
-    color:rgba(255,255,255,0.92);
-    cursor:default;
-  }
-
-  /* ===== NODES DROPDOWN ===== */
-  .nodes-stack{
+  .note{
     position:absolute;
-    top: calc(100% + 18px);
-    left: 50%;
-    transform: translateX(-50%) translateY(-6px);
+    left:14px;
+    right:14px;
+    bottom:14px;
+    font-size:12px;
+    line-height:1.6;
+    letter-spacing:.06em;
+    background:rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:16px;
+    padding:12px 14px;
+    backdrop-filter:blur(6px);
+    opacity:.88;
+  }
+
+  /* ===== Slide 2/3: clean Dumbar-ish panels ===== */
+  .panel{
     display:grid;
-    row-gap:22px;
-    justify-items:center;
-    align-items:center;
-    width:max-content;
-    min-width:11.5ch;
-
-    opacity:0;
-    pointer-events:none;
-    transition: opacity .28s ease, transform .28s ease;
+    grid-template-columns: 1fr;
+    gap:18px;
+    max-width:860px;
   }
 
-  /* ✅ Invisible bridge to prevent hover “drop” */
-  .nodes-bridge{
-    position:absolute;
-    left:-26px;
-    right:-26px;
-    top:100%;
-    height:26px; /* covers the gap */
-    background:transparent;
+  .panel-card{
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(0,0,0,.30);
+    box-shadow:0 26px 120px rgba(0,0,0,.55);
+    padding:18px 18px;
   }
 
-  .nodes:hover .nodes-stack,
-  .nodes.is-open .nodes-stack{
-    opacity:1;
-    pointer-events:auto;
-    transform: translateX(-50%) translateY(0);
+  .panel-card .mini{
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    opacity:.6;
+    margin:0 0 10px;
   }
 
-  .node{
-    width:11.5ch;
-    text-align:center;
-    font-size:40px;
-    font-weight:700;
-    letter-spacing:0.04em;
-    font-variant-numeric: tabular-nums;
-    color: rgba(255,255,255,0.92);
+  .panel-card .big{
+    font-size:14px;
+    line-height:1.65;
+    opacity:.78;
+    margin:0;
+    max-width:68ch;
+  }
+
+  /* ===== NAV ARROWS ===== */
+  .nav-arrows{
+    position:fixed;
+    right:22px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:45;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
     mix-blend-mode:difference;
+  }
 
-    opacity:0;
-    transform: translateY(-6px) scale(.97);
-    transition: opacity .3s ease, transform .18s cubic-bezier(.22,.61,.36,1);
-    position:relative;
+  .arrow{
+    width:36px;
+    height:36px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.35);
     cursor:pointer;
+    position:relative;
+    user-select:none;
+    -webkit-user-select:none;
   }
 
-  .nodes:hover .node,
-  .nodes.is-open .node{
-    opacity:1;
-    transform: translateY(0) scale(1);
-  }
-
-  .node::after{
+  .arrow::before{
     content:"";
     position:absolute;
-    left:50%;
-    bottom:-12px;
-    width:0;
-    height:2px;
-    transform: translateX(-50%);
-    background: rgba(255,255,255,0.92);
-    opacity:0;
-    transition: width .18s ease, opacity .18s ease;
-  }
-  .node:hover::after{
-    width:66%;
-    opacity:.82;
+    inset:0;
+    margin:auto;
+    width:10px;
+    height:10px;
+    border-right:2px solid rgba(255,255,255,.85);
+    border-bottom:2px solid rgba(255,255,255,.85);
   }
 
-  /* ===== PAGE ===== */
-  .page{
-    position:relative;
-    z-index:2;
-  }
+  .arrow.down::before{ transform:rotate(45deg) translate(-1px,-1px); }
+  .arrow.up::before{ transform:rotate(-135deg) translate(-1px,-1px); }
 
-  /* ===== ABOUT SECTION (IN PAGE) ===== */
-  .about-section{
-    background:#000;
-    padding:140px 0 160px;
-    margin-top:100vh; /* empieza después del hero vídeo */
-    border-top:1px solid rgba(255,255,255,0.06);
-  }
+  .arrow:hover{ border-color:#fff; }
 
-  .about-wrap{
-    width:min(1180px, calc(100vw - 56px));
-    margin:0 auto;
-  }
-
-  .about-grid{
-    display:grid;
-    grid-template-columns: 1.05fr 0.95fr; /* ajuste premium */
-    gap:46px;
-    align-items:start;
-  }
-
-  .about-media{
-    position:sticky;
-    top:96px;
-    height:min(58vh,500px);
-    border-radius:26px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.10);
-    box-shadow:0 32px 140px rgba(0,0,0,0.72);
-    background:#000;
-  }
-
-  .about-media video{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transform:scale(1.02);
-    filter:saturate(1.06) contrast(1.02);
-  }
-
-  .about-copy{
-    padding-top:10px;
-  }
-
-  .about-kicker{
-    font-size:12px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    opacity:.6;
-    margin:0 0 14px;
-  }
-
-  .about-title{
-    margin:0 0 18px;
-    font-size:28px;
-    line-height:1.15;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,0.92);
-  }
-
-  .about-p{
-    margin:0 0 18px;
-    font-size:14px;
-    line-height:1.65;
-    opacity:.72;
-    max-width:64ch;
-  }
-
-  .about-hr{
-    height:1px;
-    background:rgba(255,255,255,0.10);
-    margin:22px 0;
-  }
-
-  .about-tags{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:12px;
-  }
-
-  .about-tag{
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    padding:9px 12px;
-    border-radius:999px;
-    border:1px solid rgba(255,255,255,0.16);
-    background:rgba(255,255,255,0.03);
-    opacity:.85;
-  }
-
-  .about-tag--btn{
-    cursor:pointer;
-    transition: transform .18s ease, opacity .18s ease, border-color .18s ease;
-  }
-  .about-tag--btn:hover{
-    opacity:.95;
-    transform: translateY(-1px);
-    border-color: rgba(255,255,255,0.30);
-  }
-  .about-tag--btn:focus{
-    outline:none;
-    box-shadow: 0 0 0 2px rgba(255,255,255,0.14);
-  }
-
-  /* Scroll reveal */
-  .reveal{
-    opacity:0;
-    transform: translateY(14px);
-    transition: opacity .5s ease, transform .5s cubic-bezier(.22,.61,.36,1);
-    will-change: opacity, transform;
-  }
-  .reveal.in{
-    opacity:1;
-    transform: translateY(0);
-  }
-
-  /* Footer */
-  .footer{
-    text-align:center;
-    padding:80px 0 40px;
-    font-size:11px;
-    letter-spacing:0.14em;
-    opacity:.45;
-    mix-blend-mode:difference;
-  }
-
-  @media(max-width:980px){
-    .about-grid{ grid-template-columns:1fr; }
-    .about-media{
-      position:relative;
-      top:auto;
-      height:44vh;
-    }
-  }
-
-  /* =========================
-     HORIZONTAL OVERLAY RAIL
-  ========================== */
-  .rail{
+  .dots{
     position:fixed;
-    inset:0;
-    z-index:60;
-    background:#000;
-    opacity:0;
-    pointer-events:none;
-    transition: opacity .22s ease;
-  }
-  .rail.is-open{
-    opacity:1;
-    pointer-events:auto;
-  }
-
-  .rail-close{
-    position:absolute;
-    top:18px;
-    right:18px;
-    z-index:3;
-    background:transparent;
-    color:rgba(255,255,255,0.80);
-    border:1px solid rgba(255,255,255,0.14);
-    border-radius:999px;
-    padding:10px 14px;
-    font-size:12px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    cursor:pointer;
-    mix-blend-mode:difference;
-  }
-  .rail-close:hover{ color:rgba(255,255,255,0.95); border-color:rgba(255,255,255,0.28); }
-
-  .rail-track{
-    position:absolute;
-    inset:0;
+    right:30px;
+    top:50%;
+    transform:translateY(-50%);
+    margin-top:94px;
+    z-index:45;
     display:flex;
-    overflow-x:auto;
-    overflow-y:hidden;
-    scroll-snap-type:x mandatory;
-    scroll-behavior:smooth;
-  }
-
-  .rail-panel{
-    min-width:100vw;
-    height:100vh;
-    scroll-snap-align:start;
-    display:block;
-  }
-
-  .panel-inner{
-    width:min(1100px, calc(100vw - 56px));
-    margin:0 auto;
-    padding:120px 0 70px;
-  }
-
-  .panel-kicker{
-    font-size:12px;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    opacity:.6;
-    margin:0 0 14px;
-  }
-
-  .panel-title{
-    margin:0 0 18px;
-    font-size:28px;
-    line-height:1.15;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:rgba(255,255,255,0.92);
-  }
-
-  .panel-p{
-    margin:0 0 18px;
-    font-size:14px;
-    line-height:1.65;
-    opacity:.72;
-    max-width:72ch;
-  }
-
-  .panel-hr{
-    height:1px;
-    background:rgba(255,255,255,0.10);
-    margin:22px 0;
-  }
-
-  /* Simple institutional form */
-  .form{
-    margin-top:22px;
-    display:grid;
-    gap:12px;
-    max-width:680px;
-  }
-  .field{
-    display:grid;
-    gap:8px;
-  }
-  .label{
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    opacity:.62;
-  }
-  input, textarea{
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:14px;
-    color:rgba(255,255,255,0.92);
-    padding:12px 14px;
-    font-size:14px;
-    outline:none;
-  }
-  textarea{ min-height:140px; resize:vertical; }
-  input:focus, textarea:focus{
-    border-color: rgba(255,255,255,0.28);
-    box-shadow: 0 0 0 2px rgba(255,255,255,0.10);
-  }
-
-  .form-actions{
-    display:flex;
+    flex-direction:column;
     gap:10px;
-    margin-top:6px;
-    flex-wrap:wrap;
+    mix-blend-mode:difference;
+    user-select:none;
+    -webkit-user-select:none;
   }
-
-  .btn{
-    appearance:none;
-    border:none;
-    cursor:pointer;
-    font-size:11px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    padding:12px 14px;
+  .dot{
+    width:7px;
+    height:7px;
     border-radius:999px;
-    background:rgba(255,255,255,0.08);
-    color:rgba(255,255,255,0.90);
-    border:1px solid rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,.22);
+    background:transparent;
+    opacity:.65;
   }
-  .btn:hover{
-    background:rgba(255,255,255,0.11);
-    border-color: rgba(255,255,255,0.22);
+  .dot.active{
+    background:rgba(255,255,255,.85);
+    opacity:.95;
   }
 
-  .btn-ghost{
-    background:transparent;
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:980px){
+    .grid{ grid-template-columns:1fr; gap:36px; }
+    .media{ height:44vh; }
+    .nav-arrows{ right:14px; }
+    .dots{ right:22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    #bg, .slide, .media, .media img{
+      transition:none !important;
+      transform:none !important;
+      filter:none !important;
+      opacity:1 !important;
+    }
   }
 </style>
 </head>
@@ -447,62 +368,67 @@
 
 <!-- BACKGROUND VIDEO -->
 <video id="bg" autoplay muted loop playsinline preload="metadata">
-  <source src="CT.mp4" type="video/mp4">
+  <source src="ct.mp4" type="video/mp4" />
 </video>
+<div class="bg-overlay"></div>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="about" id="aboutBtn">ABOUT</div>
-
-  <div class="nodes" id="nodesBtn" tabindex="0" role="button" aria-label="Nodes">
-    NODES
-    <div class="nodes-bridge" aria-hidden="true"></div>
-    <div class="nodes-stack" aria-hidden="true">
-      <div class="node" data-node="001">001</div>
-      <div class="node" data-node="002">002</div>
-      <div class="node" data-node="003">003</div>
-    </div>
-  </div>
+  <a href="../index.html">← BACK</a>
+  <span>ASIA · NODE 001</span>
 </div>
 
-<div class="page">
+<!-- STAGE / SLIDES -->
+<div class="stage" id="stage">
 
-  <!-- ABOUT SECTION -->
-  <section id="aboutSection" class="about-section">
-    <div class="about-wrap">
-      <div class="about-grid">
+  <!-- SLIDE 1 -->
+  <section class="slide active" data-slide="0">
+    <div class="wrap">
+      <div class="grid">
 
-        <div class="about-media reveal">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="CT.mp4" type="video/mp4">
-          </video>
+        <div class="copy">
+          <div class="kicker">NODE 001</div>
+          <h1 class="h">IN DEVELOPMENT</h1>
+
+          <p class="p">
+            Public preview. This space is reserved for an interactive NVIDIA Omniverse tool.
+            The current media is a placeholder while the module is being built.
+          </p>
+
+          <div class="hr"></div>
+
+          <div class="metrics">
+            <div class="row">
+              <div class="label">Area (m²)</div>
+              <div class="value">TBD</div>
+            </div>
+            <div class="row">
+              <div class="label">Production Capacity</div>
+              <div class="value">TBD</div>
+            </div>
+            <div class="row">
+              <div class="label">Phase</div>
+              <div class="value">BUILD</div>
+            </div>
+            <div class="row">
+              <div class="label">Access</div>
+              <div class="value">RESTRICTED LATER</div>
+            </div>
+          </div>
         </div>
 
-        <div class="about-copy">
-          <div class="about-kicker reveal">SOLUTIONS</div>
-
-          <h2 class="about-title reveal">
-            A GLOBAL, SCALABLE SYSTEM FOR THE NEXT INDUSTRIAL ERA.
-          </h2>
-
-          <p class="about-p reveal">
-            Our objective is to provide governments with a globally deployable and scalable solution based on advanced automation and controlled biotechnology infrastructure.
-          </p>
-
-          <div class="about-hr reveal"></div>
-
-          <p class="about-p reveal">
-            The system is designed to transform physical space into fully automated operational environments,
-            aligned with the emerging industrial paradigm where software, robotics, and data orchestration redefine production.
-          </p>
-
-          <p class="about-p reveal">
-            By prioritizing automation as a foundational layer, our approach supports efficiency, resilience, and long-term sovereignty across public and institutional deployments.
-          </p>
-
-          <div class="about-tags reveal">
-            <span class="about-tag about-tag--btn" role="button" tabindex="0" data-rail="who">CEO</span>
-            <span class="about-tag about-tag--btn" role="button" tabindex="0" data-rail="government">INVESTORS &amp; GOVERNMENTS</span>
+        <div class="media" id="mediaCard" aria-label="Placeholder media">
+          <div class="chip">PLACEHOLDER</div>
+          <img
+            id="mediaImg"
+            src="https://developer.download.nvidia.com/images/isaac/sim/nvidia-physical-ai-ari.jpg"
+            alt="NVIDIA Omniverse / Isaac Sim placeholder"
+            loading="eager"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          />
+          <div class="note">
+            Placeholder image only. The interactive Omniverse environment will be enabled here once ready.
           </div>
         </div>
 
@@ -510,208 +436,217 @@
     </div>
   </section>
 
-  <div class="footer">
-    © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION
-  </div>
+  <!-- SLIDE 2 -->
+  <section class="slide" data-slide="1">
+    <div class="wrap">
+      <div class="panel">
+        <div>
+          <div class="kicker">NODE 001</div>
+          <h1 class="h">PUBLIC PREVIEW</h1>
+          <p class="p">
+            This page is intentionally minimal. Specifications and visuals will be refined as the module progresses.
+          </p>
+        </div>
+
+        <div class="panel-card">
+          <div class="mini">Reserved Space</div>
+          <p class="big">
+            The interactive NVIDIA Omniverse tool will replace the placeholder once the environment is enabled.
+          </p>
+        </div>
+
+        <div class="panel-card">
+          <div class="mini">Status</div>
+          <p class="big">
+            Work in progress — structure, metrics and access rules will evolve over time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 -->
+  <section class="slide" data-slide="2">
+    <div class="wrap">
+      <div class="panel">
+        <div>
+          <div class="kicker">NODE 001</div>
+          <h1 class="h">ACCESS LATER</h1>
+          <p class="p">
+            Once enabled, interactive access will be provided selectively.
+          </p>
+        </div>
+
+        <div class="panel-card">
+          <div class="mini">Availability</div>
+          <p class="big">
+            Public users see a placeholder. Authorised stakeholders will access the interactive environment when released.
+          </p>
+        </div>
+
+        <div class="panel-card">
+          <div class="mini">Roadmap</div>
+          <p class="big">
+            This module will be iterated in controlled phases. The public view remains intentionally high-level.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </div>
 
-<!-- =========================
-     OVERLAY: HORIZONTAL RAIL
-========================== -->
-<div id="rail" class="rail" aria-hidden="true">
-  <button class="rail-close" id="railClose" aria-label="Close">CLOSE</button>
+<!-- NAV ARROWS + DOTS -->
+<div class="nav-arrows" aria-label="Navigation">
+  <button class="arrow up" type="button" aria-label="Previous"></button>
+  <button class="arrow down" type="button" aria-label="Next"></button>
+</div>
 
-  <div class="rail-track" id="railTrack">
-    <!-- Panel 1: WHO WE ARE -->
-    <section class="rail-panel" data-panel="who">
-      <div class="panel-inner">
-        <div class="panel-kicker">WHO WE ARE</div>
-        <h2 class="panel-title">A LAB-DRIVEN SYSTEMS ORGANIZATION.</h2>
+<div class="dots" aria-label="Progress">
+  <div class="dot active" data-dot="0"></div>
+  <div class="dot" data-dot="1"></div>
+  <div class="dot" data-dot="2"></div>
+</div>
 
-        <p class="panel-p">
-          We build scalable automation-first infrastructure for controlled biotech operations—designed as a global system, deployable across jurisdictions and institutional environments.
-        </p>
-
-        <div class="panel-hr"></div>
-
-        <p class="panel-p">
-          Our focus is the next industrial shift: where robotics, software orchestration, and measurable execution redefine how production environments are created, replicated, and operated.
-        </p>
-
-        <p class="panel-p">
-          We collaborate selectively with public institutions, industrial partners, and long-horizon capital under strict standards of governance, auditability, and operational clarity.
-        </p>
-
-        <div class="form-actions">
-          <button class="btn" type="button" data-rail="government">GO TO GOVERNMENT CONTACT</button>
-          <button class="btn btn-ghost" type="button" id="railBackToSite">BACK TO SITE</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Panel 2: GOVERNMENT CONTACT -->
-    <section class="rail-panel" data-panel="government">
-      <div class="panel-inner">
-        <div class="panel-kicker">GOVERNMENT</div>
-        <h2 class="panel-title">INSTITUTIONAL CONTACT.</h2>
-
-        <p class="panel-p">
-          Use this channel for public-sector discussions: deployment frameworks, pilot environments, regulatory alignment, or institutional collaboration models.
-        </p>
-
-        <div class="panel-hr"></div>
-
-        <form class="form" id="govForm">
-          <div class="field">
-            <div class="label">ORGANIZATION</div>
-            <input type="text" name="org" autocomplete="organization" placeholder="Agency / Ministry / Institution" required>
-          </div>
-
-          <div class="field">
-            <div class="label">CONTACT NAME</div>
-            <input type="text" name="name" autocomplete="name" placeholder="Full name" required>
-          </div>
-
-          <div class="field">
-            <div class="label">EMAIL</div>
-            <input type="email" name="email" autocomplete="email" placeholder="name@institution.gov" required>
-          </div>
-
-          <div class="field">
-            <div class="label">MESSAGE</div>
-            <textarea name="message" placeholder="Brief context, objectives, jurisdiction, and timeline." required></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn" type="submit">SEND EMAIL</button>
-            <button class="btn btn-ghost" type="button" data-rail="who">WHO WE ARE</button>
-          </div>
-
-          <p class="panel-p" style="opacity:.55;margin-top:14px;">
-            This form opens your email client (mailto) and does not store submissions on the website.
-          </p>
-        </form>
-      </div>
-    </section>
-  </div>
+<!-- FOOTER -->
+<div class="footer">
+  © 2023–2025 MICRORETAILX LLC · MICROLABSX IS A PROJECT DESIGNATION
 </div>
 
 <script>
-  // ABOUT button -> smooth scroll
-  document.getElementById("aboutBtn").addEventListener("click", () => {
-    document.getElementById("aboutSection").scrollIntoView({ behavior:"smooth", block:"start" });
+(() => {
+  // ===== SLIDE NAV =====
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const dots = Array.from(document.querySelectorAll(".dot"));
+  const upBtn = document.querySelector(".arrow.up");
+  const downBtn = document.querySelector(".arrow.down");
+
+  let index = 0;
+  let locked = false;
+
+  function setActive(i){
+    index = Math.max(0, Math.min(slides.length - 1, i));
+    locked = true;
+
+    slides.forEach((s, idx) => {
+      s.classList.toggle("active", idx === index);
+      // direction hint: subtle transform is already handled by base CSS; keep simple
+    });
+
+    dots.forEach((d, idx) => d.classList.toggle("active", idx === index));
+
+    // lock briefly to avoid accidental multiple steps
+    setTimeout(() => (locked = false), 650);
+  }
+
+  function next(){ if(!locked && index < slides.length - 1) setActive(index + 1); }
+  function prev(){ if(!locked && index > 0) setActive(index - 1); }
+
+  upBtn.addEventListener("click", prev);
+  downBtn.addEventListener("click", next);
+
+  // dot click
+  dots.forEach((d) => {
+    d.addEventListener("click", () => {
+      const i = parseInt(d.getAttribute("data-dot"), 10);
+      if (!Number.isNaN(i)) setActive(i);
+    });
   });
 
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (e.isIntersecting) e.target.classList.add("in");
+  // wheel / trackpad (debounced by lock)
+  window.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaY) < 24) return;
+    e.deltaY > 0 ? next() : prev();
+  }, { passive:true });
+
+  // keyboard
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown" || e.key === "PageDown") next();
+    if (e.key === "ArrowUp" || e.key === "PageUp") prev();
+  });
+
+  // ===== MICRO PARALLAX (only when slide 1 visible) =====
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+
+  const bg = document.getElementById("bg");
+  const card = document.getElementById("mediaCard");
+  const img = document.getElementById("mediaImg");
+
+  const CARD_MAX_TILT = 3;     // degrees
+  const CARD_MAX_SHIFT = 8;    // px
+  const IMG_MAX_SHIFT  = 10;   // px
+  const BG_MAX_SHIFT   = 10;   // px
+
+  let vw = window.innerWidth, vh = window.innerHeight;
+  window.addEventListener("resize", () => { vw = window.innerWidth; vh = window.innerHeight; }, { passive:true });
+
+  let mx = vw/2, my = vh/2;
+  window.addEventListener("pointermove", (e) => { mx = e.clientX; my = e.clientY; }, { passive:true });
+
+  function lerp(a,b,t){ return a + (b-a)*t; }
+
+  let tx=0, ty=0, rx=0, ry=0, ix=0, iy=0, bgx=0, bgy=0;
+  function tick(){
+    // Only animate when slide 1 is active (keeps it clean)
+    const slide1Active = slides[0].classList.contains("active");
+    if (!slide1Active){
+      // soften background breathing back to normal
+      document.documentElement.style.setProperty("--bgBlur", "0px");
+      document.documentElement.style.setProperty("--bgOpacity", "1");
+      requestAnimationFrame(tick);
+      return;
     }
-  }, { threshold: 0.15 });
 
-  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+    const nx = (mx / vw) * 2 - 1;
+    const ny = (my / vh) * 2 - 1;
 
-  // NODES: enable click toggle for touch devices
-  const nodesBtn = document.getElementById("nodesBtn");
-  const isCoarse = window.matchMedia("(pointer: coarse)").matches;
+    const _ry = nx * CARD_MAX_TILT;
+    const _rx = -ny * CARD_MAX_TILT;
+    const _tx = nx * CARD_MAX_SHIFT;
+    const _ty = ny * CARD_MAX_SHIFT;
 
-  if (isCoarse) {
-    nodesBtn.style.cursor = "pointer";
-    nodesBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      nodesBtn.classList.toggle("is-open");
-    });
+    const _ix = -nx * IMG_MAX_SHIFT;
+    const _iy = -ny * IMG_MAX_SHIFT;
 
-    document.addEventListener("click", () => {
-      nodesBtn.classList.remove("is-open");
-    });
+    const _bgx = -nx * BG_MAX_SHIFT;
+    const _bgy = -ny * BG_MAX_SHIFT;
+
+    const s = 0.08;
+    ry = lerp(ry, _ry, s);
+    rx = lerp(rx, _rx, s);
+    tx = lerp(tx, _tx, s);
+    ty = lerp(ty, _ty, s);
+    ix = lerp(ix, _ix, s);
+    iy = lerp(iy, _iy, s);
+    bgx = lerp(bgx, _bgx, s);
+    bgy = lerp(bgy, _bgy, s);
+
+    card.style.setProperty("--ry", ry.toFixed(2) + "deg");
+    card.style.setProperty("--rx", rx.toFixed(2) + "deg");
+    card.style.setProperty("--tx", tx.toFixed(2) + "px");
+    card.style.setProperty("--ty", ty.toFixed(2) + "px");
+
+    img.style.setProperty("--ix", ix.toFixed(2) + "px");
+    img.style.setProperty("--iy", iy.toFixed(2) + "px");
+
+    bg.style.transform = `translate3d(${bgx.toFixed(2)}px, ${bgy.toFixed(2)}px, 0) scale(1.03)`;
+
+    requestAnimationFrame(tick);
   }
 
-  // Optional: node clicks (you can wire these to actions later)
-  document.querySelectorAll(".node").forEach(n => {
-    n.addEventListener("click", (e) => {
-      // placeholder
-      // console.log("Node:", n.dataset.node);
-      e.stopPropagation();
-    });
+  // background “breathing” on hover card
+  card.addEventListener("mouseenter", () => {
+    document.documentElement.style.setProperty("--bgBlur", "2px");
+    document.documentElement.style.setProperty("--bgOpacity", "0.92");
+  });
+  card.addEventListener("mouseleave", () => {
+    document.documentElement.style.setProperty("--bgBlur", "0px");
+    document.documentElement.style.setProperty("--bgOpacity", "1");
   });
 
-  // =========================
-  // Horizontal overlay rail
-  // =========================
-  const rail = document.getElementById("rail");
-  const railTrack = document.getElementById("railTrack");
-  const railClose = document.getElementById("railClose");
-  const backToSite = document.getElementById("railBackToSite");
-
-  function openRail(panel){
-    rail.classList.add("is-open");
-    rail.setAttribute("aria-hidden", "false");
-
-    // lock background scroll
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-
-    // scroll to panel
-    const idx = (panel === "government") ? 1 : 0;
-    railTrack.scrollTo({ left: idx * window.innerWidth, behavior: "smooth" });
-  }
-
-  function closeRail(){
-    rail.classList.remove("is-open");
-    rail.setAttribute("aria-hidden", "true");
-
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
-  }
-
-  // Click tags / buttons that open rail
-  function bindRailTriggers(root=document){
-    root.querySelectorAll("[data-rail]").forEach(el => {
-      const panel = el.getAttribute("data-rail");
-      const activate = () => openRail(panel);
-
-      el.addEventListener("click", activate);
-      el.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); activate(); }
-      });
-    });
-  }
-  bindRailTriggers();
-
-  railClose.addEventListener("click", closeRail);
-  if (backToSite) backToSite.addEventListener("click", closeRail);
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && rail.classList.contains("is-open")) closeRail();
-  });
-
-  // Close if click on empty black background (outside panels)
-  rail.addEventListener("click", (e) => {
-    if (e.target === rail) closeRail();
-  });
-
-  // Government form -> mailto (no backend)
-  document.getElementById("govForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const fd = new FormData(e.target);
-    const org = (fd.get("org") || "").toString().trim();
-    const name = (fd.get("name") || "").toString().trim();
-    const email = (fd.get("email") || "").toString().trim();
-    const msg = (fd.get("message") || "").toString().trim();
-
-    const to = "hello@microretailx.com"; // <-- cambia aquí tu email real
-    const subject = encodeURIComponent(`[Government / Institutional] ${org}`);
-    const body = encodeURIComponent(
-      `Organization: ${org}\n` +
-      `Contact: ${name}\n` +
-      `Email: ${email}\n\n` +
-      `Message:\n${msg}\n`
-    );
-
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-  });
+  tick();
+})();
 </script>
 
 </body>
