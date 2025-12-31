@@ -7,6 +7,7 @@
 <title>ASIA · NODE 001</title>
 
 <style>
+/* ===== RESET / BASE ===== */
 html,body{
   margin:0;
   width:100%;
@@ -14,17 +15,13 @@ html,body{
   background:#000;
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color:#fff;
+  overflow:hidden; /* NO SCROLL */
 }
 
-/* hide scrollbars */
-html, body { scrollbar-width:none; -ms-overflow-style:none; }
-::-webkit-scrollbar{ width:0; height:0; }
-
-/* ================= HEADER ================= */
+/* ===== HEADER ===== */
 .header{
-  position:fixed;
-  top:0; left:0; right:0;
-  padding:18px 22px;
+  position:absolute;
+  top:18px; left:22px; right:22px;
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -44,53 +41,98 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
 
 .header a:hover{ color:#fff; }
 
-/* ================= LAYOUT ================= */
-.wrapper{
+/* ===== MAIN PANEL ===== */
+.panel{
+  position:absolute;
+  inset:0;
   display:grid;
-  grid-template-columns: 1fr;
-  gap:28px;
-  padding:110px 32px 40px;
-  max-width:1480px;
-  margin:0 auto;
+  grid-template-columns: 0.42fr 0.58fr;
+  gap:0;
 }
 
-/* ================= VIEWER PLACEHOLDER ================= */
-.viewer{
+/* ===== LEFT: INFO ===== */
+.info{
+  padding:110px 48px 48px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.info-top{}
+
+.title{
+  font-size:26px;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  margin:0 0 28px;
+  color:rgba(255,255,255,0.95);
+}
+
+.metrics{
+  display:grid;
+  gap:14px;
+  max-width:360px;
+}
+
+.metric{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  padding-bottom:8px;
+}
+
+.metric-label{
+  font-size:11px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+}
+
+.metric-value{
+  font-size:13px;
+  letter-spacing:0.06em;
+  color:rgba(255,255,255,0.85);
+}
+
+/* status */
+.status{
+  margin-top:28px;
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+}
+
+/* ===== RIGHT: VISUAL ===== */
+.visual{
   position:relative;
-  border-radius:26px;
   overflow:hidden;
-  border:1px solid rgba(255,255,255,0.12);
-  background:#000;
-  box-shadow:0 44px 180px rgba(0,0,0,0.78);
-  min-height:72vh;
 }
 
-.viewer img{
+.visual img{
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
-  transform: scale(1.02);
-  filter: saturate(1.05) contrast(1.02);
+  transform:scale(1.02);
+  filter:saturate(1.05) contrast(1.02);
 }
 
-/* subtle depth overlays */
-.viewer::before{
+/* overlays */
+.visual::before{
   content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
   background:
     radial-gradient(circle at 30% 25%, rgba(255,255,255,0.06), rgba(0,0,0,0.0) 55%),
-    linear-gradient(to bottom, rgba(0,0,0,0.05), rgba(0,0,0,0.55));
+    linear-gradient(to right, rgba(0,0,0,0.45), rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.0));
 }
 
-/* PREVIEW badge */
-.viewer::after{
-  content:"PLACEHOLDER";
+.badge{
   position:absolute;
   top:18px;
-  left:18px;
+  right:18px;
   padding:9px 12px;
   border-radius:999px;
   border:1px solid rgba(255,255,255,0.18);
@@ -102,28 +144,11 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   mix-blend-mode:difference;
 }
 
-/* ================= OVERLAY TEXT ================= */
-.viewer-note{
-  position:absolute;
-  bottom:22px;
-  left:22px;
-  right:22px;
-  max-width:720px;
-  font-size:12px;
-  line-height:1.6;
-  letter-spacing:0.04em;
-  color:rgba(255,255,255,0.72);
-  background:rgba(0,0,0,0.35);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:14px;
-  padding:14px 16px;
-  backdrop-filter: blur(6px);
-}
-
-/* ================= FOOTER (same as index) ================= */
+/* ===== FOOTER (same as index) ===== */
 .footer{
-  margin-top:80px;
-  padding:40px 24px 28px;
+  position:absolute;
+  bottom:18px;
+  left:0; right:0;
   text-align:center;
   font-size:11px;
   letter-spacing:0.14em;
@@ -132,10 +157,17 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   mix-blend-mode:difference;
 }
 
-/* ================= RESPONSIVE ================= */
-@media(max-width:1100px){
-  .viewer{ min-height:52vh; }
-  .viewer-note{ font-size:11px; }
+/* ===== RESPONSIVE ===== */
+@media(max-width:1000px){
+  .panel{
+    grid-template-columns:1fr;
+  }
+  .info{
+    padding:96px 28px 28px;
+  }
+  .visual{
+    display:none; /* móvil: solo panel informativo */
+  }
 }
 </style>
 </head>
@@ -147,37 +179,57 @@ html, body { scrollbar-width:none; -ms-overflow-style:none; }
   <span>ASIA · NODE 001</span>
 </header>
 
-<main class="wrapper">
+<main class="panel">
 
-  <!-- PREVIEW IMAGE (reserved space for Omniverse tool) -->
-  <section class="viewer" aria-label="Node 001 placeholder">
+  <!-- LEFT: INFO -->
+  <section class="info">
+    <div class="info-top">
+      <h1 class="title">ASIA · NODE 001</h1>
 
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric-label">Area (m²)</span>
+          <span class="metric-value">TBD</span>
+        </div>
+
+        <div class="metric">
+          <span class="metric-label">Production Capacity</span>
+          <span class="metric-value">In Definition</span>
+        </div>
+
+        <div class="metric">
+          <span class="metric-label">Operational Scope</span>
+          <span class="metric-value">Simulation Phase</span>
+        </div>
+
+        <div class="metric">
+          <span class="metric-label">Automation Level</span>
+          <span class="metric-value">Conceptual</span>
+        </div>
+
+        <div class="metric">
+          <span class="metric-label">Deployment Status</span>
+          <span class="metric-value">In Progress</span>
+        </div>
+      </div>
+
+      <div class="status">
+        This node is currently under development.
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: VISUAL -->
+  <section class="visual" aria-label="Omniverse placeholder">
     <img
       src="https://blogs.nvidia.com/wp-content/uploads/2025/01/Nvidia_Press_1600x900.jpg"
-      alt="NVIDIA Omniverse conceptual preview"
+      alt="NVIDIA Omniverse conceptual placeholder"
       loading="eager"
       decoding="async"
       referrerpolicy="no-referrer"
     >
-
-    <div class="viewer-note">
-      This space is reserved for the interactive NVIDIA Omniverse tool.
-      The image shown is a visual placeholder only, intended to illustrate
-      the potential of the platform once the live simulation environment is enabled.
-    </div>
-
+    <div class="badge">Placeholder</div>
   </section>
-
-  <!--
-  FUTURE: NVIDIA Omniverse Web Viewer
-  <section class="viewer">
-    <iframe
-      src="/viewer/?node=001"
-      loading="lazy"
-      allow="autoplay; fullscreen; clipboard-read; clipboard-write">
-    </iframe>
-  </section>
-  -->
 
 </main>
 
