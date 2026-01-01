@@ -643,7 +643,7 @@
           <p>इन शर्तों के प्रयोजनों के लिए:</p>
           <p>“MICRORETAILX”, “हम” का अर्थ है <strong>MICRORETAILX LLC</strong>, एक डेलावेयर सीमित देयता कंपनी (LLC)।</p>
           <p>“वेबसाइट” का अर्थ है यह साइट, उप-डोमेन, कोड और संबंधित सामग्री।</p>
-          <p>“MICRORETAILX GROUP” वैश्विक परियोजनाओं का वर्णन करने के लिए एक परिचालन ढांचा है और डिफ़ॉルト रूप से एक अलग कानूनी इकाई नहीं है।</p>
+          <p>“MICRORETAILX GROUP” वैश्विक परियोजनाओं का वर्णन करने के लिए एक परिचालन ढांचा है और डिफ़ॉल्ट रूप से एक अलग कानूनी इकाई नहीं है।</p>
 
           <h2>संचालक और डेलावेयर अधिकार क्षेत्र</h2>
           <p>यह वेबसाइट विशेष रूप से <strong>MICRORETAILX LLC</strong> द्वारा संचालित है, जो डेलावेयर राज्य, यूएसए के कानूनों के तहत गठित है।</p>
@@ -1209,10 +1209,27 @@
         const targetCode = langMap[currentLang] || "en-US";
         u.lang = targetCode;
 
-        const bestVoice = voices.find(v => 
-          v.lang.startsWith(targetCode.split('-')[0]) && 
-          (v.name.includes("Neural") || v.name.includes("Premium") || v.name.includes("Natural"))
-        ) || voices.find(v => v.lang.startsWith(targetCode.split('-')[0]));
+        // Búsqueda de voz refinada para Chrome
+        let bestVoice = voices.find(v => v.lang === targetCode && (v.name.includes("Google") || v.name.includes("Neural") || v.name.includes("Natural")));
+        
+        // Refuerzo para Castellano de España (evitar México/EEUU)
+        if (targetCode === "es-ES") {
+           bestVoice = voices.find(v => v.lang === "es-ES" && v.name.includes("España")) || 
+                       voices.find(v => v.lang === "es-ES" && v.name.includes("Google")) ||
+                       voices.find(v => v.lang === "es-ES");
+        }
+        
+        // Refuerzo para Catalán
+        if (targetCode === "ca-ES") {
+           bestVoice = voices.find(v => v.lang.startsWith("ca") && v.name.includes("Google")) ||
+                       voices.find(v => v.lang.startsWith("ca"));
+        }
+
+        // Si no hay voz premium, buscar cualquiera del idioma exacto
+        if (!bestVoice) bestVoice = voices.find(v => v.lang === targetCode);
+        
+        // Si sigue sin haber, buscar por prefijo
+        if (!bestVoice) bestVoice = voices.find(v => v.lang.startsWith(targetCode.split('-')[0]));
         
         if (bestVoice) u.voice = bestVoice;
         
