@@ -1,59 +1,40 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="dark light" />
-  <title>Terms — microretailX</title>
-  <link rel="stylesheet" href="../assets/css/app.css" />
+  <meta charset="utf-8">
+  <title>MICRORETAILX</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="MICRORETAILX LLC — Project under construction">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/core/ui/main.css">
+
+  <!-- Security baseline -->
+  <meta http-equiv="Content-Security-Policy"
+        content="
+          default-src 'self';
+          script-src 'self';
+          style-src 'self';
+          media-src 'self';
+          img-src 'self';
+        ">
 </head>
+
 <body>
-  <header class="topbar" role="banner">
-    <div class="topbar-inner">
-      <div class="lang" id="lang">
-        <button class="lang-btn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language selector">
-          <span class="globe" aria-hidden="true">🌐</span>
-          <span class="lang-code" id="langCode">EN</span>
-        </button>
-        <div class="lang-panel" id="langPanel" role="menu" aria-label="Languages">
-          <button class="lang-chip" data-lang="en" role="menuitem">English (EN)</button>
-          <button class="lang-chip" data-lang="es" role="menuitem">Español (ES)</button>
-          <button class="lang-chip" data-lang="ca" role="menuitem">Català (CA)</button>
-          <button class="lang-chip" data-lang="ar" role="menuitem">العربية (AR)</button>
-          <button class="lang-chip" data-lang="zh" role="menuitem">中文 (ZH)</button>
-          <button class="lang-chip" data-lang="ru" role="menuitem">Русский (RU)</button>
-        </div>
-      </div>
 
-      <a class="brand" href="../index.html" aria-label="microretailX home">microretailX</a>
+  <!-- Background -->
+  <video id="bg-video" autoplay muted playsinline></video>
+  <canvas id="canvas"></canvas>
 
-      <nav class="nav" aria-label="Primary">
-        <a class="toplink" href="../index.html#about">ABOUT</a>
-        <div class="legal" id="legal">
-          <button class="toplink legal-btn" id="legalBtn" type="button" aria-haspopup="true" aria-expanded="false">LEGAL</button>
-          <div class="legal-panel" id="legalPanel" role="menu" aria-label="Legal links">
-            <a class="legal-link" href="./terms.html" role="menuitem">Terms</a>
-            <a class="legal-link" href="./privacy.html" role="menuitem">Privacy</a>
-            <a class="legal-link" href="./cookies.html" role="menuitem">Cookies</a>
-          </div>
-        </div>
-      </nav>
-    </div>
-  </header>
+  <!-- App root -->
+  <main id="app"></main>
 
-  <main class="page" role="main">
-    <section class="hero">
-      <h1 class="h1">Terms</h1>
-      <p class="p muted">Draft — under development.</p>
-    </section>
+  <!-- Footer -->
+  <footer id="footer"></footer>
 
-    <footer class="footer" role="contentinfo">
-      <div class="footer-inner">
-        <span>© microretailX</span>
-      </div>
-    </footer>
-  </main>
+  <!-- Bootstrap -->
+  <script type="module" src="/core/app.js"></script>
 
-  <script src="../assets/js/app.js"></script>
 </body>
 </html>
