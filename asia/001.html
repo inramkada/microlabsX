@@ -9,11 +9,10 @@
     html, body{
       margin:0; padding:0; background:#000;
       overflow:hidden;
-      /* Font Stack: Latin, Arabic, Chinese, Cyrillic, Indic */
       font-family: ui-monospace, SFMono-Regular, "SF Mono", "Segoe UI Mono", "Roboto Mono", 
-                   "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", /* Chinese */
-                   "Nirmala UI", "Mangal", "Lohit Devanagari", /* Hindi */
-                   "Tahoma", "Arial", /* Arabic fallback */
+                   "Microsoft YaHei", "Hiragino Sans GB", "Noto Sans SC", 
+                   "Nirmala UI", "Mangal", "Lohit Devanagari", 
+                   "Tahoma", "Arial", 
                    monospace;
     }
 
@@ -282,7 +281,6 @@
       .terms-panel { overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
       .terms-scroll { overflow: visible !important; height: auto !important; padding-top: 14px !important; scroll-padding-top: 0 !important; }
       
-      /* Mobile Language Scroll Fix */
       .lang-group {
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -645,7 +643,7 @@
           <p>इन शर्तों के प्रयोजनों के लिए:</p>
           <p>“MICRORETAILX”, “हम” का अर्थ है <strong>MICRORETAILX LLC</strong>, एक डेलावेयर सीमित देयता कंपनी (LLC)।</p>
           <p>“वेबसाइट” का अर्थ है यह साइट, उप-डोमेन, कोड और संबंधित सामग्री।</p>
-          <p>“MICRORETAILX GROUP” वैश्विक परियोजनाओं का वर्णन करने के लिए एक परिचालन ढांचा है और डिफ़ॉल्ट रूप से एक अलग कानूनी इकाई नहीं है।</p>
+          <p>“MICRORETAILX GROUP” वैश्विक परियोजनाओं का वर्णन करने के लिए एक परिचालन ढांचा है और डिफ़ॉルト रूप से एक अलग कानूनी इकाई नहीं है।</p>
 
           <h2>संचालक और डेलावेयर अधिकार क्षेत्र</h2>
           <p>यह वेबसाइट विशेष रूप से <strong>MICRORETAILX LLC</strong> द्वारा संचालित है, जो डेलावेयर राज्य, यूएसए के कानूनों के तहत गठित है।</p>
@@ -728,7 +726,6 @@
   <script>
     "use strict";
 
-    // --- I18N SYSTEM (7 STRATEGIC LANGUAGES) ---
     const STRINGS = {
       en: { docTitle: "TERMS OF USE (GLOBAL)", lastUpd: "Last updated:", effDate: "Effective date:", linkTerms: "Terms", linkPrivacy: "Privacy", linkCookies: "Cookies", linkPrefs: "Cookie Preferences", linkLegal: "Legal", bannerHtml: 'We use strictly necessary technologies to operate this site and store your preferences locally in your browser. Optional categories (Analytics / Marketing) are currently not active and will only apply if such technologies are implemented in the future and you explicitly enable them. You can review or change your choice anytime via <a href="#" onclick="openConsentPanel();return false;">Cookie Preferences</a>.', btnReject: "Reject", btnPrefs: "Preferences", btnAccept: "Accept", modalTitle: "COOKIE PREFERENCES", modalIntro: "Choose which optional categories you want to allow. Necessary cookies are always enabled.", catNec: "Necessary", catNecDesc: "Required for basic functionality, security and page delivery. Always on.", catAna: "Analytics", catAnaDesc: "Helps us understand traffic and improve the Website. Loaded only with your consent.", catMkt: "Marketing", catMktDesc: "Enables marketing / tracking technologies. Loaded only with your consent.", btnSave: "Save", btnAcceptAll: "Accept All" },
       es: { docTitle: "TÉRMINOS DE USO (GLOBAL)", lastUpd: "Última act.:", effDate: "Fecha efectiva:", linkTerms: "Términos", linkPrivacy: "Privacidad", linkCookies: "Cookies", linkPrefs: "Preferencias Cookies", linkLegal: "Legal", bannerHtml: 'Utilizamos tecnologías estrictamente necesarias para operar este sitio y guardar sus preferencias localmente. Las categorías opcionales (Analítica / Marketing) no están activas y solo se aplicarán si usted las habilita explícitamente. Puede cambiar su elección en <a href="#" onclick="openConsentPanel();return false;">Preferencias</a>.', btnReject: "Rechazar", btnPrefs: "Preferencias", btnAccept: "Aceptar", modalTitle: "PREFERENCIAS DE COOKIES", modalIntro: "Elija qué categorías opcionales desea permitir. Las cookies necesarias están siempre activas.", catNec: "Necesarias", catNecDesc: "Requeridas para funcionalidad básica y seguridad.", catAna: "Analítica", catAnaDesc: "Nos ayuda a entender el tráfico.", catMkt: "Marketing", catMktDesc: "Permite marketing y seguimiento.", btnSave: "Guardar", btnAcceptAll: "Aceptar Todo" },
@@ -745,21 +742,17 @@
       currentLang = lang;
       localStorage.setItem("mrxx_lang", lang);
       
-      // Update Active Button
       document.querySelectorAll(".lang-btn").forEach(b => {
         b.classList.toggle("active", b.innerText.toLowerCase() === lang);
       });
 
-      // RTL Logic for Arabic
       if(lang === "ar"){ document.body.classList.add("rtl"); }
       else { document.body.classList.remove("rtl"); }
 
-      // Content Swap
       document.querySelectorAll(".terms-body").forEach(el => el.classList.add("hidden-lang"));
       const target = document.getElementById("content-" + lang);
       if(target) target.classList.remove("hidden-lang");
 
-      // Strings Update
       const dict = STRINGS[lang] || STRINGS.en;
       document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
@@ -768,10 +761,8 @@
       const bannerText = document.getElementById("bannerText");
       if(bannerText && dict.bannerHtml) bannerText.innerHTML = dict.bannerHtml;
 
-      // DISPATCH EVENT FOR AUDIO ENGINE
       window.dispatchEvent(new Event("lang-change"));
 
-      // Reset scroll position & numbers
       const scrollContainer = document.getElementById("termsScroll") || window;
       scrollContainer.scrollTop = 0;
       numberSections();
@@ -781,7 +772,6 @@
       switchLang(currentLang);
     });
 
-    // --- EXISTING JS LOGIC (Unchanged) ---
     function setVhVar(){
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", vh + "px");
@@ -834,7 +824,6 @@
     const toggleAnalytics = document.getElementById("toggleAnalytics");
     const toggleMarketing = document.getElementById("toggleMarketing");
 
-    // Accessibility: focus trap for consent modal
     let lastActiveEl = null;
     function getFocusable(container){
       if (!container) return [];
@@ -902,7 +891,6 @@
       setTimeout(()=>document.body.classList.remove("consent-waking"), 1250);
     }
 
-    // HARD LOCK guards
     function isConsentLocked(){ return document.body.classList.contains("consent-locked"); }
     function isInsideConsentUI(node){
       return (consentModalBackdrop && consentModalBackdrop.contains(node)) ||
@@ -1069,7 +1057,6 @@
       printBtn.addEventListener("click", ()=>printViaIframe());
     }
 
-    /* --- CANVAS ANIMATION --- */
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d", { alpha:false });
     const termsPanelEl = document.querySelector(".terms-panel");
@@ -1181,7 +1168,6 @@
       const supported = !!(synth && window.SpeechSynthesisUtterance);
       if (!supported){ playBtn.disabled = true; return; }
       
-      // Load voices (Chrome needs this)
       let voices = [];
       function populateVoices() { voices = synth.getVoices(); }
       populateVoices();
@@ -1215,7 +1201,6 @@
         const part = queue.shift();
         const u = new SpeechSynthesisUtterance(part);
         
-        // --- SMART VOICE SELECTOR V23 (7 LANGS) ---
         const currentLang = localStorage.getItem("mrxx_lang") || "en";
         const langMap = { 
           "en":"en-US", "es":"es-ES", "ca":"ca-ES", "zh":"zh-CN", 
@@ -1224,13 +1209,14 @@
         const targetCode = langMap[currentLang] || "en-US";
         u.lang = targetCode;
 
-        // Try to find exact voice match, then prefix match
-        const exactVoice = voices.find(v => v.lang === targetCode);
-        const prefixVoice = voices.find(v => v.lang.startsWith(targetCode.split('-')[0]));
-        if (exactVoice) u.voice = exactVoice;
-        else if (prefixVoice) u.voice = prefixVoice;
+        const bestVoice = voices.find(v => 
+          v.lang.startsWith(targetCode.split('-')[0]) && 
+          (v.name.includes("Neural") || v.name.includes("Premium") || v.name.includes("Natural"))
+        ) || voices.find(v => v.lang.startsWith(targetCode.split('-')[0]));
         
-        u.rate = 1.05; u.pitch = 1.0; u.volume = 1.0;
+        if (bestVoice) u.voice = bestVoice;
+        
+        u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0;
         u.onend = ()=>{ if (!synth.paused) speakNext(); };
         u.onerror = ()=>{ if (!synth.paused) speakNext(); };
         setState("speaking"); synth.speak(u);
@@ -1246,7 +1232,6 @@
           else { try { synth.pause(); } catch(_){ } setState("paused"); }
           return;
         }
-        // Force fresh start
         cancelAll(); 
         const termsEl = getVisibleTerms(); 
         const text = normalizeText(termsEl.innerText); 
@@ -1255,12 +1240,10 @@
         speakNext();
       });
       window.addEventListener("beforeunload", ()=>{ try { synth.cancel(); } catch(_){} });
-      // Reset audio on language switch
       window.addEventListener("lang-change", ()=>{ cancelAll(); });
       setState("idle");
     })();
   
-    // Back to Top & To Bottom Logic
     window.addEventListener("DOMContentLoaded", () => {
       const backToTop = document.getElementById("backToTop");
       const toBottom = document.getElementById("toBottom");
@@ -1299,7 +1282,6 @@
       if (toBottom) toBottom.addEventListener("click", scrollToBottom);
     });
 
-    // SECURITY GUARD
     document.addEventListener("click", (e) => {
       const a = e.target.closest && e.target.closest("a");
       if (!a) return;
@@ -1308,7 +1290,6 @@
   </script>
 
 <button id="backToTop" aria-label="Back to top">↑</button>
-
 <button id="toBottom" aria-label="Go to bottom">↓</button>
 
 </body>
