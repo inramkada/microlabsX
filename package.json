@@ -1,0 +1,21 @@
+{
+  "name": "microlabsx",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare:legacy": "node scripts/extract-legacy-models.mjs",
+    "dev": "npm run prepare:legacy && astro dev",
+    "build": "npm run prepare:legacy && astro check && astro build",
+    "check": "astro check",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "7.3.4",
+    "three": "0.186.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,67 @@
+---
+import "../styles/home.css";
+---
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>microLabsX — Experimental Systems</title>
+  <meta name="description" content="microLabsX explores experimental systems across biology, automation and machine intelligence." />
+  <meta name="author" content="microLabsX" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="canonical" href="https://microlabsx.com/" />
+</head>
+<body>
+<main id="app" class="page" aria-label="MICROLABSX we are developing">
+    <header class="top-bar">
+      <div class="brand" data-text="MICROLABSX">MICROLABSX</div>
+      <div class="right-controls">
+        <div class="lang-switch" id="lang-switch">
+          <button class="lang-trigger" aria-label="Language selector" type="button">
+            <svg class="globe" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/>
+              <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M12 3c3 3 3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              <path d="M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="lang-rail" id="lang-rail" aria-label="Languages">
+            <button class="lang-pill" data-lang="en" data-label="English" type="button">EN</button>
+            <button class="lang-pill" data-lang="es" data-label="Español" type="button">ES</button>
+            <button class="lang-pill" data-lang="ca" data-label="Català" type="button">CA</button>
+            <button class="lang-pill" data-lang="eu" data-label="Euskara" type="button">EU</button>
+            <button class="lang-pill" data-lang="zh" data-label="中文 (Chinese)" type="button">ZH</button>
+            <button class="lang-pill" data-lang="hi" data-label="हिंदी (Hindi)" type="button">HI</button>
+            <button class="lang-pill" data-lang="ar" data-label="العربية (Arabic)" type="button">AR</button>
+            <button class="lang-pill" data-lang="ru" data-label="Русский" type="button">RU</button>
+            <button class="lang-pill" data-lang="fr" data-label="Français" type="button">FR</button>
+          </div>
+        </div>
+        <a class="navlink" id="contactLink" href="mailto:info@microretailx.com" data-label-en="Contact">Contact</a>
+      </div>
+    </header>
+    <div class="hero-copy" aria-hidden="true">
+      <div class="headline-wrap">
+        <div class="headline-text" id="headlineText" data-text="WE ARE DEVELOPING">WE ARE DEVELOPING</div>
+      </div>
+    </div>
+    <div class="loading hidden" id="loading" aria-hidden="true"></div>
+    <div class="transition-dim" id="transitionDim"></div>
+    <div class="vignette"></div>
+    <footer class="footer-bar">
+      <div class="copyright" id="footerComment">
+        © 2023–2026
+        <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC (DELAWARE)</a>
+        — ALL RIGHTS RESERVED — MICROLABSX: NON-COMMERCIAL R&amp;D PROJECTS
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    import "../scripts/ui.js";
+    import "../scripts/lab-hero.js";
+  </script>
+</body>
+</html>
