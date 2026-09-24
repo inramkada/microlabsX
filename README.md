@@ -7,7 +7,7 @@ Experimental systems for biology, automation and machine intelligence.
 microLabsX v2 replaces the original monolithic page with a static Astro shell and an isolated Three.js/WebGL visual engine.
 
 - Astro 7 static output
-- Three.js visual engine loaded after first paint
+- Three.js 0.162.0 visual engine loaded after first paint (pinned to the legacy v1 rendering runtime for visual fidelity)
 - original tardigrade and cryptobiosis GLB specimens preserved
 - legacy GLB data extracted at build time instead of shipping base64 inside HTML
 - WebGL render loop pauses while the document is hidden
@@ -38,3 +38,8 @@ npm run verify
 ## Production safety
 
 Production `main` remains unchanged during the v2 migration. Merge only after CI, visual QA and deployment-header verification pass.
+
+
+## Legacy visual master
+
+`legacy/index-v1.html` is the visual reference for the tardigrade scene. The WebGL runtime is intentionally pinned to Three.js 0.162.0 because that is the exact version used by the reference. The specimen material, lighting and bloom remain legacy-faithful; strong scan emphasis is reduced on the specimen so the background X remains the primary pulse/energy element.
