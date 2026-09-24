@@ -1,19 +1,19 @@
 window.MX_PAGE = {
   policyVersion: "2026-01-01",
   titleMap: {
-  "en": "Legal Notice — MICRORETAILX",
-  "es": "Aviso legal — MICRORETAILX",
-  "ca": "Avís legal — MICRORETAILX",
-  "fr": "Mentions légales — MICRORETAILX",
-  "ar": "الإشعار القانوني — MICRORETAILX",
-  "ru": "Юридическое уведомление — MICRORETAILX",
-  "hi": "कानूनी सूचना — MICRORETAILX",
-  "zh": "法律声明 — MICRORETAILX",
-  "eu": "Lege oharra — MICRORETAILX"
+  "en": "Legal Notice — MICROLABSX",
+  "es": "Aviso legal — MICROLABSX",
+  "ca": "Avís legal — MICROLABSX",
+  "fr": "Mentions légales — MICROLABSX",
+  "ar": "الإشعار القانوني — MICROLABSX",
+  "ru": "Юридическое уведомление — MICROLABSX",
+  "hi": "कानूनी सूचना — MICROLABSX",
+  "zh": "法律声明 — MICROLABSX",
+  "eu": "Lege oharra — MICROLABSX"
 
       },
   descriptionMap: {
-  "en": "MICRORETAILX global legal notice and legal framework.",
+  "en": "MICROLABSX global legal notice and legal framework.",
   "es": "Aviso legal global y marco jurídico de MICRORETAILX.",
   "ca": "Avís legal global i marc jurídic de MICRORETAILX.",
   "fr": "Mentions légales globales et cadre juridique de MICRORETAILX.",
@@ -36,7 +36,7 @@ en: {
   "footer.cookies": "Cookies",
   "footer.legal": "Legal",
 
-  "card.terms": `MICRORETAILX — LEGAL NOTICE
+  "card.terms": `MICROLABSX — LEGAL NOTICE
 
 MICRORETAILX LLC (Delaware, United States)
 MICRORETAILX GROUP – Global Operations Framework
@@ -177,7 +177,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "法律",
 
-  "card.terms": `MICRORETAILX — 法律声明
+  "card.terms": `MICROLABSX — 法律声明
 
 MICRORETAILX LLC（特拉华州，美国）
 MICRORETAILX 集团 —— 全球运营框架
@@ -318,7 +318,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Legal",
 
-  "card.terms": `MICRORETAILX — AVISO LEGAL
+  "card.terms": `MICROLABSX — AVISO LEGAL
 
 MICRORETAILX LLC (Delaware, Estados Unidos)
 MICRORETAILX GROUP – Marco de Operaciones Globales
@@ -463,7 +463,7 @@ legal@microretailx.com
   "reader.toggle": "Immersiu",
   "card.test": "Hi estem treballant — torna aviat.",
 
-  "card.terms": `MICRORETAILX — AVÍS LEGAL
+  "card.terms": `MICROLABSX — AVÍS LEGAL
 
 MICRORETAILX LLC (Delaware, Estats Units)
 MICRORETAILX GROUP – Marc d’Operacions Globals
@@ -605,7 +605,7 @@ legal@microretailx.com
   "footer.cookies": "Cookie-ak",
   "footer.legal": "Lege-oharra",
 
-  "card.terms": `MICRORETAILX — LEGE OHARRA
+  "card.terms": `MICROLABSX — LEGE OHARRA
 
 MICRORETAILX LLC (Delaware, Ameriketako Estatu Batuak)
 MICRORETAILX GROUP – Eragiketa Globalen Esparrua
@@ -661,7 +661,7 @@ MICRORETAILX LLCk ez du edukien zehaztasunari, osotasunari edo helburu jakin bat
 
 5. JABETZA INTELEKTUALA
 
-Bestelakorik adierazi ezean, Webguneko eduki guztia —besteak beste, testuak, grafikoak, diseinua, maketazioa, iturburu-kodea, simulazioak, bistaratzeak, ereduak eta dokumentazioa— MICRORETAILX LLCren jabetza esklusiboa da.
+Bestelakorik adierazi ezean, Webguneko eduki guztia —besteak beste, testuak, grafikoak, diseinua, maketazioa, iturburu-kodea, simulazioak, bistaratzeak, ereduak eta dokumentazioa— MICROLABSX LLCren jabetza esklusiboa da.
 
 Eduki hori jabetza intelektualari, egile-eskubideei eta enpresa-sekretuei buruzko araudi aplikagarriak babesten du mundu osoan.
 
@@ -747,7 +747,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Mentions légales",
 
-  "card.terms": `MICRORETAILX — MENTIONS LÉGALES
+  "card.terms": `MICROLABSX — MENTIONS LÉGALES
 
 MICRORETAILX LLC (Delaware, États-Unis)
 MICRORETAILX GROUP – Cadre des Opérations Globales
@@ -889,7 +889,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "قانوني",
 
-  "card.terms": `MICRORETAILX — الإشعار القانوني
+  "card.terms": `MICROLABSX — الإشعار القانوني
 
 MICRORETAILX LLC (ديلاوير، الولايات المتحدة الأمريكية)
 MICRORETAILX GROUP – إطار العمليات العالمية
@@ -1031,7 +1031,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Правовая информация",
 
-  "card.terms": `MICRORETAILX — ПРАВОВОЕ УВЕДОМЛЕНИЕ
+  "card.terms": `MICROLABSX — ПРАВОВОЕ УВЕДОМЛЕНИЕ
 
 MICRORETAILX LLC (Делавэр, Соединённые Штаты Америки)
 MICRORETAILX GROUP – Глобальная операционная структура
@@ -1173,7 +1173,7 @@ hi: {
   "footer.cookies": "Cookies",
   "footer.legal": "कानूनी",
 
-  "card.terms": `MICRORETAILX — कानूनी सूचना
+  "card.terms": `MICROLABSX — कानूनी सूचना
 
 MICRORETAILX LLC (डेलावेयर, संयुक्त राज्य अमेरिका)
 MICRORETAILX GROUP – वैश्विक संचालन ढांचा
@@ -1230,7 +1230,7 @@ MICRORETAILX LLC सामग्री की शुद्धता, पूर�
 
 5. बौद्धिक संपदा
 
-जब तक स्पष्ट रूप से अन्यथा न कहा गया हो, वेबसाइट की समस्त सामग्री — जिसमें, परंतु इन्हीं तक सीमित नहीं, पाठ, ग्राफिक्स, डिज़ाइन, लेआउट, स्रोत कोड, सिमुलेशन, विज़ुअलाइज़ेशन, मॉडल एवं प्रलेखन शामिल हैं — MICRORETAILX LLC की विशिष्ट संपत्ति है।
+जब तक स्पष्ट रूप से अन्यथा न कहा गया हो, वेबसाइट की समस्त सामग्री — जिसमें, परंतु इन्हीं तक सीमित नहीं, पाठ, ग्राफिक्स, डिज़ाइन, लेआउट, स्रोत कोड, सिमुलेशन, विज़ुअलाइज़ेशन, मॉडल एवं प्रलेखन शामिल हैं — MICROLABSX LLC की विशिष्ट संपत्ति है।
 
 यह सामग्री विश्व स्तर पर लागू बौद्धिक संपदा, कॉपीराइट एवं व्यापार रहस्य कानूनों द्वारा संरक्षित है।
 
