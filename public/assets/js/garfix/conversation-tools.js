@@ -275,12 +275,12 @@
       : null;
 
     const startedAt = active?.startedAt || entries[0]?.timestamp || new Date().toISOString();
-    const title = `GARFIX-AI-${new Date(startedAt).toISOString().slice(0, 10)}`;
+    const title = `MICROLABSX-AI-${new Date(startedAt).toISOString().slice(0, 10)}`;
     const direction = document.documentElement.dir === "rtl" ? "rtl" : "ltr";
 
     const rows = entries.map(entry => {
       const role = entry.role === "assistant"
-        ? "GARFIX AI"
+        ? "MICROLABSX AI"
         : entry.role === "user"
           ? "USER"
           : "SYSTEM";
@@ -321,11 +321,11 @@
 </head>
 <body>
 <header>
-  <h1>GARFIX AI</h1>
+  <h1>MICROLABSX AI</h1>
   <p>${escapeHtml(department?.label || "MICRORETAILX")} · ${escapeHtml(formatDate(startedAt))}</p>
 </header>
 ${rows}
-<footer>GARFIX AI BY MICROSTUDIOX</footer>
+<footer>MICROLABSX AI BY MICROSTUDIOX</footer>
 <script>window.addEventListener('load',()=>setTimeout(()=>window.print(),180),{once:true});<\/script>
 </body>
 </html>`);
@@ -337,7 +337,7 @@ ${rows}
   sessions.downloadPdf = downloadPdf;
 
   function enforceBrand() {
-    if (footnote) footnote.textContent = "GARFIX AI BY MICROSTUDIOX";
+    if (footnote) footnote.textContent = "MICROLABSX AI BY MICROSTUDIOX";
   }
 
   window.addEventListener("mx:garfix-session-change", renderLifecycle);
