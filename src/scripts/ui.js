@@ -7,7 +7,7 @@
 
   const buttons = Array.from(railEl.querySelectorAll(".lang-pill"));
   const contactLink = document.getElementById("contactLink");
-  const footerComment = document.getElementById("footerComment");
+  const footerRights = document.getElementById("footerRights");
   const headlineText = document.getElementById("headlineText");
   const trigger = switchEl.querySelector(".lang-trigger");
 
@@ -150,9 +150,8 @@
       document.getElementById("app")?.setAttribute("aria-label", `MICROLABSX ${dict.headline}`);
     }
 
-    if (footerComment) {
-      footerComment.innerHTML =
-        `© 2023–2026 <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC (DELAWARE)</a> — ${dict.footer}`;
+    if (footerRights) {
+      footerRights.textContent = dict.footer;
     }
 
     railEl.scrollLeft = 0;
