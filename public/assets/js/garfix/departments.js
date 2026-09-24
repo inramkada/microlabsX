@@ -369,7 +369,7 @@
     return item.starters[lang] || item.starters.en;
   }
 
-  window.__mxMICROLABSX AIDepartments = {
+  window.__mxGarfixDepartments = {
     list: () => Object.keys(departments).map(get),
     get,
     starters
