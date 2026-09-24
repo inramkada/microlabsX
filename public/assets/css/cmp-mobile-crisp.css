@@ -1,0 +1,75 @@
+/* =========================================================
+   MICRORETAILX — MOBILE CMP CRISP RENDERING
+   Safari/iOS can rasterise descendants of backdrop-filter layers.
+   Keep every consent control on a flat, isolated layer on mobile.
+   ========================================================= */
+
+@media (max-width:760px){
+  .mx-cmp{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+    isolation:isolate !important;
+  }
+
+  /* Critical iOS fix: the banner veil used a backdrop blur behind the
+     dialog. Safari can composite parts of the dialog into that filtered
+     layer, which is why individual rows/buttons appeared blurred. */
+  .mx-cmp.is-banner::before{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+    background:rgba(0,0,0,.46) !important;
+    z-index:0 !important;
+  }
+
+  .mx-cmp:not(.is-banner){
+    background:rgba(0,0,0,.86) !important;
+  }
+
+  .mx-cmp.is-banner .mx-cmp-panel,
+  .mx-cmp-panel{
+    position:relative !important;
+    z-index:1 !important;
+    animation:none !important;
+    transform:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    opacity:1 !important;
+    will-change:auto !important;
+    backface-visibility:visible !important;
+    -webkit-backface-visibility:visible !important;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .mx-cmp-head,
+  .mx-cmp-body,
+  .mx-cmp-row,
+  .mx-cmp-actions,
+  .mx-cmp .mx-btn,
+  .mx-cmp .mx-btn.primary,
+  .mx-cmp .mx-switch,
+  .mx-cmp strong,
+  .mx-cmp p,
+  .mx-cmp span{
+    transform:none !important;
+    filter:none !important;
+    -webkit-filter:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    text-shadow:none !important;
+    will-change:auto !important;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  .mx-cmp .mx-btn{
+    font-weight:650;
+    line-height:1.15;
+  }
+}
