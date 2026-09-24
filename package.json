@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "astro": "7.3.4",
-    "three": "0.186.0"
+    "three": "0.162.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.4",

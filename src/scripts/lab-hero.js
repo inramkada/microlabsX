@@ -288,7 +288,7 @@ import * as THREE from 'three';
     const scanUniforms = {
       uScanY: { value: 0 },
       uScanWidth: { value: 0.16 },
-      uScanGlow: { value: 1.05 }
+      uScanGlow: { value: 0.12 } // keep the specimen stable; strong pulse belongs to the background X
     };
 
     const creatureUniforms = {
