@@ -38,11 +38,16 @@ const canonical = `https://microlabsx.com/${page}`;
   <link rel="stylesheet" href="/assets/css/legal.css" />
   <link rel="stylesheet" href="/assets/css/landing.css" />
   <link rel="stylesheet" href="/assets/css/legal-page-layout.css" />
+  <link rel="stylesheet" href="/assets/css/responsive.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-nav-rescue.css" />
   <link rel="stylesheet" href="/assets/css/nav-premium-v2.css" />
+  <link rel="stylesheet" href="/assets/css/cmp-mobile-crisp.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-polish.css" />
 
   <link rel="stylesheet" href="/assets/css/garfix.css" />
   <link rel="stylesheet" href="/assets/css/garfix-controls.css" />
   <link rel="stylesheet" href="/assets/css/garfix-simple.css" />
+  <link rel="stylesheet" href="/assets/css/hyperion-visual.css" />
   <link rel="stylesheet" href="/assets/css/garfix-legal.css" />
   <link rel="stylesheet" href="/assets/css/legal-garfix-fix.css" />
   <link rel="stylesheet" href="/assets/css/garfix-labs.css" />
@@ -65,6 +70,21 @@ const canonical = `https://microlabsx.com/${page}`;
   </div>
 
   <QuickScroll />
+
+  <script is:inline src="/assets/js/landing/brand-effects.js"></script>
+  <script is:inline>
+    (() => {
+      const brandX = document.querySelector(".brand-x");
+      if (!brandX) return;
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+      brandX.classList.add("is-lit");
+      if (!reduce) window.__mxBrandEffects?.flare?.();
+      window.setTimeout(() => {
+        brandX.classList.remove("is-lit");
+        brandX.classList.add("is-ember");
+      }, reduce ? 0 : 1750);
+    })();
+  </script>
 
   <script is:inline src={`/assets/js/page-data/${page}.js`}></script>
   <script is:inline src="/assets/js/page-data/legal-ja.js"></script>
@@ -94,6 +114,7 @@ const canonical = `https://microlabsx.com/${page}`;
   <script is:inline src="/assets/js/garfix/hyperion-visual.js"></script>
   <script is:inline src="/assets/js/garfix/instant-actions.js"></script>
   <script is:inline src="/assets/js/garfix/legal-reader.js"></script>
+  <script is:inline src="/assets/js/landing/mobile-nav-rescue.js"></script>
   <script is:inline src="/assets/js/garfix-labs-context.js"></script>
 </body>
 </html>
