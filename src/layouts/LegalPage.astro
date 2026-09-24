@@ -1,5 +1,6 @@
 ---
 import PublicHeader from "../components/PublicHeader.astro";
+import CookieConsent from "../components/CookieConsent.astro";
 import PublicFooter from "../components/PublicFooter.astro";
 import QuickScroll from "../components/QuickScroll.astro";
 
@@ -43,6 +44,7 @@ const canonical = `https://microlabsx.com/${page}`;
   <link rel="stylesheet" href="/assets/css/nav-premium-v2.css" />
   <link rel="stylesheet" href="/assets/css/cmp-mobile-crisp.css" />
   <link rel="stylesheet" href="/assets/css/mobile-polish.css" />
+  <link rel="stylesheet" href="/assets/css/cmp-microretailx.css?v=20260924-1" />
 
   <link rel="stylesheet" href="/assets/css/garfix.css?v=20260924-labs4" />
   <link rel="stylesheet" href="/assets/css/garfix-controls.css?v=20260924-labs4" />
@@ -69,9 +71,12 @@ const canonical = `https://microlabsx.com/${page}`;
     <PublicFooter />
   </div>
 
+  <CookieConsent />
   <QuickScroll />
 
   <script is:inline src="/assets/js/landing/brand-effects.js"></script>
+  <script is:inline src="/assets/js/landing/welcome-choreography.js"></script>
+  <script is:inline src="/assets/js/landing/consent.js"></script>
   <script is:inline>
     (() => {
       const brandX = document.querySelector(".brand-x");
