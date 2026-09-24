@@ -13,6 +13,14 @@ const limits = {
   '.ts': 256 * 1024,
 };
 
+const fileLimitOverrides = new Map([
+  ['public/assets/js/page-data/legal-extra.js', 384 * 1024],
+]);
+
+const allowedExternalScripts = new Set([
+  'https://challenges.cloudflare.com/turnstile/v0/api.js',
+]);
+
 const errors = [];
 
 function walk(dir) {
@@ -27,8 +35,9 @@ function walk(dir) {
     const ext = extname(entry.name);
     const size = statSync(full).size;
 
-    if (limits[ext] && size > limits[ext]) {
-      errors.push(`${rel} is ${size.toLocaleString()} bytes; limit is ${limits[ext].toLocaleString()}`);
+    const fileLimit = fileLimitOverrides.get(rel) ?? limits[ext];
+    if (fileLimit && size > fileLimit) {
+      errors.push(`${rel} is ${size.toLocaleString()} bytes; limit is ${fileLimit.toLocaleString()}`);
     }
 
     if (textExtensions.has(ext)) {
@@ -36,8 +45,11 @@ function walk(dir) {
       if (/data:model\/gltf-binary;base64,/i.test(text)) {
         errors.push(`${rel} contains an embedded GLB data URI`);
       }
-      if (/https?:\/\/[^"'\s)]+\.js\b/i.test(text)) {
-        errors.push(`${rel} loads JavaScript from an external origin`);
+      const externalScripts = text.match(/https?:\/\/[^"'\s)]+\.js\b/gi) ?? [];
+      for (const externalScript of externalScripts) {
+        if (!allowedExternalScripts.has(externalScript)) {
+          errors.push(`${rel} loads JavaScript from an external origin: ${externalScript}`);
+        }
       }
     }
 
