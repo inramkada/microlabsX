@@ -95,7 +95,7 @@
         id="mx-garfix-panel"
         role="dialog"
         aria-modal="false"
-        aria-label="Garfix"
+        aria-label="MICROLABSX AI"
       >
         <header class="mx-garfix-head">
           <div class="mx-garfix-identity">
@@ -110,7 +110,7 @@
             </div>
 
             <div class="mx-garfix-name">
-              <strong>GARFIX AI</strong>
+              <strong>MICROLABSX AI</strong>
               <span
                 id="mx-garfix-subtitle"
               ></span>
@@ -270,7 +270,7 @@
           aria-hidden="true"
         ></span>
 
-        <span>GARFIX</span>
+        <span>MICROLABSX</span>
 
         <span
           class="mx-garfix-launcher-time"
@@ -2395,10 +2395,10 @@
 
             const permissionText =
               currentLang() === "es"
-                ? "De acuerdo. Para hacerlo necesito tu autorización. Abre Configuración y activa ‘Permitir a GARFIX controlar esta web’. Cuando lo hagas, podré operar los controles compatibles de MICRORETAILX."
+                ? "De acuerdo. Para hacerlo necesito tu autorización. Abre Configuración y activa ‘Permitir a MICROLABSX AI controlar esta web’. Cuando lo hagas, podré operar los controles compatibles de MICROLABSX."
                 : currentLang() === "ar"
-                  ? "حسنًا. لتنفيذ ذلك أحتاج إلى إذنك. افتح الإعدادات وفعّل خيار «السماح لـ GARFIX بالتحكم في هذا الموقع». بعد ذلك يمكنني تشغيل عناصر MICRORETAILX المدعومة."
-                  : "Understood. To do that I need your authorization. Open Settings and enable ‘Allow GARFIX to control this site’. Once enabled, I can operate supported MICRORETAILX controls.";
+                  ? "حسنًا. لتنفيذ ذلك أحتاج إلى إذنك. افتح الإعدادات وفعّل خيار «السماح لـ MICROLABSX AI بالتحكم في هذا الموقع». بعد ذلك يمكنني تشغيل عناصر MICROLABSX المدعومة."
+                  : "Understood. To do that I need your authorization. Open Settings and enable ‘Allow MICROLABSX AI to control this site’. Once enabled, I can operate supported MICROLABSX controls.";
 
             if (!authorized) {
               appendMessage(
