@@ -4,14 +4,14 @@
   window.__mxGarfixI18N = {
 
     en: {
-      subtitle: "MICRORETAILX AI INTERFACE",
+      subtitle: "MICROSTUDIOX AI",
       open: "Open Garfix",
       close: "Close Garfix",
       placeholder: "Ask Garfix…",
       blockedPlaceholder: "Temporarily unavailable",
       send: "Send",
       welcome:
-        "Hello. I'm Garfix, the AI interface for microretailX. How can I help?",
+        "Hello. I'm Garfix, a MICROSTUDIOX conversational technology preview. I do not currently provide or expose MICROLABSX project data. You can talk with me about whatever you need to test the technology.",
       network:
         "I couldn't reach the service. Please try again in a moment.",
       invalid:
@@ -35,14 +35,14 @@
     },
 
     es: {
-      subtitle: "INTERFAZ IA DE MICRORETAILX",
+      subtitle: "MICROSTUDIOX AI",
       open: "Abrir Garfix",
       close: "Cerrar Garfix",
       placeholder: "Pregunta a Garfix…",
       blockedPlaceholder: "Temporalmente bloqueado",
       send: "Enviar",
       welcome:
-        "Hola. Soy Garfix, la interfaz de IA de microretailX. ¿En qué puedo ayudarte?",
+        "Hola. Soy Garfix, una demostración de la tecnología conversacional de MICROSTUDIOX. Por el momento no proporciono ni expongo datos de MICROLABSX. Puedes hablar conmigo de lo que necesites para probar la tecnología.",
       network:
         "No he podido contactar con el servicio. Inténtalo de nuevo en unos instantes.",
       invalid:
