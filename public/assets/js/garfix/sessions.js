@@ -107,7 +107,7 @@
       },
       eu: {
         choose: "Aukeratu sail bat",
-        chooseHint: "GARFIXek elkarrizketa sail egokira bideratuko du hasi aurretik.",
+        chooseHint: "MICROLABSX AIk elkarrizketa sail egokira bideratuko du hasi aurretik.",
         end: "Amaitu txata",
         newChat: "Txat berria",
         saved: "Gordetako txatak",
