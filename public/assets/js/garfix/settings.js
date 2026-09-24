@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "mx_garfix_settings_v4";
+  const STORAGE_KEY = "mx_garfix_settings_microlabsx_v1";
   const END_CONFIRM_WINDOW = 3500;
 
   const defaults = {
