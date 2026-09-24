@@ -1,7 +1,7 @@
 ---
 import LanguageFlag from "./LanguageFlag.astro";
 
-const languages = [
+const languages: ReadonlyArray<readonly [string, string, string]> = [
   ["en", "English", "EN"],
   ["es", "Español", "ES"],
   ["ca", "Català", "CA"],
