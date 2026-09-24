@@ -19,52 +19,52 @@
       starters: {
         en: [
           "What is MICRORETAILX?",
-          "What can Garfix help me with?",
+          "What can MICROLABSX AI help me with?",
           "How can I contact the company?"
         ],
         es: [
           "¿Qué es MICRORETAILX?",
-          "¿En qué puede ayudarme Garfix?",
+          "¿En qué puede ayudarme MICROLABSX AI?",
           "¿Cómo puedo contactar con la empresa?"
         ],
         ar: [
           "ما هي MICRORETAILX؟",
-          "كيف يمكن لـ GARFIX مساعدتي؟",
+          "كيف يمكن لـ MICROLABSX AI مساعدتي؟",
           "كيف يمكنني التواصل مع الشركة؟"
         ],
         ca: [
           "Què és MICRORETAILX?",
-          "En què em pot ajudar Garfix?",
+          "En què em pot ajudar MICROLABSX AI?",
           "Com puc contactar amb l'empresa?"
         ],
         eu: [
           "Zer da MICRORETAILX?",
-          "Zertan lagun diezadake Garfixek?",
+          "Zertan lagun diezadake MICROLABSX AIek?",
           "Nola jar naiteke harremanetan enpresarekin?"
         ],
         zh: [
           "MICRORETAILX 是什么？",
-          "Garfix 能帮我做什么？",
+          "MICROLABSX AI 能帮我做什么？",
           "如何联系公司？"
         ],
         hi: [
           "MICRORETAILX क्या है?",
-          "Garfix मेरी किस तरह मदद कर सकता है?",
+          "MICROLABSX AI मेरी किस तरह मदद कर सकता है?",
           "मैं कंपनी से कैसे संपर्क कर सकता हूँ?"
         ],
         ru: [
           "Что такое MICRORETAILX?",
-          "Чем мне может помочь Garfix?",
+          "Чем мне может помочь MICROLABSX AI?",
           "Как связаться с компанией?"
         ],
         fr: [
           "Qu’est-ce que MICRORETAILX ?",
-          "Comment Garfix peut-il m’aider ?",
+          "Comment MICROLABSX AI peut-il m’aider ?",
           "Comment contacter l’entreprise ?"
         ],
         ja: [
           "MICRORETAILXとは何ですか？",
-          "Garfixはどのようなことを手伝えますか？",
+          "MICROLABSX AIはどのようなことを手伝えますか？",
           "会社にはどう連絡できますか？"
         ]
       }
@@ -219,52 +219,52 @@
       },
       starters: {
         en: [
-          "What can GARFIX do?",
+          "What can MICROLABSX AI do?",
           "Tell me about MICRORETAILX technology.",
           "What AI systems are being developed?"
         ],
         es: [
-          "¿Qué puede hacer GARFIX?",
+          "¿Qué puede hacer MICROLABSX AI?",
           "Háblame de la tecnología de MICRORETAILX.",
           "¿Qué sistemas de IA se están desarrollando?"
         ],
         ar: [
-          "ماذا يستطيع GARFIX أن يفعل؟",
+          "ماذا يستطيع MICROLABSX AI أن يفعل؟",
           "حدثني عن تقنية MICRORETAILX.",
           "ما أنظمة الذكاء الاصطناعي التي يجري تطويرها؟"
         ],
         ca: [
-          "Què pot fer GARFIX?",
+          "Què pot fer MICROLABSX AI?",
           "Parla'm de la tecnologia de MICRORETAILX.",
           "Quins sistemes d'IA s'estan desenvolupant?"
         ],
         eu: [
-          "Zer egin dezake GARFIXek?",
+          "Zer egin dezake MICROLABSX AIek?",
           "Azaldu MICRORETAILXen teknologia.",
           "Zer IA sistema ari dira garatzen?"
         ],
         zh: [
-          "GARFIX 能做什么？",
+          "MICROLABSX AI 能做什么？",
           "介绍一下 MICRORETAILX 的技术。",
           "正在开发哪些 AI 系统？"
         ],
         hi: [
-          "GARFIX क्या कर सकता है?",
+          "MICROLABSX AI क्या कर सकता है?",
           "MICRORETAILX की तकनीक के बारे में बताइए।",
           "कौन-से AI सिस्टम विकसित किए जा रहे हैं?"
         ],
         ru: [
-          "Что умеет GARFIX?",
+          "Что умеет MICROLABSX AI?",
           "Расскажите о технологиях MICRORETAILX.",
           "Какие системы ИИ разрабатываются?"
         ],
         fr: [
-          "Que peut faire GARFIX ?",
+          "Que peut faire MICROLABSX AI ?",
           "Parlez-moi de la technologie de MICRORETAILX.",
           "Quels systèmes d’IA sont en cours de développement ?"
         ],
         ja: [
-          "GARFIXは何ができますか？",
+          "MICROLABSX AIは何ができますか？",
           "MICRORETAILXの技術について教えてください。",
           "どのようなAIシステムを開発していますか？"
         ]
@@ -369,7 +369,7 @@
     return item.starters[lang] || item.starters.en;
   }
 
-  window.__mxGarfixDepartments = {
+  window.__mxMICROLABSX AIDepartments = {
     list: () => Object.keys(departments).map(get),
     get,
     starters
