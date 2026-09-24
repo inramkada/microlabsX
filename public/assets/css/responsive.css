@@ -1,0 +1,3096 @@
+/* =========================================================
+   MICRORETAILX - GLOBAL RESPONSIVE FOUNDATION
+   ========================================================= */
+
+html{
+  width:100%;
+  min-width:0;
+  overflow-x:hidden;
+}
+
+body{
+  width:100%;
+  min-width:0;
+  overflow-x:hidden;
+}
+
+.page{
+  width:100%;
+  min-width:0;
+}
+
+#mx-main{
+  position:relative;
+  z-index:1;
+
+  width:100%;
+  min-width:0;
+
+  padding-inline:
+    clamp(12px, 3vw, 48px);
+
+  overflow:visible;
+}
+
+
+/* Common public page shells */
+
+.about-shell,
+.shop-shell,
+.team-shell,
+.founder-shell{
+  width:min(1120px,100%) !important;
+  max-width:100% !important;
+  margin-inline:auto !important;
+}
+
+
+/* Prevent giant editorial typography */
+
+.about-hero h1{
+  font-size:
+    clamp(48px, 6.4vw, 92px) !important;
+}
+
+.about-statement h2,
+.about-system h2{
+  font-size:
+    clamp(32px, 4.2vw, 58px) !important;
+}
+
+.about-hero{
+  min-height:
+    clamp(390px, 56vh, 520px) !important;
+}
+
+
+/* =========================================================
+   HEADER STACKING
+   ========================================================= */
+
+#mx-header{
+  position:relative !important;
+  z-index:5000 !important;
+
+  overflow:visible !important;
+  isolation:isolate;
+}
+
+#mx-header .topbar{
+  position:relative;
+  z-index:5001;
+
+  overflow:visible !important;
+
+  /*
+   * mix-blend-mode on the complete topbar creates
+   * unnecessary stacking contexts for dropdowns.
+   */
+  mix-blend-mode:normal !important;
+}
+
+#mx-header nav{
+  position:relative;
+  z-index:5002;
+
+  flex-wrap:nowrap;
+  overflow:visible;
+}
+
+#mx-header .brand{
+  color:#fff;
+  text-decoration:none;
+  mix-blend-mode:normal !important;
+}
+
+#mx-header .navlink{
+  mix-blend-mode:normal !important;
+}
+
+
+/* =========================================================
+   HEADER DROPDOWNS
+   ========================================================= */
+
+.nav-dropdown{
+  position:relative;
+  z-index:5100;
+
+  display:inline-flex;
+  align-items:center;
+}
+
+.navdrop-trigger{
+  appearance:none;
+  -webkit-appearance:none;
+
+  border:1px solid transparent;
+  font:inherit;
+  cursor:pointer;
+}
+
+.nav-dropdown-menu,
+.verticals-menu{
+  position:absolute !important;
+  z-index:7000 !important;
+
+  top:calc(100% + 9px) !important;
+  left:0 !important;
+
+  width:286px !important;
+
+  display:flex !important;
+  flex-direction:column;
+  gap:6px;
+
+  padding:9px !important;
+
+  border:
+    1px solid rgba(255,255,255,.14) !important;
+
+  border-radius:16px !important;
+
+  background:
+    rgba(4,4,4,.98) !important;
+
+  box-shadow:
+    0 28px 90px rgba(0,0,0,.78),
+    0 1px 0 rgba(255,255,255,.05) inset;
+
+  backdrop-filter:
+    blur(20px) saturate(120%);
+
+  -webkit-backdrop-filter:
+    blur(20px) saturate(120%);
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transform:
+    translateY(8px) scale(.985);
+
+  transform-origin:top left;
+
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease,
+    visibility 150ms ease;
+
+  overflow:hidden;
+}
+
+.nav-dropdown.is-open
+.nav-dropdown-menu{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+
+  transform:
+    translateY(0) scale(1);
+}
+
+.nav-dropdown-menu .v-item{
+  display:flex;
+  flex-direction:column;
+
+  padding:14px 15px;
+
+  border:
+    1px solid rgba(255,255,255,.075);
+
+  border-radius:12px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  transition:
+    background 150ms ease,
+    border-color 150ms ease;
+}
+
+.nav-dropdown-menu .v-item:hover{
+  background:
+    rgba(255,255,255,.075);
+
+  border-color:
+    rgba(255,255,255,.15);
+}
+
+
+/* =========================================================
+   DESKTOP / LAPTOP SCALING
+   ========================================================= */
+
+@media(max-width:1200px){
+
+  #mx-main{
+    padding-inline:
+      clamp(14px,2.5vw,30px);
+  }
+
+  #mx-header nav{
+    gap:3px !important;
+  }
+
+  #mx-header .navlink{
+    font-size:
+      clamp(11px,1.15vw,14px) !important;
+
+    letter-spacing:.17em !important;
+
+    padding-inline:8px !important;
+  }
+
+  #mx-header .brand{
+    font-size:
+      clamp(16px,1.7vw,20px) !important;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:900px){
+
+  #mx-header{
+    padding-inline:12px !important;
+  }
+
+  #mx-header .topbar{
+    gap:8px;
+  }
+
+  #mx-header .navlink{
+    font-size:11px !important;
+    letter-spacing:.12em !important;
+    padding-inline:6px !important;
+  }
+
+  .about-grid{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:720px){
+
+  #mx-main{
+    padding-inline:14px !important;
+  }
+
+  #mx-header{
+    padding:
+      10px 12px !important;
+  }
+
+  #mx-header .topbar{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+
+  #mx-header .brand{
+    width:max-content;
+
+    font-size:16px !important;
+  }
+
+  #mx-header nav{
+    width:100%;
+
+    display:flex;
+    justify-content:flex-start;
+
+    gap:2px !important;
+
+    overflow-x:auto;
+    overflow-y:visible;
+
+    padding-bottom:2px;
+
+    scrollbar-width:none;
+  }
+
+  #mx-header nav::-webkit-scrollbar{
+    display:none;
+  }
+
+  #mx-header .navlink{
+    flex:0 0 auto;
+
+    font-size:10px !important;
+    letter-spacing:.11em !important;
+
+    padding:7px 6px !important;
+  }
+
+  .nav-contact{
+    display:none;
+  }
+
+  .nav-dropdown-menu,
+  .verticals-menu{
+    position:fixed !important;
+
+    z-index:9000 !important;
+
+    top:auto !important;
+
+    left:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+
+    width:auto !important;
+    max-height:65dvh;
+
+    overflow:auto;
+
+    transform:
+      translateY(16px) scale(.99);
+  }
+
+  .nav-dropdown.is-open
+  .nav-dropdown-menu{
+    transform:
+      translateY(0) scale(1);
+  }
+
+  body.mx-sheet-open{
+    overflow:hidden;
+  }
+
+  .about-hero h1{
+    font-size:
+      clamp(45px,14vw,72px) !important;
+  }
+
+  .about-hero{
+    min-height:auto !important;
+  }
+}
+
+
+/* Small phones */
+
+@media(max-width:420px){
+
+  #mx-main{
+    padding-inline:10px !important;
+  }
+
+  #mx-header{
+    padding-inline:10px !important;
+  }
+}
+/* =========================================================
+   NAV BUTTON RESET
+   ========================================================= */
+
+#mx-header .navdrop-trigger{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+
+  background:transparent !important;
+
+  border:
+    1px solid transparent !important;
+
+  border-radius:999px;
+
+  color:#fff !important;
+
+  box-shadow:none !important;
+
+  outline:none;
+
+  cursor:pointer;
+}
+
+#mx-header .navdrop-trigger:hover,
+#mx-header .navdrop-trigger:focus,
+#mx-header .navdrop-trigger:focus-visible,
+#mx-header .nav-dropdown.is-open > .navdrop-trigger{
+  background:
+    rgba(255,255,255,.055) !important;
+
+  border-color:
+    rgba(255,255,255,.10) !important;
+
+  color:#fff !important;
+}
+
+
+/* =========================================================
+   HEADER — CONSISTENT NAV WEIGHT
+   ========================================================= */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  font-weight:800 !important;
+}
+
+
+/* =========================================================
+   GARFIX — GLOBAL GUTTER ALIGNMENT
+   ========================================================= */
+
+.mx-garfix{
+  inset-inline-end:
+    max(
+      var(--px),
+      env(safe-area-inset-right)
+    ) !important;
+}
+
+
+/* =========================================================
+   MICRORETAILX — MASTER RESPONSIVE GRID
+   ========================================================= */
+
+:root{
+  --mx-page-max:1240px;
+  --mx-page-gutter:clamp(16px,3vw,48px);
+
+  /*
+   * Distancia real desde el borde de la ventana
+   * hasta el borde de la retícula central.
+   */
+  --mx-content-edge:
+    max(
+      var(--mx-page-gutter),
+      calc((100vw - var(--mx-page-max)) / 2)
+    );
+}
+
+
+/* =========================================================
+   GLOBAL PAGE FRAME
+   ========================================================= */
+
+#mx-main{
+  width:100% !important;
+  max-width:none !important;
+
+  box-sizing:border-box;
+
+  padding-inline:
+    var(--mx-page-gutter) !important;
+}
+
+
+/* Los shells principales viven dentro del mismo marco */
+
+.mx-founder,
+.team-shell,
+.about-shell,
+.shop-shell,
+.blog-shell,
+.providers-shell{
+  width:min(var(--mx-page-max),100%) !important;
+  max-width:100% !important;
+
+  margin-inline:auto !important;
+
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   FOUNDER — ONE MASTER GRID
+   ========================================================= */
+
+.mx-founder{
+  padding:
+    clamp(42px,6vh,72px)
+    0
+    clamp(70px,9vh,110px) !important;
+}
+
+
+/*
+ * LAS DOS SECCIONES UTILIZAN EXACTAMENTE
+ * LAS MISMAS COLUMNAS.
+ *
+ * 1 = FOTO / NOMBRE
+ * 2 = METADATA
+ * 3 = CARGO / DESCRIPCIÓN
+ */
+
+.mx-founder-head,
+.mx-founder-body{
+  display:grid !important;
+
+  grid-template-columns:
+    minmax(220px,270px)
+    minmax(135px,170px)
+    minmax(280px,1fr) !important;
+
+  column-gap:
+    clamp(30px,4vw,64px) !important;
+
+  width:100%;
+
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.mx-founder-head{
+  align-items:end !important;
+
+  padding-bottom:28px !important;
+
+  border-bottom:
+    1px solid rgba(255,255,255,.13);
+}
+
+
+/*
+ * Nombre centrado EXACTAMENTE
+ * respecto a la columna de la foto.
+ */
+
+.mx-founder-head h1{
+  grid-column:1 !important;
+
+  width:100%;
+
+  margin:0 !important;
+
+  text-align:center !important;
+
+  font-size:
+    clamp(23px,1.9vw,30px) !important;
+
+  line-height:1.05 !important;
+
+  font-weight:700 !important;
+
+  letter-spacing:-.035em !important;
+
+  overflow-wrap:anywhere;
+}
+
+
+/*
+ * FOUNDER empieza exactamente
+ * donde empezará la descripción.
+ */
+
+.mx-founder-head p{
+  grid-column:3 !important;
+
+  margin:0 !important;
+
+  text-align:left;
+
+  font-size:
+    clamp(21px,1.8vw,27px) !important;
+
+  line-height:1 !important;
+
+  font-weight:700 !important;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.mx-founder-body{
+  align-items:start !important;
+
+  padding-top:
+    clamp(30px,4vh,40px) !important;
+}
+
+
+/* FOTO */
+
+.mx-founder-photo{
+  grid-column:1 !important;
+
+  width:100% !important;
+  max-width:270px !important;
+
+  margin-inline:auto !important;
+
+  aspect-ratio:3 / 4;
+}
+
+
+/* METADATA */
+
+.mx-founder-meta{
+  grid-column:2 !important;
+
+  width:100%;
+
+  margin:0 !important;
+  padding:0 !important;
+}
+
+
+/* DESCRIPCIÓN */
+
+.mx-founder-copy{
+  grid-column:3 !important;
+
+  width:100%;
+
+  max-width:420px !important;
+
+  margin:0 !important;
+  padding:0 !important;
+}
+
+
+/*
+ * FOUNDER y Founder of MICRORETAILX.
+ * empiezan ahora exactamente en X.
+ */
+
+.mx-founder-copy p{
+  margin:0 !important;
+}
+
+
+/* =========================================================
+   GARFIX — SAME PAGE EDGE
+   ========================================================= */
+
+/*
+ * GARFIX deja de estar pegado
+ * al borde físico del monitor.
+ *
+ * Queda alineado con el borde derecho
+ * de la retícula de MICRORETAILX.
+ */
+
+.mx-garfix{
+  inset-inline-end:
+    var(--mx-content-edge) !important;
+
+  bottom:8px !important;
+}
+
+
+/* =========================================================
+   MEDIUM SCREENS
+   ========================================================= */
+
+@media(max-width:1000px){
+
+  .mx-founder-head,
+  .mx-founder-body{
+    grid-template-columns:
+      minmax(200px,240px)
+      minmax(120px,145px)
+      minmax(240px,1fr) !important;
+
+    column-gap:28px !important;
+  }
+
+  .mx-founder-photo{
+    max-width:240px !important;
+  }
+
+  .mx-founder-head h1{
+    font-size:
+      clamp(22px,2.6vw,28px) !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:760px){
+
+  :root{
+    --mx-page-gutter:14px;
+  }
+
+  .mx-founder{
+    padding-top:34px !important;
+  }
+
+  .mx-founder-head,
+  .mx-founder-body{
+    grid-template-columns:1fr !important;
+  }
+
+  .mx-founder-head{
+    gap:8px;
+  }
+
+  .mx-founder-head h1,
+  .mx-founder-head p,
+  .mx-founder-photo,
+  .mx-founder-meta,
+  .mx-founder-copy{
+    grid-column:1 !important;
+  }
+
+  .mx-founder-head h1{
+    text-align:left !important;
+
+    font-size:
+      clamp(25px,8vw,32px) !important;
+  }
+
+  .mx-founder-head p{
+    font-size:19px !important;
+  }
+
+  .mx-founder-photo{
+    width:min(68vw,230px) !important;
+
+    margin-inline:0 !important;
+  }
+
+  .mx-garfix{
+    inset-inline-end:14px !important;
+    bottom:10px !important;
+  }
+
+}
+
+
+/* =========================================================
+   MICRORETAILX — VIEWPORT FIT V2
+   ========================================================= */
+
+html,
+body{
+  min-height:100%;
+}
+
+body{
+  min-height:100dvh !important;
+}
+
+
+/*
+ * La pagina completa se reparte siempre:
+ *
+ * HEADER
+ * MAIN flexible
+ * FOOTER
+ *
+ * Si el contenido cabe, NO hay scroll.
+ * Si realmente no cabe, entonces sí.
+ */
+
+.page{
+  min-height:100dvh !important;
+
+  display:grid !important;
+
+  grid-template-rows:
+    auto
+    minmax(0,1fr)
+    auto !important;
+}
+
+
+#mx-main{
+  min-height:0 !important;
+
+  width:100% !important;
+
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   FOUNDER — FIT TO VIEWPORT
+   ========================================================= */
+
+.mx-founder{
+  width:min(1180px,100%) !important;
+
+  min-height:0 !important;
+  height:100%;
+
+  margin-inline:auto !important;
+
+  padding:
+    clamp(16px,2.8dvh,30px)
+    0
+    clamp(16px,2.8dvh,30px) !important;
+
+  display:grid;
+
+  grid-template-rows:
+    auto
+    minmax(0,1fr);
+
+  align-content:center;
+}
+
+
+/*
+ * MISMA rejilla para cabecera y cuerpo.
+ */
+
+.mx-founder-head,
+.mx-founder-body{
+  grid-template-columns:
+    minmax(210px,240px)
+    minmax(125px,150px)
+    minmax(280px,1fr) !important;
+
+  column-gap:
+    clamp(28px,3.6vw,54px) !important;
+
+  width:100%;
+}
+
+
+/* =========================================================
+   CABECERA
+   ========================================================= */
+
+.mx-founder-head{
+  border:0 !important;
+
+  padding:0 !important;
+
+  align-items:end !important;
+}
+
+
+/*
+ * Cada título lleva SU PROPIA línea.
+ * Ya no existe una línea gigante atravesando el hueco.
+ */
+
+.mx-founder-head h1,
+.mx-founder-head p{
+  margin:0 !important;
+
+  padding-bottom:
+    clamp(12px,1.8dvh,17px);
+
+  border-bottom:
+    1px solid rgba(255,255,255,.16);
+}
+
+
+/*
+ * Nombre centrado sobre la foto.
+ *
+ * Además reducimos tamaño porque mañana puede
+ * entrar un nombre mucho más largo.
+ */
+
+.mx-founder-head h1{
+  grid-column:1 !important;
+
+  width:100%;
+
+  text-align:center !important;
+
+  font-size:
+    clamp(20px,1.45vw,25px) !important;
+
+  line-height:1.08 !important;
+
+  font-weight:650 !important;
+
+  letter-spacing:-.025em !important;
+
+  overflow-wrap:anywhere;
+}
+
+
+/*
+ * FOUNDER perfectamente alineado con
+ * la descripción inferior.
+ */
+
+.mx-founder-head p{
+  grid-column:3 !important;
+
+  text-align:left !important;
+
+  font-size:
+    clamp(20px,1.55vw,26px) !important;
+
+  line-height:1.08 !important;
+
+  font-weight:700 !important;
+}
+
+
+/* =========================================================
+   CUERPO
+   ========================================================= */
+
+.mx-founder-body{
+  min-height:0;
+
+  align-items:start !important;
+
+  padding-top:
+    clamp(18px,2.8dvh,28px) !important;
+}
+
+
+/* FOTO */
+
+.mx-founder-photo{
+  grid-column:1 !important;
+
+  width:min(100%,240px) !important;
+  max-width:240px !important;
+
+  /*
+   * Limita también por ALTURA disponible.
+   * Esto es lo que evita scroll absurdo en portátil.
+   */
+
+  max-height:42dvh;
+
+  margin-inline:auto !important;
+
+  aspect-ratio:3 / 4;
+
+  align-self:start;
+}
+
+.mx-founder-photo img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+}
+
+
+/* METADATA */
+
+.mx-founder-meta{
+  grid-column:2 !important;
+
+  gap:
+    clamp(20px,3.2dvh,32px) !important;
+
+  padding:0 !important;
+  margin:0 !important;
+}
+
+.mx-founder-meta span{
+  font-size:
+    clamp(9px,.7vw,10.5px) !important;
+}
+
+.mx-founder-meta strong,
+.mx-founder-meta a{
+  font-size:
+    clamp(10.5px,.82vw,12px) !important;
+}
+
+
+/* DESCRIPTION */
+
+.mx-founder-copy{
+  grid-column:3 !important;
+
+  width:100%;
+
+  max-width:420px !important;
+
+  margin:0 !important;
+  padding:0 !important;
+}
+
+.mx-founder-copy p{
+  margin:0 !important;
+
+  font-size:
+    clamp(14px,1.05vw,17px) !important;
+}
+
+
+/* =========================================================
+   GARFIX
+   Vuelve al borde derecho.
+   Solo corregimos la altura.
+   ========================================================= */
+
+.mx-garfix{
+  inset-inline-end:
+    max(
+      16px,
+      env(safe-area-inset-right)
+    ) !important;
+
+  /*
+   * El launcher mide ~46 px.
+   * Lo centramos ópticamente dentro del footer.
+   */
+  bottom:
+    max(
+      6px,
+      env(safe-area-inset-bottom)
+    ) !important;
+}
+
+
+/* =========================================================
+   PANTALLAS BAJAS
+   ========================================================= */
+
+@media(min-width:761px) and (max-height:760px){
+
+  .mx-founder{
+    padding-block:
+      12px !important;
+  }
+
+  .mx-founder-head h1{
+    font-size:20px !important;
+  }
+
+  .mx-founder-head p{
+    font-size:20px !important;
+  }
+
+  .mx-founder-body{
+    padding-top:16px !important;
+  }
+
+  .mx-founder-photo{
+    width:min(100%,210px) !important;
+    max-width:210px !important;
+    max-height:38dvh;
+  }
+
+  .mx-founder-meta{
+    gap:18px !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:760px){
+
+  .page{
+    min-height:100dvh !important;
+  }
+
+  .mx-founder{
+    height:auto;
+
+    padding:
+      28px 0 42px !important;
+  }
+
+  .mx-founder-head,
+  .mx-founder-body{
+    grid-template-columns:1fr !important;
+  }
+
+  .mx-founder-head{
+    gap:9px;
+  }
+
+  .mx-founder-head h1,
+  .mx-founder-head p,
+  .mx-founder-photo,
+  .mx-founder-meta,
+  .mx-founder-copy{
+    grid-column:1 !important;
+  }
+
+  .mx-founder-head h1{
+    text-align:left !important;
+  }
+
+  .mx-founder-photo{
+    width:min(68vw,220px) !important;
+
+    margin-inline:0 !important;
+
+    max-height:none;
+  }
+
+  .mx-founder-meta{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr));
+  }
+
+  .mx-garfix{
+    inset-inline-end:
+      max(
+        12px,
+        env(safe-area-inset-right)
+      ) !important;
+
+    bottom:
+      max(
+        6px,
+        env(safe-area-inset-bottom)
+      ) !important;
+  }
+
+}
+
+
+/* =========================================================
+   FOUNDER — TRUE VERTICAL CENTER
+   ========================================================= */
+
+/*
+ * En la ficha Founder, MAIN ocupa exactamente
+ * el espacio que queda entre HEADER y FOOTER.
+ * El perfil completo se centra dentro de él.
+ */
+
+#mx-main:has(.mx-founder){
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  grid-template-rows:1fr !important;
+
+  align-items:center !important;
+  justify-items:center !important;
+
+  min-height:0 !important;
+}
+
+.mx-founder{
+  width:min(1180px,100%) !important;
+
+  height:auto !important;
+  min-height:0 !important;
+
+  align-self:center !important;
+
+  /*
+   * Pequeña compensación óptica.
+   * El centro matemático puro suele parecer
+   * ligeramente alto por el peso de la foto.
+   */
+  transform:translateY(8px);
+
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+
+
+/* =========================================================
+   GARFIX — FOOTER GEOMETRIC CENTER
+   ========================================================= */
+
+:root{
+  --mx-footer-reference-height:64px;
+  --mx-garfix-launcher-height:46px;
+}
+
+.mx-garfix{
+  inset-inline-end:
+    max(
+      16px,
+      env(safe-area-inset-right)
+    ) !important;
+
+  /*
+   * (64 - 46) / 2 = 9px
+   * Centro exacto respecto al footer.
+   */
+  bottom:
+    max(
+      9px,
+      env(safe-area-inset-bottom)
+    ) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:760px){
+
+  #mx-main:has(.mx-founder){
+    align-items:start !important;
+  }
+
+  .mx-founder{
+    transform:none;
+    padding-top:28px !important;
+    padding-bottom:42px !important;
+  }
+
+  .mx-garfix{
+    bottom:
+      max(
+        9px,
+        env(safe-area-inset-bottom)
+      ) !important;
+  }
+
+}
+
+
+/* =========================================================
+   GV-STYLE LINK SWEEP
+   ========================================================= */
+
+/*
+ * Enlaces reales del header:
+ * SHOP / CONTACT
+ */
+
+#mx-header nav > a.navlink{
+  position:relative;
+  overflow:visible;
+}
+
+#mx-header nav > a.navlink::after{
+  content:"" !important;
+
+  position:absolute;
+
+  left:6px;
+  right:6px;
+  bottom:2px;
+
+  height:1px;
+
+  background:
+    rgba(255,255,255,.72);
+
+  transform:scaleX(0);
+
+  transform-origin:left center;
+
+  transition:
+    transform 320ms cubic-bezier(.16,1,.3,1);
+
+  pointer-events:none;
+}
+
+#mx-header nav > a.navlink:hover::after,
+#mx-header nav > a.navlink:focus-visible::after{
+  transform:scaleX(1);
+}
+
+
+/* =========================================================
+   INFO + VERTICALS
+   NO underline animation
+   ========================================================= */
+
+#mx-header .navdrop-trigger::after,
+#mx-header .navdrop-trigger:hover::after,
+#mx-header .navdrop-trigger:focus::after,
+#mx-header .navdrop-trigger:focus-visible::after,
+#mx-header .nav-dropdown.is-open > .navdrop-trigger::after{
+  content:none !important;
+  display:none !important;
+  transform:none !important;
+}
+
+
+/* =========================================================
+   FOUNDER — LINKEDIN GV SWEEP
+   ========================================================= */
+
+.mx-founder-meta a{
+  position:relative;
+
+  display:inline-block;
+
+  width:max-content;
+
+  text-decoration:none !important;
+}
+
+.mx-founder-meta a::after{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:-3px;
+
+  height:1px;
+
+  background:
+    rgba(255,255,255,.75);
+
+  transform:scaleX(0);
+
+  transform-origin:left center;
+
+  transition:
+    transform 320ms cubic-bezier(.16,1,.3,1);
+
+  pointer-events:none;
+}
+
+.mx-founder-meta a:hover::after,
+.mx-founder-meta a:focus-visible::after{
+  transform:scaleX(1);
+}
+
+
+/*
+ * Quitamos cualquier text-decoration anterior
+ * para que no aparezcan dos líneas.
+ */
+
+.mx-founder-meta a:hover,
+.mx-founder-meta a:focus-visible{
+  text-decoration:none !important;
+}
+
+
+/* Reduced motion */
+
+@media(prefers-reduced-motion:reduce){
+
+  #mx-header nav > a.navlink::after,
+  .mx-founder-meta a::after{
+    transition:none !important;
+  }
+
+}
+
+
+/* =========================================================
+   HEADER — FINAL NAV NORMALIZATION
+   INFO / VERTICALS / SHOP / CONTACT
+   ========================================================= */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  box-sizing:border-box !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  min-height:34px !important;
+
+  margin:0 !important;
+  padding:7px 9px !important;
+
+  border:1px solid transparent !important;
+  border-radius:0 !important;
+
+  background:transparent !important;
+  box-shadow:none !important;
+
+  color:#fff !important;
+
+  font-family:inherit !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+
+  letter-spacing:.17em !important;
+  text-transform:uppercase !important;
+
+  text-decoration:none !important;
+
+  appearance:none !important;
+  -webkit-appearance:none !important;
+
+  cursor:pointer;
+}
+
+
+/* Todos iguales también al hover */
+
+#mx-header .navlink:hover,
+#mx-header .navlink:focus-visible,
+#mx-header .navdrop-trigger:hover,
+#mx-header .navdrop-trigger:focus-visible{
+  background:transparent !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+
+  color:#fff !important;
+}
+
+
+/* INFO / VERTICALS abiertos:
+   nada de caja gris ni píldora */
+
+#mx-header .nav-dropdown.is-open > .navdrop-trigger,
+#mx-header .verticals.is-open,
+#mx-header .info-dropdown.is-open{
+  background:transparent !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+
+
+/* Evitar reglas antiguas de VERTICALS */
+
+#mx-header .verticals{
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+}
+
+
+/* =========================================================
+   SWEEP — MÁS LENTO
+   Solo enlaces reales
+   ========================================================= */
+
+#mx-header nav > a.navlink::after{
+  transition:
+    transform 560ms cubic-bezier(.16,1,.3,1) !important;
+}
+
+
+/* LinkedIn: misma velocidad */
+
+.mx-founder-meta a::after{
+  transition:
+    transform 560ms cubic-bezier(.16,1,.3,1) !important;
+}
+
+
+/* INFO + VERTICALS jamás tienen barrido */
+
+#mx-header .navdrop-trigger::after,
+#mx-header .navdrop-trigger:hover::after,
+#mx-header .navdrop-trigger:focus-visible::after,
+#mx-header .nav-dropdown.is-open > .navdrop-trigger::after{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:900px){
+
+  #mx-header .navlink,
+  #mx-header .navdrop-trigger{
+    font-size:11px !important;
+    letter-spacing:.14em !important;
+    padding-inline:7px !important;
+  }
+
+}
+
+
+/* === MX GLOBAL ADAPTIVE V3 START === */
+
+
+/* =========================================================
+   MASTER FRAME
+   100% browser zoom = design reference
+   ========================================================= */
+
+:root{
+  --mx-frame-max:1180px;
+
+  --mx-gutter:
+    clamp(14px,2.5vw,40px);
+}
+
+
+html,
+body{
+  width:100%;
+  min-width:0;
+
+  overflow-x:hidden;
+}
+
+
+/*
+ * Cuando el contenido es corto:
+ *
+ * HEADER
+ * MAIN
+ * FOOTER
+ *
+ * ocupan como mínimo el viewport.
+ *
+ * Cuando el contenido es largo,
+ * la página crece naturalmente.
+ */
+
+.page{
+  width:100%;
+
+  min-height:100dvh !important;
+
+  display:grid !important;
+
+  grid-template-rows:
+    auto
+    minmax(0,1fr)
+    auto !important;
+}
+
+
+/* MAIN universal */
+
+#mx-main,
+.page > main{
+  width:100%;
+  min-width:0;
+  min-height:0;
+
+  box-sizing:border-box;
+}
+
+
+#mx-main{
+  padding-inline:
+    var(--mx-gutter) !important;
+}
+
+
+/* =========================================================
+   COMMON PAGE WIDTH
+   ========================================================= */
+
+:where(
+  .about-shell,
+  .shop-shell,
+  .team-shell,
+  .mx-founder,
+  .blog-shell,
+  .providers-shell
+){
+  width:
+    min(
+      var(--mx-frame-max),
+      100%
+    ) !important;
+
+  max-width:100% !important;
+
+  margin-inline:auto !important;
+
+  box-sizing:border-box;
+}
+
+
+/* Multimedia nunca rompe el marco */
+
+#mx-main img,
+#mx-main video,
+#mx-main svg{
+  max-width:100%;
+}
+
+
+/* Grid/flex children pueden contraerse */
+
+#mx-main *,
+.page > main *{
+  min-width:0;
+}
+
+
+/* =========================================================
+   GV STYLE NAV SWEEP
+   INFO / VERTICALS / SHOP / CONTACT
+   ========================================================= */
+
+/*
+ * Todos forman ahora una única familia visual,
+ * sean <a> o <button>.
+ */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  position:relative !important;
+
+  overflow:visible !important;
+
+  background:transparent !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+}
+
+
+/*
+ * Línea:
+ *
+ * inicio lento
+ * aceleración fuerte al final
+ */
+
+#mx-header .navlink::after,
+#mx-header .navdrop-trigger::after{
+  content:"" !important;
+
+  display:block !important;
+
+  position:absolute !important;
+
+  left:8px !important;
+  right:8px !important;
+  bottom:1px !important;
+
+  height:1px !important;
+
+  background:
+    rgba(255,255,255,.72) !important;
+
+  transform:
+    scaleX(0) !important;
+
+  transform-origin:
+    left center !important;
+
+  /*
+   * Muy lento al salir,
+   * bastante rápido en el tramo final.
+   */
+  transition:
+    transform
+    760ms
+    cubic-bezier(.70,0,.90,.45)
+    !important;
+
+  pointer-events:none;
+
+  will-change:transform;
+}
+
+
+/*
+ * Hover / teclado
+ */
+
+#mx-header .navlink:hover::after,
+#mx-header .navlink:focus-visible::after,
+#mx-header .navdrop-trigger:hover::after,
+#mx-header .navdrop-trigger:focus-visible::after{
+  transform:
+    scaleX(1) !important;
+}
+
+
+/*
+ * INFO / VERTICALS:
+ * mientras el desplegable siga abierto,
+ * la línea permanece completada.
+ */
+
+#mx-header
+.nav-dropdown.is-open
+> .navdrop-trigger::after{
+  transform:
+    scaleX(1) !important;
+}
+
+
+/* Eliminar cualquier caja gris vieja */
+
+#mx-header
+.nav-dropdown.is-open
+> .navdrop-trigger,
+
+#mx-header
+.nav-dropdown.is-open,
+
+#mx-header
+.verticals.is-open,
+
+#mx-header
+.info-dropdown.is-open{
+  background:
+    transparent !important;
+
+  border-color:
+    transparent !important;
+
+  box-shadow:
+    none !important;
+}
+
+
+/* =========================================================
+   LINKEDIN — SAME SWEEP
+   ========================================================= */
+
+.mx-founder-meta a,
+.mx-founder-profile-meta a{
+  position:relative;
+
+  display:inline-block;
+
+  width:max-content;
+
+  text-decoration:none !important;
+}
+
+
+.mx-founder-meta a::after,
+.mx-founder-profile-meta a::after{
+  content:"";
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:-3px;
+
+  height:1px;
+
+  background:
+    rgba(255,255,255,.72);
+
+  transform:scaleX(0);
+
+  transform-origin:left center;
+
+  transition:
+    transform
+    760ms
+    cubic-bezier(.70,0,.90,.45);
+
+  pointer-events:none;
+}
+
+
+.mx-founder-meta a:hover::after,
+.mx-founder-meta a:focus-visible::after,
+.mx-founder-profile-meta a:hover::after,
+.mx-founder-profile-meta a:focus-visible::after{
+  transform:scaleX(1);
+}
+
+
+/* =========================================================
+   AUTOMATIC DESKTOP HEIGHT ADAPTATION
+   ========================================================= */
+
+/*
+ * En portátiles con poca altura vertical,
+ * quitamos aire automáticamente.
+ *
+ * No es browser zoom.
+ * Es responsive real.
+ */
+
+@media(min-width:761px) and (max-height:820px){
+
+  #mx-main{
+    padding-top:
+      clamp(8px,1.4dvh,14px) !important;
+
+    padding-bottom:
+      clamp(8px,1.4dvh,14px) !important;
+  }
+
+
+  /* ABOUT */
+
+  .about-shell{
+    gap:
+      clamp(8px,1.4dvh,12px) !important;
+  }
+
+  .about-hero{
+    min-height:
+      min(48dvh,420px) !important;
+
+    padding:
+      clamp(22px,3.8dvh,38px) !important;
+  }
+
+  .about-hero h1{
+    font-size:
+      clamp(
+        44px,
+        min(6vw,9dvh),
+        78px
+      ) !important;
+  }
+
+
+  /* SHOP */
+
+  .shop-shell{
+    padding-top:
+      clamp(10px,2dvh,20px) !important;
+  }
+
+  .shop-hero{
+    min-height:
+      min(34dvh,290px) !important;
+
+    padding:
+      clamp(22px,3.5dvh,38px) !important;
+  }
+
+  .shop-hero h1{
+    font-size:
+      clamp(
+        50px,
+        min(7vw,10dvh),
+        82px
+      ) !important;
+  }
+
+
+  /* TEAM */
+
+  .team-shell{
+    padding-top:
+      clamp(16px,2.5dvh,28px) !important;
+
+    padding-bottom:
+      clamp(22px,3dvh,36px) !important;
+  }
+
+  .team-title{
+    min-height:
+      clamp(60px,8dvh,82px) !important;
+
+    padding-bottom:
+      clamp(15px,2dvh,22px) !important;
+  }
+
+  .team-directory{
+    padding-top:
+      clamp(20px,3dvh,32px) !important;
+
+    row-gap:
+      clamp(24px,4dvh,42px) !important;
+  }
+
+
+  /* BLOG / PROVIDERS */
+
+  .blog-shell,
+  .providers-shell{
+    min-height:
+      min(58dvh,480px) !important;
+  }
+
+}
+
+
+/* =========================================================
+   WIDE SCREENS
+   ========================================================= */
+
+@media(min-width:1500px){
+
+  :root{
+    --mx-frame-max:1240px;
+    --mx-gutter:42px;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:1000px){
+
+  :root{
+    --mx-gutter:
+      clamp(14px,2.2vw,26px);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:760px){
+
+  :root{
+    --mx-gutter:14px;
+  }
+
+  .page{
+    min-height:100svh !important;
+  }
+
+  #mx-main{
+    padding-inline:
+      14px !important;
+  }
+
+  /*
+   * En móvil no intentamos meter contenido largo
+   * artificialmente en una sola pantalla.
+   * Refluye y hace scroll normal.
+   */
+
+  :where(
+    .about-shell,
+    .shop-shell,
+    .team-shell,
+    .mx-founder,
+    .blog-shell,
+    .providers-shell
+  ){
+    width:100% !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOTION ACCESSIBILITY
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  #mx-header .navlink::after,
+  #mx-header .navdrop-trigger::after,
+  .mx-founder-meta a::after,
+  .mx-founder-profile-meta a::after{
+    transition:none !important;
+  }
+
+}
+
+
+/* === MX GLOBAL ADAPTIVE V3 END === */
+
+/* =========================================================
+   HEADER — FINAL SWEEP V4
+   Reliable for BUTTONS + LINKS
+   ========================================================= */
+
+/*
+ * Eliminamos los pseudo-elementos antiguos.
+ * El barrido pasa a ser un background independiente.
+ */
+
+#mx-header .navlink::after,
+#mx-header .navdrop-trigger::after{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* INFO / VERTICALS / SHOP / CONTACT */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  background-color:transparent !important;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.78),
+      rgba(255,255,255,.78)
+    ) !important;
+
+  background-repeat:no-repeat !important;
+
+  background-position:
+    left calc(100% - 1px) !important;
+
+  background-size:
+    0 1px !important;
+
+  /*
+   * Arranque deliberadamente lento,
+   * aceleración clara al final.
+   */
+  transition:
+    background-size
+    850ms
+    cubic-bezier(.78,0,.98,.58),
+    color 180ms ease !important;
+}
+
+
+/* Barrido */
+
+#mx-header .navlink:hover,
+#mx-header .navlink:focus-visible,
+#mx-header .navdrop-trigger:hover,
+#mx-header .navdrop-trigger:focus-visible{
+  background-size:
+    100% 1px !important;
+}
+
+
+/*
+ * INFO y VERTICALS mantienen
+ * la línea cuando su menú está abierto.
+ */
+
+#mx-header
+.nav-dropdown.is-open
+> .navdrop-trigger{
+  background-size:
+    100% 1px !important;
+}
+
+
+/* =========================================================
+   INFO SUBMENU
+   ABOUT / TEAM / BLOG / PROVIDERS
+   ========================================================= */
+
+#mx-header .nav-dropdown-menu .v-item{
+  position:relative;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.58),
+      rgba(255,255,255,.58)
+    ) !important;
+
+  background-repeat:no-repeat !important;
+
+  background-position:
+    left calc(100% - 6px) !important;
+
+  background-size:
+    0 1px !important;
+
+  transition:
+    background-size
+    850ms
+    cubic-bezier(.78,0,.98,.58),
+    background-color 180ms ease,
+    border-color 180ms ease !important;
+}
+
+
+#mx-header .nav-dropdown-menu .v-item:hover,
+#mx-header .nav-dropdown-menu .v-item:focus-visible{
+  background-size:
+    calc(100% - 26px) 1px !important;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  #mx-header .navlink,
+  #mx-header .navdrop-trigger,
+  #mx-header .nav-dropdown-menu .v-item{
+    transition:none !important;
+  }
+
+}
+
+
+/* =========================================================
+   HEADER — FINAL SWEEP V4
+   Reliable for BUTTONS + LINKS
+   ========================================================= */
+
+/*
+ * Eliminamos los pseudo-elementos antiguos.
+ * El barrido pasa a ser un background independiente.
+ */
+
+#mx-header .navlink::after,
+#mx-header .navdrop-trigger::after{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* INFO / VERTICALS / SHOP / CONTACT */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  background-color:transparent !important;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.78),
+      rgba(255,255,255,.78)
+    ) !important;
+
+  background-repeat:no-repeat !important;
+
+  background-position:
+    left calc(100% - 1px) !important;
+
+  background-size:
+    0 1px !important;
+
+  /*
+   * Arranque deliberadamente lento,
+   * aceleración clara al final.
+   */
+  transition:
+    background-size
+    850ms
+    cubic-bezier(.78,0,.98,.58),
+    color 180ms ease !important;
+}
+
+
+/* Barrido */
+
+#mx-header .navlink:hover,
+#mx-header .navlink:focus-visible,
+#mx-header .navdrop-trigger:hover,
+#mx-header .navdrop-trigger:focus-visible{
+  background-size:
+    100% 1px !important;
+}
+
+
+/*
+ * INFO y VERTICALS mantienen
+ * la línea cuando su menú está abierto.
+ */
+
+#mx-header
+.nav-dropdown.is-open
+> .navdrop-trigger{
+  background-size:
+    100% 1px !important;
+}
+
+
+/* =========================================================
+   INFO SUBMENU
+   ABOUT / TEAM / BLOG / PROVIDERS
+   ========================================================= */
+
+#mx-header .nav-dropdown-menu .v-item{
+  position:relative;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,.58),
+      rgba(255,255,255,.58)
+    ) !important;
+
+  background-repeat:no-repeat !important;
+
+  background-position:
+    left calc(100% - 6px) !important;
+
+  background-size:
+    0 1px !important;
+
+  transition:
+    background-size
+    850ms
+    cubic-bezier(.78,0,.98,.58),
+    background-color 180ms ease,
+    border-color 180ms ease !important;
+}
+
+
+#mx-header .nav-dropdown-menu .v-item:hover,
+#mx-header .nav-dropdown-menu .v-item:focus-visible{
+  background-size:
+    calc(100% - 26px) 1px !important;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  #mx-header .navlink,
+  #mx-header .navdrop-trigger,
+  #mx-header .nav-dropdown-menu .v-item{
+    transition:none !important;
+  }
+
+}
+
+
+/* =========================================================
+   HEADER SWEEP — MATCH LINKEDIN FEEL
+   ========================================================= */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger,
+#mx-header .nav-dropdown-menu .v-item{
+  transition:
+    background-size
+    360ms
+    cubic-bezier(.16,1,.3,1),
+    color 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease !important;
+}
+
+
+/* LinkedIn igualado */
+
+.mx-founder-meta a::after,
+.mx-founder-profile-meta a::after{
+  transition:
+    transform
+    360ms
+    cubic-bezier(.16,1,.3,1)
+    !important;
+}
+
+
+/* =========================================================
+   HEADER SWEEP — IMMEDIATE RESPONSE
+   ========================================================= */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger,
+#mx-header .nav-dropdown-menu .v-item{
+  transition-delay:0ms !important;
+
+  transition:
+    background-size
+    240ms
+    cubic-bezier(.2,.75,.25,1)
+    0ms,
+    color 120ms ease
+    0ms !important;
+}
+
+
+/* Empieza inmediatamente desde la izquierda */
+
+#mx-header .navlink:hover,
+#mx-header .navlink:focus-visible,
+#mx-header .navdrop-trigger:hover,
+#mx-header .navdrop-trigger:focus-visible,
+#mx-header .nav-dropdown-menu .v-item:hover,
+#mx-header .nav-dropdown-menu .v-item:focus-visible{
+  background-size:100% 1px !important;
+}
+
+
+/* Al salir también responde rápido */
+
+#mx-header .navlink:not(:hover),
+#mx-header .navdrop-trigger:not(:hover){
+  transition:
+    background-size
+    180ms
+    cubic-bezier(.4,0,1,1)
+    0ms,
+    color 120ms ease
+    0ms !important;
+}
+
+
+/* LinkedIn con exactamente la misma sensación */
+
+.mx-founder-meta a::after,
+.mx-founder-profile-meta a::after{
+  transition:
+    transform
+    240ms
+    cubic-bezier(.2,.75,.25,1)
+    0ms !important;
+}
+
+
+/* =========================================================
+   HEADER SWEEP V5
+   EXACT SAME MECHANIC AS LINKEDIN
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   1. ELIMINAR el sistema background-size anterior
+   --------------------------------------------------------- */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger{
+  background-image:none !important;
+  background-size:auto !important;
+  background-position:initial !important;
+  background-repeat:no-repeat !important;
+
+  position:relative !important;
+  overflow:visible !important;
+}
+
+
+/* ---------------------------------------------------------
+   2. MISMA LINEA QUE LINKEDIN
+   --------------------------------------------------------- */
+
+#mx-header .navlink::after,
+#mx-header .navdrop-trigger::after{
+  content:"" !important;
+
+  display:block !important;
+
+  position:absolute !important;
+
+  left:8px !important;
+  right:8px !important;
+
+  bottom:1px !important;
+
+  height:1px !important;
+
+  background:
+    rgba(255,255,255,.75) !important;
+
+  transform:
+    scaleX(0) !important;
+
+  transform-origin:
+    left center !important;
+
+  opacity:1 !important;
+
+  pointer-events:none !important;
+
+  transition:
+    transform
+    240ms
+    cubic-bezier(.2,.75,.25,1)
+    0ms !important;
+}
+
+
+/* ---------------------------------------------------------
+   3. HOVER = BARRIDO INMEDIATO IZQ -> DER
+   --------------------------------------------------------- */
+
+#mx-header .navlink:hover::after,
+#mx-header .navlink:focus-visible::after,
+#mx-header .navdrop-trigger:hover::after,
+#mx-header .navdrop-trigger:focus-visible::after{
+  transform:
+    scaleX(1) !important;
+}
+
+
+/* ---------------------------------------------------------
+   4. INFO / VERTICALS abiertos
+   mantienen la línea completa
+   --------------------------------------------------------- */
+
+#mx-header
+.nav-dropdown.is-open
+> .navdrop-trigger::after{
+  transform:
+    scaleX(1) !important;
+}
+
+
+/* ---------------------------------------------------------
+   5. LINKEDIN
+   MISMA VELOCIDAD + MISMA CURVA
+   --------------------------------------------------------- */
+
+.mx-founder-meta a::after,
+.mx-founder-profile-meta a::after{
+  transform-origin:
+    left center !important;
+
+  transition:
+    transform
+    240ms
+    cubic-bezier(.2,.75,.25,1)
+    0ms !important;
+}
+
+
+/* ---------------------------------------------------------
+   6. Nada de botón / caja gris
+   --------------------------------------------------------- */
+
+#mx-header .navlink,
+#mx-header .navdrop-trigger,
+#mx-header .nav-dropdown.is-open > .navdrop-trigger{
+  background-color:
+    transparent !important;
+
+  border-color:
+    transparent !important;
+
+  box-shadow:
+    none !important;
+}
+
+
+/* ---------------------------------------------------------
+   ACCESSIBILITY
+   --------------------------------------------------------- */
+
+@media(prefers-reduced-motion:reduce){
+
+  #mx-header .navlink::after,
+  #mx-header .navdrop-trigger::after,
+  .mx-founder-meta a::after,
+  .mx-founder-profile-meta a::after{
+    transition:none !important;
+  }
+
+}
+
+
+/* =========================================================
+   TOP NAV — REAL SWEEP LINE
+   ========================================================= */
+
+#mx-header .mx-nav-sweep-target{
+  position:relative !important;
+  overflow:visible !important;
+}
+
+#mx-header .mx-nav-sweep{
+  position:absolute;
+
+  left:8px;
+  right:8px;
+  bottom:1px;
+
+  height:1px;
+
+  background:#fff;
+
+  transform:scaleX(0);
+  transform-origin:left center;
+
+  pointer-events:none;
+
+  opacity:.88;
+
+  transition:
+    transform 240ms cubic-bezier(.2,.75,.25,1);
+}
+
+#mx-header .mx-nav-sweep-target:hover > .mx-nav-sweep,
+#mx-header .mx-nav-sweep-target:focus-visible > .mx-nav-sweep{
+  transform:scaleX(1);
+}
+
+/* INFO / VERTICALS abiertos */
+#mx-header .nav-dropdown.is-open > .mx-nav-sweep-target > .mx-nav-sweep{
+  transform:scaleX(1);
+}
+
+
+/* Desactivar definitivamente las líneas CSS antiguas */
+
+#mx-header .navlink::after,
+#mx-header .navdrop-trigger::after{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* =========================================================
+   NAV SWEEP — TOP LEVEL ONLY
+   INFO / VERTICALS / SHOP / CONTACT
+   ========================================================= */
+
+
+/* SUBMENUS: absolutamente ningún barrido */
+
+#mx-header .nav-dropdown-menu .v-item,
+#mx-header .nav-dropdown-menu a{
+  background-image:none !important;
+  background-size:auto !important;
+}
+
+#mx-header .nav-dropdown-menu .v-item::after,
+#mx-header .nav-dropdown-menu a::after,
+#mx-header .nav-dropdown-menu .mx-nav-sweep{
+  content:none !important;
+  display:none !important;
+}
+
+
+/* =========================================================
+   SOLO CONTROLES PRINCIPALES
+   ========================================================= */
+
+#mx-header nav > .navlink,
+#mx-header nav > .nav-dropdown > .navdrop-trigger{
+  position:relative !important;
+}
+
+
+/* Línea real que añadimos antes */
+
+#mx-header nav > .navlink > .mx-nav-sweep,
+#mx-header nav > .nav-dropdown > .navdrop-trigger > .mx-nav-sweep{
+  display:block !important;
+
+  position:absolute !important;
+
+  left:8px !important;
+  right:8px !important;
+  bottom:0 !important;
+
+  height:1px !important;
+
+  background:#fff !important;
+
+  opacity:.85;
+
+  transform:scaleX(0) !important;
+  transform-origin:left center !important;
+
+  transition:
+    transform 240ms cubic-bezier(.2,.75,.25,1) !important;
+
+  pointer-events:none;
+}
+
+
+/* Hover inmediato izquierda -> derecha */
+
+#mx-header nav > .navlink:hover > .mx-nav-sweep,
+#mx-header nav > .navlink:focus-visible > .mx-nav-sweep,
+
+#mx-header nav > .nav-dropdown > .navdrop-trigger:hover > .mx-nav-sweep,
+#mx-header nav > .nav-dropdown > .navdrop-trigger:focus-visible > .mx-nav-sweep{
+  transform:scaleX(1) !important;
+}
+
+
+/* INFO / VERTICALS abiertos mantienen la línea */
+
+#mx-header nav > .nav-dropdown.is-open > .navdrop-trigger > .mx-nav-sweep{
+  transform:scaleX(1) !important;
+}
+
+
+/* =========================================================
+   TEAM — SAME VIEWPORT LOGIC AS FOUNDER
+   ========================================================= */
+
+
+/*
+ * MAIN ocupa el espacio real entre header y footer
+ * y centra TEAM dentro cuando cabe.
+ */
+
+#mx-main:has(.team-shell){
+  display:grid !important;
+
+  grid-template-columns:1fr !important;
+  grid-template-rows:1fr !important;
+
+  align-items:center !important;
+  justify-items:center !important;
+
+  min-height:0 !important;
+}
+
+
+/* =========================================================
+   TEAM FRAME
+   ========================================================= */
+
+.team-shell{
+  width:min(1180px,100%) !important;
+
+  height:auto !important;
+  min-height:0 !important;
+
+  margin-inline:auto !important;
+
+  padding:
+    clamp(10px,1.8dvh,20px)
+    0
+    clamp(12px,2dvh,24px) !important;
+
+  align-self:center !important;
+
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.team-title{
+  min-height:0 !important;
+
+  margin:0 !important;
+
+  padding:
+    0
+    0
+    clamp(14px,2dvh,22px) !important;
+}
+
+.team-title h1{
+  margin:0 !important;
+
+  font-size:
+    clamp(26px,2.2vw,34px) !important;
+
+  line-height:1 !important;
+}
+
+
+/* =========================================================
+   DIRECTORY — 5 x 2 DESKTOP
+   ========================================================= */
+
+.team-directory{
+  display:grid !important;
+
+  grid-template-columns:
+    repeat(5,minmax(0,1fr)) !important;
+
+  column-gap:
+    clamp(18px,2vw,30px) !important;
+
+  row-gap:
+    clamp(18px,2.6dvh,30px) !important;
+
+  padding-top:
+    clamp(18px,2.6dvh,28px) !important;
+
+  width:100% !important;
+
+  box-sizing:border-box;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.team-card{
+  width:100% !important;
+
+  min-width:0 !important;
+
+  margin:0 !important;
+}
+
+
+/*
+ * La altura de las fotos responde también
+ * a la ALTURA del monitor, no solo al ancho.
+ */
+
+.team-photo{
+  width:100% !important;
+
+  height:
+    clamp(
+      150px,
+      25dvh,
+      230px
+    ) !important;
+
+  aspect-ratio:auto !important;
+
+  overflow:hidden !important;
+}
+
+.team-photo img{
+  width:100% !important;
+  height:100% !important;
+
+  object-fit:cover !important;
+}
+
+
+/* Nombre + cargo compactos */
+
+.team-card h2{
+  margin:
+    clamp(8px,1.2dvh,12px)
+    0
+    0 !important;
+
+  font-size:
+    clamp(11px,.9vw,13px) !important;
+
+  line-height:1.15 !important;
+
+  overflow-wrap:anywhere;
+}
+
+.team-card p{
+  margin:
+    4px
+    0
+    0 !important;
+
+  font-size:
+    clamp(9px,.72vw,11px) !important;
+
+  line-height:1.2 !important;
+}
+
+
+/* =========================================================
+   LOW HEIGHT LAPTOPS
+   ========================================================= */
+
+@media(min-width:761px) and (max-height:760px){
+
+  .team-shell{
+    padding-block:6px !important;
+  }
+
+  .team-title{
+    padding-bottom:12px !important;
+  }
+
+  .team-title h1{
+    font-size:25px !important;
+  }
+
+  .team-directory{
+    padding-top:14px !important;
+
+    row-gap:16px !important;
+
+    column-gap:18px !important;
+  }
+
+  .team-photo{
+    height:
+      clamp(
+        135px,
+        22dvh,
+        185px
+      ) !important;
+  }
+
+  .team-card h2{
+    margin-top:7px !important;
+    font-size:11px !important;
+  }
+
+  .team-card p{
+    font-size:9px !important;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media(max-width:1000px) and (min-width:701px){
+
+  .team-directory{
+    grid-template-columns:
+      repeat(4,minmax(0,1fr)) !important;
+  }
+
+  /*
+   * Con más de dos filas ya dejamos crecer
+   * la página naturalmente.
+   */
+
+  #mx-main:has(.team-shell){
+    align-items:start !important;
+  }
+
+  .team-shell{
+    padding-top:30px !important;
+    padding-bottom:50px !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px){
+
+  #mx-main:has(.team-shell){
+    display:block !important;
+  }
+
+  .team-shell{
+    width:100% !important;
+
+    padding:
+      28px
+      0
+      46px !important;
+  }
+
+  .team-directory{
+    grid-template-columns:
+      repeat(2,minmax(0,1fr)) !important;
+
+    gap:
+      26px
+      14px !important;
+  }
+
+  .team-photo{
+    height:auto !important;
+
+    aspect-ratio:3 / 4 !important;
+  }
+
+  .team-title h1{
+    font-size:28px !important;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE NAV — FINAL RECOVERY
+   Language / Info / Verticals
+   ========================================================= */
+
+@media(max-width:760px){
+
+  /* Nunca permitir que el header recorte los paneles */
+  #mx-header,
+  #mx-header .topbar{
+    overflow:visible !important;
+  }
+
+  #mx-header{
+    z-index:15000 !important;
+  }
+
+
+  /* =======================================================
+     LANGUAGE SHEET
+     ======================================================= */
+
+  #lang-switch.is-open #lang-rail{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    top:auto !important;
+    bottom:12px !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:20000 !important;
+  }
+
+
+  /* =======================================================
+     INFO + VERTICALS SHEETS
+     ======================================================= */
+
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu,
+  #mx-header #verticals.is-open > .verticals-menu{
+
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    top:auto !important;
+    bottom:12px !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:20000 !important;
+  }
+
+
+  /* El contenido interior sí debe poder pulsarse */
+
+  #lang-rail *,
+  #mx-header .nav-dropdown-menu *,
+  #mx-header .verticals-menu *{
+    pointer-events:auto !important;
+  }
+
+
+  /* Bloqueo de fondo al abrir un sheet */
+
+  body.mx-sheet-open{
+    overflow:hidden !important;
+    touch-action:none;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE DROPDOWNS — CLEAN FINAL OVERRIDE
+   ========================================================= */
+
+@media (max-width:760px){
+
+  #mx-header,
+  #mx-header .topbar,
+  #mx-header nav{
+    overflow:visible !important;
+  }
+
+  #mx-header{
+    z-index:15000 !important;
+  }
+
+
+  /* -------------------------
+     INFO / VERTICALS
+     ------------------------- */
+
+  #mx-header .nav-dropdown > .nav-dropdown-menu{
+    display:none !important;
+  }
+
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+    top:auto !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    flex-direction:column !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:20000 !important;
+  }
+
+
+  /* legacy verticals-menu por seguridad */
+
+  #mx-header #verticals > .verticals-menu{
+    display:none !important;
+  }
+
+  #mx-header #verticals.is-open > .verticals-menu{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+    top:auto !important;
+
+    width:auto !important;
+
+    flex-direction:column !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:20000 !important;
+  }
+
+
+  /* -------------------------
+     LANGUAGES
+     ------------------------- */
+
+  #lang-rail{
+    display:none !important;
+  }
+
+  #lang-switch.is-open #lang-rail{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    bottom:12px !important;
+    top:auto !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:20000 !important;
+  }
+
+
+  /* Todos los links siguen siendo pulsables */
+
+  #lang-rail a,
+  #lang-rail button,
+  #mx-header .nav-dropdown-menu a,
+  #mx-header .verticals-menu a{
+    pointer-events:auto !important;
+  }
+
+
+  body.mx-sheet-open{
+    overflow:hidden !important;
+  }
+
+}
+
+
