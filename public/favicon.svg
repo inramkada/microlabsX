@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 343 343" role="img" aria-label="MicroLabsX">
+  <style>
+    .mark { fill: #14493C; }
+    @media (prefers-color-scheme: dark) { .mark { fill: #2E7D63; } }
+  </style>
+  <g class="mark">
+    <path d="M16 47L95.5 47L162 113.5L162 163L112.5 163L16 66.5Z"/>
+    <path d="M328 47L248.5 47L182 113.5L182 163L231.5 163L328 66.5Z"/>
+    <path d="M16 299L95.5 299L162 232.5L162 183L112.5 183L16 279.5Z"/>
+    <path d="M328 299L248.5 299L182 232.5L182 183L231.5 183L328 279.5Z"/>
+  </g>
+</svg>
