@@ -44,3 +44,69 @@ body[data-site="microlabsx"] .mx-garfix-launcher > span:not(.mx-garfix-launcher-
   letter-spacing:.12em;
   text-transform:uppercase;
 }
+
+
+/* =========================================================
+   VISIBLE GARFIX LABS LAUNCHER
+   microRetailX uses a minimal dot. microLabsX exposes the
+   technology preview explicitly so visitors know it is usable.
+   ========================================================= */
+body[data-site="microlabsx"] .mx-garfix-launcher{
+  width:auto !important;
+  min-width:126px !important;
+  height:42px !important;
+  min-height:42px !important;
+  padding:0 14px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:9px !important;
+  border-radius:999px !important;
+  background:rgba(0,0,0,.94) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:
+    0 12px 42px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+body[data-site="microlabsx"] .mx-garfix-launcher > span:not(.mx-garfix-launcher-dot):not(.mx-garfix-launcher-time){
+  display:inline !important;
+  color:rgba(255,255,255,.94) !important;
+  font-size:10px !important;
+  font-weight:750 !important;
+  line-height:1 !important;
+  letter-spacing:.16em !important;
+  white-space:nowrap !important;
+}
+
+body[data-site="microlabsx"] .mx-garfix-launcher-dot{
+  width:7px !important;
+  height:7px !important;
+  flex:0 0 7px !important;
+  border-radius:50% !important;
+  background:#fff !important;
+  box-shadow:
+    0 0 0 3px rgba(255,255,255,.06),
+    0 0 14px rgba(255,255,255,.38) !important;
+}
+
+body[data-site="microlabsx"] .mx-garfix[data-locked="1"] .mx-garfix-launcher-time{
+  display:inline !important;
+}
+
+body[data-site="microlabsx"] .mx-garfix-launcher:hover{
+  background:rgba(12,12,12,.98) !important;
+  border-color:rgba(255,255,255,.32) !important;
+}
+
+@media (max-width:640px){
+  body[data-site="microlabsx"] .mx-garfix-launcher{
+    min-width:118px !important;
+    padding:0 12px !important;
+  }
+
+  body[data-site="microlabsx"] .mx-garfix-launcher > span:not(.mx-garfix-launcher-dot):not(.mx-garfix-launcher-time){
+    font-size:9.5px !important;
+    letter-spacing:.14em !important;
+  }
+}
