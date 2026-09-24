@@ -1,6 +1,7 @@
 ---
 import "../styles/home.css";
 import LanguageSelector from "../components/LanguageSelector.astro";
+import CookieConsent from "../components/CookieConsent.astro";
 ---
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -8,7 +9,8 @@ import LanguageSelector from "../components/LanguageSelector.astro";
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>microLabsX — Experimental Systems</title>
-  <meta name="description" content="microLabsX explores experimental systems across biology, automation and machine intelligence." />\n  <meta name="robots" content="index, follow" />
+  <meta name="description" content="microLabsX explores experimental systems across biology, automation and machine intelligence." />
+  <meta name="robots" content="index, follow" />
   <meta name="author" content="microLabsX" />
   <meta name="referrer" content="no-referrer" />
   <meta name="color-scheme" content="dark" />
@@ -20,8 +22,11 @@ import LanguageSelector from "../components/LanguageSelector.astro";
   <link rel="stylesheet" href="/assets/css/garfix-simple.css?v=20260924-labs4" />
   <link rel="stylesheet" href="/assets/css/hyperion-visual.css?v=20260924-labs4" />
   <link rel="stylesheet" href="/assets/css/garfix-microlabsx.css?v=20260924-x1" />
+  <link rel="stylesheet" href="/assets/css/cmp-microretailx.css?v=20260924-1" />
+  <link rel="stylesheet" href="/assets/css/cmp-mobile-crisp.css?v=20260924-1" />
 </head>
 <body data-page="home" data-site="microlabsx">
+  <div id="app-root">
   <main id="app" class="page" aria-label="MICROLABSX we are developing">
     <header id="mx-header" class="lab-header">
       <div class="topbar">
@@ -53,7 +58,14 @@ import LanguageSelector from "../components/LanguageSelector.astro";
       <div class="footer-links" aria-label="Legal">
         <a href="/terms">TERMS</a>
         <a href="/privacy">PRIVACY</a>
-        <a href="/cookies">COOKIES</a>
+        <span class="footer-cookie-wrap">
+          <a href="/cookies">COOKIES</a>
+          <button type="button" class="cookie-gear" id="cookiePreferencesGear" aria-label="Cookie Preferences" data-tip="Cookie Preferences">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M19.43 12.98c.04-.32.07-.65.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.49.49 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.38 2.65c-.61.25-1.17.58-1.69.98l-2.49-1c-.23-.09-.48 0-.6.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.09.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z" />
+            </svg>
+          </button>
+        </span>
         <a href="/legal">LEGAL</a>
       </div>
 
@@ -65,6 +77,9 @@ import LanguageSelector from "../components/LanguageSelector.astro";
       </div>
     </div>
   </footer>
+  </div>
+
+  <CookieConsent />
 
   <noscript>
     <p class="no-js">microLabsX requires JavaScript for the interactive specimen viewer.</p>
@@ -76,6 +91,10 @@ import LanguageSelector from "../components/LanguageSelector.astro";
     import "../scripts/language-flags.js";
     import "../scripts/bootstrap.js";
   </script>
+
+  <script is:inline src="/assets/js/landing/brand-effects.js"></script>
+  <script is:inline src="/assets/js/landing/welcome-choreography.js"></script>
+  <script is:inline src="/assets/js/landing/consent.js"></script>
 
   <script is:inline>
     // GARFIX bootstrap fallback: the UI must render even if the full
