@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 
-const path = 'legacy/index-v1.html';
-const src = fs.readFileSync(path, 'utf8');
+const html = fs.readFileSync('legacy/index-v1.html', 'utf8');
+const current = fs.readFileSync('src/scripts/lab-hero.js', 'utf8');
 
 function clean(s) {
   return s
@@ -9,74 +9,73 @@ function clean(s) {
     .replace(/[A-Za-z0-9+/=]{1200,}/g, '<LONG_EMBEDDED_DATA>');
 }
 
+console.log('LEGACY_RUNTIME_AUDIT_BEGIN');
+console.log('legacy_bytes=' + Buffer.byteLength(html));
+
+const importMapMatch = html.match(/<script\s+type=["']importmap["'][^>]*>([\s\S]*?)<\/script>/i);
+if (importMapMatch) {
+  console.log('\n### IMPORTMAP');
+  console.log(clean(importMapMatch[1]).slice(0,12000));
+} else {
+  console.log('\n### IMPORTMAP NOT_FOUND');
+}
+
+const scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)];
+const moduleScript = scripts
+  .map(m => ({attrs:m[1], body:m[2]}))
+  .find(x => /type=["']module["']/i.test(x.attrs) && x.body.includes("import * as THREE"));
+
+if (!moduleScript) throw new Error('Legacy Three module script not found');
+
+let legacy = moduleScript.body;
+
+// Replace only the two giant embedded models with the v2 external URLs.
+legacy = legacy.replace(
+  /const MODEL_URL\s*=\s*['"]data:model\/gltf-binary;base64,[A-Za-z0-9+/=]+['"]\s*;/,
+  "const MODEL_URL = '/assets/models/tardigrade.glb';"
+);
+legacy = legacy.replace(
+  /const SECOND_MODEL_URL\s*=\s*['"]data:model\/gltf-binary;base64,[A-Za-z0-9+/=]+['"]\s*;/,
+  "const SECOND_MODEL_URL = '/assets/models/crypto-specimen.glb';"
+);
+
+// Normalize the script-tag indentation only.
+const lines = legacy.replace(/^\n+|\n+$/g,'').split('\n');
+const indents = lines.filter(l=>l.trim()).map(l => (l.match(/^\s*/)?.[0].length || 0));
+const minIndent = indents.length ? Math.min(...indents) : 0;
+legacy = lines.map(l => l.slice(Math.min(minIndent,l.length))).join('\n') + '\n';
+
+fs.writeFileSync('/tmp/legacy-module.js', legacy, 'utf8');
+
+console.log('\n### MODULE_SIZE');
+console.log('legacy_module_bytes=' + Buffer.byteLength(legacy));
+console.log('current_module_bytes=' + Buffer.byteLength(current));
+
 const terms = [
-  'UnrealBloomPass',
-  'bloomPass',
-  'AmbientLight',
-  'DirectionalLight',
-  'PointLight',
-  'HemisphereLight',
-  'SpotLight',
+  'renderer.outputColorSpace',
   'toneMapping',
-  'toneMappingExposure',
-  'outputColorSpace',
-  'outputEncoding',
-  'MeshPhysicalMaterial',
-  'MeshStandardMaterial',
-  'MeshPhongMaterial',
-  'MeshLambertMaterial',
-  'MeshBasicMaterial',
-  'emissiveIntensity',
-  'envMapIntensity',
-  'roughness',
-  'metalness',
-  'clearcoat',
-  'wireframe',
-  'ShaderMaterial',
+  'const bloomPass',
+  'const ambientLight',
+  'const keyLight',
+  'const fillLight',
+  'const rimLight',
   'uScanGlow',
-  'scanBand',
-  'xDots',
-  'createXDots',
-  'uPulseGain',
-  'registerStressClick',
-  'renderer.render',
+  'function makeDisplayMaterial',
+  'const emissiveBoost',
+  'wireframeTargetOpacity',
+  'const pulse =',
+  'rimLight.intensity',
   'composer.render'
 ];
 
-console.log('LEGACY_VISUAL_AUDIT_BEGIN');
-console.log('bytes=' + Buffer.byteLength(src));
-
 for (const term of terms) {
-  let from = 0;
-  let count = 0;
-  while (count < 8) {
-    const idx = src.indexOf(term, from);
-    if (idx < 0) break;
-    const snippet = clean(src.slice(Math.max(0, idx - 1000), Math.min(src.length, idx + 2600)));
-    console.log('\n### TERM ' + term + ' #' + (count + 1) + ' @ ' + idx);
-    console.log(snippet);
-    from = idx + term.length;
-    count++;
+  console.log('\n### TERM ' + term);
+  for (const [label, src] of [['LEGACY', legacy], ['CURRENT', current]]) {
+    const idx=src.indexOf(term);
+    console.log('---' + label + ' @ ' + idx + '---');
+    if(idx>=0) console.log(clean(src.slice(Math.max(0,idx-550),Math.min(src.length,idx+1800))));
+    else console.log('NOT_FOUND');
   }
-  if (count === 0) console.log('\n### TERM ' + term + ' NOT_FOUND');
 }
 
-const regexes = [
-  ['LIGHT_CTOR', /new\s+THREE\.(?:AmbientLight|DirectionalLight|PointLight|HemisphereLight|SpotLight)\([^;]{0,400}\)/g],
-  ['BLOOM_CTOR', /new\s+UnrealBloomPass\([^;]{0,600}\)/g],
-  ['TONE', /renderer\.(?:toneMapping|toneMappingExposure|outputColorSpace|outputEncoding)[^;]{0,300};/g],
-  ['MATERIAL', /new\s+THREE\.Mesh(?:Physical|Standard|Phong|Lambert|Basic)Material\(\{[\s\S]{0,3500}?\}\)/g]
-];
-
-for (const [label, rx] of regexes) {
-  console.log('\n### REGEX ' + label);
-  let match;
-  let n = 0;
-  while ((match = rx.exec(src)) && n < 30) {
-    console.log(clean(match[0]));
-    n++;
-  }
-  if (!n) console.log('NOT_FOUND');
-}
-
-console.log('\nLEGACY_VISUAL_AUDIT_END');
+console.log('\nLEGACY_RUNTIME_AUDIT_END');

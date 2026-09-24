@@ -31,7 +31,11 @@ jobs:
           cache: npm
 
       - name: Audit legacy visual reference
-        run: node scripts/audit-legacy-visual.mjs
+        run: |
+          node scripts/audit-legacy-visual.mjs
+          echo "LEGACY_DIFF_BEGIN"
+          diff -u /tmp/legacy-module.js src/scripts/lab-hero.js | head -n 900 || true
+          echo "LEGACY_DIFF_END"
 
       - name: Source guardrails
         run: node scripts/guardrails.mjs
