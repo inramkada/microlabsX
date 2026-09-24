@@ -25,32 +25,11 @@
     ]);
 
 
-  const I18N =
-    window.__mxGarfixI18N &&
-    typeof window.__mxGarfixI18N === "object"
-      ? window.__mxGarfixI18N
-      : {
-          en: {
-            subtitle: "MICROSTUDIOX TECHNOLOGY PREVIEW",
-            open: "Open GARFIX LABS",
-            close: "Close GARFIX LABS",
-            placeholder: "Talk to GARFIX LABS…",
-            send: "Send",
-            welcome: "Hello. I'm GARFIX · LABS, a demonstration of MICROSTUDIOX conversational technology. For now I do not provide or expose MICROLABSX project data. You can talk with me about whatever you need to test the technology.",
-            footnote: "TECHNOLOGY PREVIEW · NO MICROLABSX DATA ACCESS"
-          },
-          es: {
-            subtitle: "DEMOSTRACIÓN TECNOLÓGICA DE MICROSTUDIOX",
-            open: "Abrir GARFIX LABS",
-            close: "Cerrar GARFIX LABS",
-            placeholder: "Habla con GARFIX LABS…",
-            send: "Enviar",
-            welcome: "Hola. Soy GARFIX · LABS, una demostración de la tecnología conversacional de MICROSTUDIOX. Por el momento no proporciono ni expongo datos de MICROLABSX. Puedes hablar conmigo de lo que necesites para probar la tecnología.",
-            footnote: "DEMOSTRACIÓN TECNOLÓGICA · SIN ACCESO A DATOS DE MICROLABSX"
-          }
-        };
+  const I18N = window.__mxGarfixI18N;
 
-  window.__mxGarfixI18N ||= I18N;
+  if (!I18N || typeof I18N !== "object") {
+    throw new Error("GARFIX translations unavailable");
+  }
 
 
   const state = {
@@ -125,13 +104,13 @@
               aria-hidden="true"
             >
               <img
-                src="/assets/images/garfix/garfix-labs.svg"
+                src="/assets/images/garfix/avif/neogarfix.avif"
                 alt=""
               />
             </div>
 
             <div class="mx-garfix-name">
-              <strong>GARFIX · LABS</strong>
+              <strong>GARFIX AI</strong>
               <span
                 id="mx-garfix-subtitle"
               ></span>
@@ -1755,7 +1734,6 @@
       pageContextEnabled
         ? String(
             document.getElementById("mx-main")?.innerText ||
-            document.getElementById("legal-scroll-area")?.innerText ||
             ""
           )
             .replace(/\s+/g, " ")
@@ -1770,15 +1748,14 @@
     const requestContext = {
       site: "microlabsx.com",
       vertical: "microlabsx",
-      projectType: "non-commercial R&D",
       technologyProvider: "MICROSTUDIOX",
       assistantMode: "technology-preview",
       internalDataAccess: false,
       internalDataDisclosure: false,
       dataPolicy:
-        "Do not claim access to, provide, reveal, infer or fabricate internal MICROLABSX project data. GARFIX · LABS is currently a conversational technology preview only.",
+        "Do not claim access to, provide, reveal, infer or fabricate internal MICROLABSX project data. This interface is a conversational technology preview.",
       conversationPurpose:
-        "Allow open general conversation so visitors can evaluate MICROSTUDIOX conversational technology.",
+        "Allow general conversation so visitors can evaluate MICROSTUDIOX conversational technology.",
       language:
         currentLang(),
 
@@ -2418,10 +2395,10 @@
 
             const permissionText =
               currentLang() === "es"
-                ? "De acuerdo. Para hacerlo necesito tu autorización. Abre Configuración y activa ‘Permitir a GARFIX controlar esta web’. Cuando lo hagas, podré operar los controles compatibles de MICROLABSX."
+                ? "De acuerdo. Para hacerlo necesito tu autorización. Abre Configuración y activa ‘Permitir a GARFIX controlar esta web’. Cuando lo hagas, podré operar los controles compatibles de MICRORETAILX."
                 : currentLang() === "ar"
-                  ? "حسنًا. لتنفيذ ذلك أحتاج إلى إذنك. افتح الإعدادات وفعّل خيار «السماح لـ GARFIX بالتحكم في هذا الموقع». بعد ذلك يمكنني تشغيل عناصر MICROLABSX المدعومة."
-                  : "Understood. To do that I need your authorization. Open Settings and enable ‘Allow GARFIX to control this site’. Once enabled, I can operate supported MICROLABSX controls.";
+                  ? "حسنًا. لتنفيذ ذلك أحتاج إلى إذنك. افتح الإعدادات وفعّل خيار «السماح لـ GARFIX بالتحكم في هذا الموقع». بعد ذلك يمكنني تشغيل عناصر MICRORETAILX المدعومة."
+                  : "Understood. To do that I need your authorization. Open Settings and enable ‘Allow GARFIX to control this site’. Once enabled, I can operate supported MICRORETAILX controls.";
 
             if (!authorized) {
               appendMessage(
