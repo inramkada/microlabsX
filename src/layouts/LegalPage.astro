@@ -1,0 +1,125 @@
+---
+import PublicHeader from "../components/PublicHeader.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+import PublicFooter from "../components/PublicFooter.astro";
+import QuickScroll from "../components/QuickScroll.astro";
+
+interface Props {
+  page: "legal" | "privacy" | "cookies" | "terms";
+  title: string;
+  description: string;
+}
+
+const { page, title, description } = Astro.props;
+const canonical = `https://microlabsx.com/${page}`;
+---
+
+<!doctype html>
+<html lang="en" dir="ltr" translate="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="google" content="notranslate" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href={canonical} />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#000000" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="MICROLABSX" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+
+  <link rel="stylesheet" href="/assets/css/legal.css" />
+  <link rel="stylesheet" href="/assets/css/landing.css" />
+  <link rel="stylesheet" href="/assets/css/legal-page-layout.css" />
+  <link rel="stylesheet" href="/assets/css/responsive.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-nav-rescue.css" />
+  <link rel="stylesheet" href="/assets/css/nav-premium-v2.css" />
+  <link rel="stylesheet" href="/assets/css/cmp-mobile-crisp.css" />
+  <link rel="stylesheet" href="/assets/css/mobile-polish.css" />
+  <link rel="stylesheet" href="/assets/css/cmp-microretailx.css?v=20260924-1" />
+
+  <link rel="stylesheet" href="/assets/css/garfix.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-controls.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-simple.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/hyperion-visual.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-microlabsx.css?v=20260924-x1" />
+  <link rel="stylesheet" href="/assets/css/garfix-legal.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/legal-garfix-fix.css" />
+</head>
+
+<body data-page={page} data-site="microlabsx">
+  <div class="page" id="app-root">
+    <PublicHeader showHome={true} showAccessibility={true} showPrimaryNav={false} />
+
+    <main id="legal-scroll-area" class="legal-main" tabindex="-1">
+      <section class="card">
+        <div class="legal-project-context" aria-label="MICROLABSX legal context">
+          MICROLABSX is a non-commercial R&amp;D project operated within the MICRORETAILX LLC platform.
+        </div>
+        <div class="legalcopy" data-i18n="card.terms"></div>
+      </section>
+    </main>
+
+    <PublicFooter />
+  </div>
+
+  <CookieConsent />
+  <QuickScroll />
+
+  <script is:inline src="/assets/js/landing/brand-effects.js"></script>
+  <script is:inline src="/assets/js/landing/welcome-choreography.js"></script>
+  <script is:inline src="/assets/js/landing/consent.js"></script>
+  <script is:inline>
+    (() => {
+      const brandX = document.querySelector(".brand-x");
+      if (!brandX) return;
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+      brandX.classList.add("is-lit");
+      if (!reduce) window.__mxBrandEffects?.flare?.();
+      window.setTimeout(() => {
+        brandX.classList.remove("is-lit");
+        brandX.classList.add("is-ember");
+      }, reduce ? 0 : 1750);
+    })();
+  </script>
+
+  <script is:inline src={`/assets/js/page-data/${page}.js`}></script>
+  <script is:inline src="/assets/js/page-data/legal-ja.js"></script>
+  <script is:inline src="/assets/js/page-data/legal-extra.js"></script>
+  {page === "privacy" && (
+    <>
+      <script is:inline src="/assets/js/page-data/privacy-garfix.js"></script>
+      <script is:inline src="/assets/js/page-data/privacy-garfix-extra.js"></script>
+    </>
+  )}
+  <script is:inline src="/assets/js/page-data/microlabsx-legal-brand.js?v=20260924-1"></script>
+  <script is:inline src="/assets/js/ui-translations.js"></script>
+  <script is:inline src="/assets/js/legal-page.js"></script>
+  <script is:inline src="/assets/js/landing/language-flags.js"></script>
+
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+  <script is:inline src="/assets/js/garfix/translations.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/turnstile.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/latency.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/settings.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/memory-client.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/departments.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/sessions.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/voice.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/conversation-tools.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/powers.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/hyperion-visual.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/instant-actions.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/legal-reader.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/landing/mobile-nav-rescue.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+---
+import LanguageFlag from "./LanguageFlag.astro";
+
+const languages: ReadonlyArray<readonly [string, string, string]> = [
+  ["en", "English", "EN"],
+  ["es", "Español", "ES"],
+  ["ca", "Català", "CA"],
+  ["eu", "Euskara", "EU"],
+  ["zh", "中文 (Chinese)", "ZH"],
+  ["ja", "日本語 (Japanese)", "JA"],
+  ["hi", "हिंदी (Hindi)", "HI"],
+  ["ar", "العربية (Arabic)", "AR"],
+  ["he", "עברית (Hebrew)", "HE"],
+  ["ru", "Русский", "RU"],
+  ["fr", "Français", "FR"],
+  ["de", "Deutsch", "DE"],
+  ["it", "Italiano", "IT"],
+  ["pt", "Português", "PT"],
+  ["ko", "한국어 (Korean)", "KO"],
+  ["id", "Bahasa Indonesia", "ID"],
+  ["nl", "Nederlands", "NL"],
+  ["th", "ไทย (Thai)", "TH"],
+  ["vi", "Tiếng Việt", "VI"],
+];
+---
+
+<div class="lang-switch" id="lang-switch">
+  <button class="lang-trigger" aria-label="Language selector" data-i18n-aria-label="lang.selector" type="button">
+    <svg class="globe" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7" />
+      <path d="M3 12h18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M12 3c3 3 3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+      <path d="M12 3c-3 3-3 15 0 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <div class="lang-rail" id="lang-rail" aria-label="Languages" data-i18n-aria-label="lang.languages">
+    {languages.map(([lang, label, code]) => (
+      <button class="lang-pill" lang={lang} data-lang={lang} data-label={label} type="button">
+        <span class="lang-flag" aria-hidden="true">
+          <LanguageFlag lang={lang} />
+        </span>
+        <span class="lang-pill-code">{code}</span>
+      </button>
+    ))}
+  </div>
+</div>

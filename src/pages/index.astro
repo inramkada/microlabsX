@@ -1,0 +1,138 @@
+---
+import "../styles/home.css";
+import LanguageSelector from "../components/LanguageSelector.astro";
+import CookieConsent from "../components/CookieConsent.astro";
+---
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>microLabsX — Experimental Systems</title>
+  <meta name="description" content="microLabsX explores experimental systems across biology, automation and machine intelligence." />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="microLabsX" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="canonical" href="https://microlabsx.com/" />
+
+  <link rel="stylesheet" href="/assets/css/garfix.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-controls.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-simple.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/hyperion-visual.css?v=20260924-labs4" />
+  <link rel="stylesheet" href="/assets/css/garfix-microlabsx.css?v=20260924-x1" />
+  <link rel="stylesheet" href="/assets/css/cmp-microretailx.css?v=20260924-1" />
+  <link rel="stylesheet" href="/assets/css/cmp-mobile-crisp.css?v=20260924-1" />
+</head>
+<body data-page="home" data-site="microlabsx">
+  <div id="app-root">
+  <main id="app" class="page" aria-label="MICROLABSX we are developing">
+    <header id="mx-header" class="lab-header">
+      <div class="topbar">
+        <a class="brand" href="/" aria-label="MICROLABSX home">
+          MICROLABS<span class="brand-x">X</span>
+        </a>
+
+        <nav aria-label="Primary navigation">
+          <LanguageSelector />
+          <a class="navlink nav-contact" id="contactLink" href="mailto:info@microretailx.com" data-i18n="nav.contact">CONTACT</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="hero-copy" aria-hidden="true">
+      <div class="headline-wrap">
+        <div class="headline-text" id="headlineText" data-text="WE ARE DEVELOPING" data-i18n="lab.headline">WE ARE DEVELOPING</div>
+      </div>
+    </div>
+
+    <div class="loading hidden" id="loading" aria-live="polite"></div>
+    <div class="transition-dim" id="transitionDim"></div>
+    <div class="vignette"></div>
+
+  </main>
+
+  <footer class="footer-bar mx-home-footer" id="mx-home-footer">
+    <div class="footer-inner">
+      <div class="footer-links" aria-label="Legal">
+        <a href="/terms">TERMS</a>
+        <a href="/privacy">PRIVACY</a>
+        <span class="footer-cookie-wrap">
+          <a href="/cookies">COOKIES</a>
+          <button type="button" class="cookie-gear" id="cookiePreferencesGear" aria-label="Cookie Preferences" data-tip="Cookie Preferences">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M19.43 12.98c.04-.32.07-.65.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.37-.31-.6-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.49.49 0 0 0 14 2h-4c-.25 0-.46.18-.5.42l-.38 2.65c-.61.25-1.17.58-1.69.98l-2.49-1c-.23-.09-.48 0-.6.22l-2 3.46c-.12.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.37.31.6.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.09.48 0 .6-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z" />
+            </svg>
+          </button>
+        </span>
+        <a href="/legal">LEGAL</a>
+      </div>
+
+      <div class="copyright">
+        © 2023–2026
+        <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC</a>
+        —
+        <span id="footerRights">ALL RIGHTS RESERVED — MICROLABSX: NON-COMMERCIAL R&D PROJECTS</span>
+      </div>
+    </div>
+  </footer>
+  </div>
+
+  <CookieConsent />
+
+  <noscript>
+    <p class="no-js">microLabsX requires JavaScript for the interactive specimen viewer.</p>
+  </noscript>
+
+  <script>
+    import "../scripts/ui.js";
+    import "../scripts/language-menu.js";
+    import "../scripts/language-flags.js";
+    import "../scripts/bootstrap.js";
+  </script>
+
+  <script is:inline src="/assets/js/landing/brand-effects.js"></script>
+  <script is:inline src="/assets/js/landing/welcome-choreography.js"></script>
+  <script is:inline src="/assets/js/landing/consent.js"></script>
+
+  <script is:inline>
+    // GARFIX bootstrap fallback: the UI must render even if the full
+    // translation asset is unavailable for any reason.
+    window.__mxGarfixI18N ||= {
+      en: {
+        subtitle: "MICROSTUDIOX TECHNOLOGY PREVIEW",
+        open: "Open GARFIX LABS",
+        close: "Close GARFIX LABS",
+        placeholder: "Talk to GARFIX LABS…",
+        send: "Send",
+        welcome: "Hello. I'm GARFIX · LABS, a demonstration of MICROSTUDIOX conversational technology. For now I do not provide or expose MICROLABSX project data. You can talk with me about whatever you need to test the technology.",
+        footnote: "TECHNOLOGY PREVIEW · NO MICROLABSX DATA ACCESS"
+      },
+      es: {
+        subtitle: "DEMOSTRACIÓN TECNOLÓGICA DE MICROSTUDIOX",
+        open: "Abrir GARFIX LABS",
+        close: "Cerrar GARFIX LABS",
+        placeholder: "Habla con GARFIX LABS…",
+        send: "Enviar",
+        welcome: "Hola. Soy GARFIX · LABS, una demostración de la tecnología conversacional de MICROSTUDIOX. Por el momento no proporciono ni expongo datos de MICROLABSX. Puedes hablar conmigo de lo que necesites para probar la tecnología.",
+        footnote: "DEMOSTRACIÓN TECNOLÓGICA · SIN ACCESO A DATOS DE MICROLABSX"
+      }
+    };
+  </script>
+  <script is:inline src="/assets/js/garfix/translations.js?v=20260924-labs4"></script>
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+  <script is:inline src="/assets/js/garfix/turnstile.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/latency.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/settings.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/memory-client.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/departments.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/sessions.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/voice.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/conversation-tools.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/powers.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/hyperion-visual.js?v=20260924-labs4"></script>
+  <script is:inline src="/assets/js/garfix/instant-actions.js?v=20260924-labs4"></script>
+</body>
+</html>
