@@ -46,23 +46,25 @@ import LanguageSelector from "../components/LanguageSelector.astro";
     <div class="transition-dim" id="transitionDim"></div>
     <div class="vignette"></div>
 
-    <footer class="footer-bar mx-home-footer">
-      <div class="footer-inner">
-        <div class="footer-links" aria-label="Legal">
-          <a href="/terms">Terms</a>
-          <a href="/privacy">Privacy</a>
-          <a href="/cookies">Cookies</a>
-          <a href="/legal">Legal</a>
-        </div>
-
-        <div class="copyright" id="footerComment">
-          © 2023–2026
-          <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC</a>
-          — MICROLABSX — ALL RIGHTS RESERVED
-        </div>
-      </div>
-    </footer>
   </main>
+
+  <footer class="footer-bar mx-home-footer" id="mx-home-footer">
+    <div class="footer-inner">
+      <div class="footer-links" aria-label="Legal">
+        <a href="/terms">TERMS</a>
+        <a href="/privacy">PRIVACY</a>
+        <a href="/cookies">COOKIES</a>
+        <a href="/legal">LEGAL</a>
+      </div>
+
+      <div class="copyright">
+        © 2023–2026
+        <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC</a>
+        — MICROLABSX —
+        <span id="footerRights">ALL RIGHTS RESERVED</span>
+      </div>
+    </div>
+  </footer>
 
   <noscript>
     <p class="no-js">microLabsX requires JavaScript for the interactive specimen viewer.</p>
@@ -75,8 +77,33 @@ import LanguageSelector from "../components/LanguageSelector.astro";
     import "../scripts/bootstrap.js";
   </script>
 
-  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+  <script is:inline>
+    // GARFIX bootstrap fallback: the UI must render even if the full
+    // translation asset is unavailable for any reason.
+    window.__mxGarfixI18N ||= {
+      en: {
+        subtitle: "MICROSTUDIOX TECHNOLOGY PREVIEW",
+        open: "Open GARFIX LABS",
+        close: "Close GARFIX LABS",
+        placeholder: "Talk to GARFIX LABS…",
+        send: "Send",
+        welcome: "Hello. I'm GARFIX · LABS, a demonstration of MICROSTUDIOX conversational technology. For now I do not provide or expose MICROLABSX project data. You can talk with me about whatever you need to test the technology.",
+        footnote: "TECHNOLOGY PREVIEW · NO MICROLABSX DATA ACCESS"
+      },
+      es: {
+        subtitle: "DEMOSTRACIÓN TECNOLÓGICA DE MICROSTUDIOX",
+        open: "Abrir GARFIX LABS",
+        close: "Cerrar GARFIX LABS",
+        placeholder: "Habla con GARFIX LABS…",
+        send: "Enviar",
+        welcome: "Hola. Soy GARFIX · LABS, una demostración de la tecnología conversacional de MICROSTUDIOX. Por el momento no proporciono ni expongo datos de MICROLABSX. Puedes hablar conmigo de lo que necesites para probar la tecnología.",
+        footnote: "DEMOSTRACIÓN TECNOLÓGICA · SIN ACCESO A DATOS DE MICROLABSX"
+      }
+    };
+  </script>
   <script is:inline src="/assets/js/garfix/translations.js"></script>
+  <script is:inline src="/assets/js/garfix-labs-context.js"></script>
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
   <script is:inline src="/assets/js/garfix/turnstile.js"></script>
   <script is:inline src="/assets/js/garfix.js"></script>
   <script is:inline src="/assets/js/garfix/latency.js"></script>
@@ -89,6 +116,5 @@ import LanguageSelector from "../components/LanguageSelector.astro";
   <script is:inline src="/assets/js/garfix/powers.js"></script>
   <script is:inline src="/assets/js/garfix/hyperion-visual.js"></script>
   <script is:inline src="/assets/js/garfix/instant-actions.js"></script>
-  <script is:inline src="/assets/js/garfix-labs-context.js"></script>
 </body>
 </html>
