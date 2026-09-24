@@ -182,12 +182,14 @@ import * as THREE from 'three';
           color += base * centerGlow * 0.65;
           color += laser * (scan * 0.88 + scanTrail * 0.24);
           color += hot * scanCore * (0.48 + halo * 0.35);
-          color += laser * syncRing * uPulseGain * (0.42 + vAccent * 0.20);
-          color += pearl * syncCore * uPulseGain * (0.16 + vCenterBias * 0.22);
+          // The X is the energetic element of the scene. Keep the specimen itself restrained.
+          color += laser * syncRing * uPulseGain * (0.82 + vAccent * 0.26);
+          color += pearl * syncCore * uPulseGain * (0.34 + vCenterBias * 0.30);
 
           float alpha = tex.a * uOpacity;
           alpha *= (0.14 + pulse * 0.14 + vCenterBias * 0.25 + scan * 0.76 + scanCore * 0.34);
-          alpha += tex.a * syncRing * uPulseGain * (0.08 + vAccent * 0.06 + vCenterBias * 0.10);
+          alpha += tex.a * syncRing * uPulseGain * (0.17 + vAccent * 0.09 + vCenterBias * 0.14);
+          alpha += tex.a * syncCore * uPulseGain * (0.08 + vCenterBias * 0.08);
           alpha += tex.a * centerGlow * 0.12;
           alpha *= mix(0.52, 1.0, halo);
           alpha *= mix(0.90, 1.10, vSizeJitter);
@@ -956,14 +958,20 @@ import * as THREE from 'three';
       xDotsUniforms.uTime.value = elapsed;
       xDotsUniforms.uScan.value = scanPhase;
       xDotsUniforms.uPulseBand.value = Math.abs(scanPhase - 0.5) * 2.0;
-      xDotsUniforms.uPulseGain.value = Math.pow(Math.max(0.0, 1.0 - Math.abs(scanPhase - 0.5) * 2.0), 1.45);
+      const xPulseCore = Math.max(0.0, 1.0 - Math.abs(scanPhase - 0.5) * 2.0);
+      xDotsUniforms.uPulseGain.value = Math.pow(xPulseCore, 1.12);
 
-      const pulse = 1 + xDotsUniforms.uPulseGain.value * 0.014 + Math.sin(scanPhase * Math.PI * 2.0) * 0.003 + glitchPhase * 0.003;
-      xDots.scale.set(pulse, pulse * 0.999, 1);
-      xDots.rotation.z = Math.sin(scanPhase * Math.PI * 2.0) * 0.003 + glitchPhase * 0.006;
+      // Strong synchronized breathing belongs to the background X, never to the tardigrade.
+      const pulse = 1
+        + xDotsUniforms.uPulseGain.value * 0.030
+        + Math.sin(scanPhase * Math.PI * 2.0) * 0.002
+        + glitchPhase * 0.002;
+      xDots.scale.set(pulse, pulse * 0.9985, 1);
+      xDots.rotation.z = Math.sin(scanPhase * Math.PI * 2.0) * 0.0025 + glitchPhase * 0.004;
 
+      // Keep specimen illumination steady. Transition dimming is allowed; rhythmic flashing is not.
       const rimBase = activeModelKind === 'crypto' ? 9.2 : 12.0;
-      rimLight.intensity = rimBase * (1.0 - transitionDarkness * 0.32) + Math.sin(elapsed * 6) * (activeModelKind === 'crypto' ? 0.8 : 1.5);
+      rimLight.intensity = rimBase * (1.0 - transitionDarkness * 0.32);
       composer.render();
 
       if (!hasLoggedFirstFrame) {
