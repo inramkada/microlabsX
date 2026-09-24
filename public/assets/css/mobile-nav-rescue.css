@@ -1,0 +1,153 @@
+@media (max-width:760px){
+
+  /*
+   * Header siempre interactivo.
+   */
+
+  #mx-header{
+    z-index:50000 !important;
+    overflow:visible !important;
+    pointer-events:auto !important;
+  }
+
+  #mx-header .topbar,
+  #mx-header nav,
+  #lang-switch,
+  #lang-switch .lang-trigger,
+  #mx-header .nav-dropdown,
+  #mx-header .navdrop-trigger{
+    overflow:visible !important;
+    pointer-events:auto !important;
+    touch-action:manipulation !important;
+  }
+
+
+  /*
+   * ESTADO CERRADO
+   */
+
+  #lang-rail,
+  #mx-header .nav-dropdown > .nav-dropdown-menu{
+    display:none !important;
+
+    opacity:0 !important;
+    visibility:hidden !important;
+
+    pointer-events:none !important;
+  }
+
+
+  /*
+   * IDIOMAS ABIERTO
+   */
+
+  #lang-switch.is-open > #lang-rail{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    top:auto !important;
+    bottom:12px !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:60000 !important;
+  }
+
+
+  /*
+   * INFO / VERTICALS ABIERTOS
+   */
+
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu{
+    display:flex !important;
+
+    position:fixed !important;
+
+    left:12px !important;
+    right:12px !important;
+    top:auto !important;
+    bottom:12px !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    flex-direction:column !important;
+
+    opacity:1 !important;
+    visibility:visible !important;
+
+    pointer-events:auto !important;
+
+    transform:none !important;
+
+    z-index:60000 !important;
+  }
+
+
+  /*
+   * Todo el contenido del panel puede pulsarse.
+   */
+
+  #lang-switch.is-open #lang-rail *,
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu *{
+    pointer-events:auto !important;
+  }
+
+
+  /*
+   * Aunque mx-sheet-open tenga reglas antiguas,
+   * el header sigue vivo.
+   */
+
+  body.mx-sheet-open #mx-header,
+  body.mx-sheet-open #mx-header nav,
+  body.mx-sheet-open #lang-switch,
+  body.mx-sheet-open .nav-dropdown,
+  body.mx-sheet-open .lang-trigger,
+  body.mx-sheet-open .navdrop-trigger{
+    pointer-events:auto !important;
+  }
+
+}
+
+/* Narrow and touch-sized headers cannot anchor a wide dropdown to the
+   trigger: always centre the menu in the viewport instead. */
+@media (max-width:1100px){
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu{
+    position:fixed !important;
+    left:50% !important;
+    right:auto !important;
+    top:calc(76px + env(safe-area-inset-top)) !important;
+    bottom:auto !important;
+    width:min(540px, calc(100vw - 28px)) !important;
+    max-width:calc(100vw - 28px) !important;
+    max-height:calc(100dvh - 96px) !important;
+    padding:9px !important;
+    overflow-y:auto !important;
+    transform:translateX(-50%) !important;
+    transform-origin:top center !important;
+  }
+
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu .v-item,
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu .v-main,
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu .v-sub{
+    align-items:center !important;
+    justify-content:center;
+    text-align:center !important;
+  }
+
+  #mx-header .nav-dropdown.is-open > .nav-dropdown-menu .v-item{
+    min-width:0;
+  }
+}
