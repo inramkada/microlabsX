@@ -1,0 +1,181 @@
+---
+interface Props {
+  lang: string;
+}
+const { lang } = Astro.props;
+
+const flagSequences: Record<string, { flags: string[]; interval: number }> = {
+  en: {
+    flags: ["gb", "us"],
+    interval: 1050,
+  },
+  es: {
+    // 20 sovereign states where Spanish is an official national language.
+    flags: [
+      "es", "mx", "co", "ar", "pe", "ve",
+      "cl", "ec", "gt", "cu", "bo", "do",
+      "hn", "py", "sv", "ni", "cr", "pa",
+      "uy", "gq",
+    ],
+    interval: 540,
+  },
+  ar: {
+    // 22 Arab League member states. Preferred markets appear first.
+    flags: [
+      "sa", "ae", "kw", "qa", "ps", "ma",
+      "bh", "om", "ye", "iq", "jo", "lb",
+      "sy", "eg", "ly", "tn", "dz", "mr",
+      "sd", "so", "dj", "km",
+    ],
+    interval: 540,
+  },
+};
+
+const sequence = flagSequences[lang];
+---
+
+{sequence && (
+  <span
+    class="lang-flag-sequence"
+    data-flag-sequence
+    data-flags={sequence.flags.join(",")}
+    data-interval={String(sequence.interval)}
+    aria-hidden="true"
+  >
+    <span class="lang-flag-seq-frame is-current" data-flag-slot="0"></span>
+    <span class="lang-flag-seq-frame" data-flag-slot="1"></span>
+  </span>
+)}
+
+{lang === "ca" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#FCDD09"/>
+    <path d="M0 6h60M0 16h60M0 26h60M0 36h60" stroke="#DA121A" stroke-width="5"/>
+  </svg>
+)}
+
+{lang === "eu" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#D52B1E"/>
+    <path d="M0 0 60 40M60 0 0 40" stroke="#009B48" stroke-width="7"/>
+    <path d="M30 0v40M0 20h60" stroke="#fff" stroke-width="5"/>
+  </svg>
+)}
+
+{lang === "zh" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#DE2910"/>
+    <polygon points="10,5 12.2,10.2 17.8,10.7 13.5,14.3 14.8,19.7 10,16.8 5.2,19.7 6.5,14.3 2.2,10.7 7.8,10.2" fill="#FFDE00"/>
+    <circle cx="23" cy="7" r="1.7" fill="#FFDE00"/><circle cx="27" cy="12" r="1.7" fill="#FFDE00"/>
+    <circle cx="27" cy="18" r="1.7" fill="#FFDE00"/><circle cx="22" cy="22" r="1.7" fill="#FFDE00"/>
+  </svg>
+)}
+
+{lang === "ja" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#fff"/>
+    <circle cx="30" cy="20" r="10.5" fill="#BC002D"/>
+  </svg>
+)}
+
+{lang === "hi" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="13.34" fill="#FF9933"/>
+    <rect y="13.33" width="60" height="13.34" fill="#fff"/>
+    <rect y="26.66" width="60" height="13.34" fill="#138808"/>
+    <circle cx="30" cy="20" r="5.4" fill="none" stroke="#000080" stroke-width="1.1"/>
+    <circle cx="30" cy="20" r="1.1" fill="#000080"/>
+    <path d="M30 14.7v10.6M24.7 20h10.6M26.2 16.2l7.6 7.6M33.8 16.2l-7.6 7.6" stroke="#000080" stroke-width=".55"/>
+  </svg>
+)}
+
+{lang === "he" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#fff"/>
+    <rect y="5" width="60" height="3.6" fill="#0038B8"/>
+    <rect y="31.4" width="60" height="3.6" fill="#0038B8"/>
+    <path d="M30 11.2 22.6 24h14.8L30 11.2Z" fill="none" stroke="#0038B8" stroke-width="1.9" stroke-linejoin="round"/>
+    <path d="M30 28.8 22.6 16h14.8L30 28.8Z" fill="none" stroke="#0038B8" stroke-width="1.9" stroke-linejoin="round"/>
+  </svg>
+)}
+
+{lang === "ru" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="13.34" fill="#fff"/>
+    <rect y="13.33" width="60" height="13.34" fill="#0039A6"/>
+    <rect y="26.66" width="60" height="13.34" fill="#D52B1E"/>
+  </svg>
+)}
+
+{lang === "fr" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="20" height="40" fill="#0055A4"/>
+    <rect x="20" width="20" height="40" fill="#fff"/>
+    <rect x="40" width="20" height="40" fill="#EF4135"/>
+  </svg>
+)}
+
+{lang === "de" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="13.34" fill="#000"/>
+    <rect y="13.33" width="60" height="13.34" fill="#DD0000"/>
+    <rect y="26.66" width="60" height="13.34" fill="#FFCE00"/>
+  </svg>
+)}
+
+{lang === "it" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="20" height="40" fill="#009246"/>
+    <rect x="20" width="20" height="40" fill="#fff"/>
+    <rect x="40" width="20" height="40" fill="#CE2B37"/>
+  </svg>
+)}
+
+{lang === "pt" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="24" height="40" fill="#046A38"/>
+    <rect x="24" width="36" height="40" fill="#DA291C"/>
+    <circle cx="24" cy="20" r="7" fill="#FFCC00"/>
+    <circle cx="24" cy="20" r="4.3" fill="#fff"/>
+    <path d="M20.5 17.5h7v5h-7z" fill="#D71920"/>
+  </svg>
+)}
+
+{lang === "ko" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#fff"/>
+    <path d="M30 12a8 8 0 0 1 0 16 4 4 0 0 0 0-8 4 4 0 0 1 0-8Z" fill="#CD2E3A"/>
+    <path d="M30 28a8 8 0 0 1 0-16 4 4 0 0 0 0 8 4 4 0 0 1 0 8Z" fill="#0047A0"/>
+    <path d="M10 9l8-5M11 12l8-5M41 33l8-5M42 36l8-5M42 7l7 5M40 10l7 5M11 28l7 5M9 31l7 5" stroke="#111" stroke-width="1.5"/>
+  </svg>
+)}
+
+{lang === "id" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="20" fill="#CE1126"/>
+    <rect y="20" width="60" height="20" fill="#fff"/>
+  </svg>
+)}
+
+{lang === "nl" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="13.34" fill="#AE1C28"/>
+    <rect y="13.33" width="60" height="13.34" fill="#fff"/>
+    <rect y="26.66" width="60" height="13.34" fill="#21468B"/>
+  </svg>
+)}
+
+{lang === "th" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#A51931"/>
+    <rect y="7" width="60" height="26" fill="#F4F5F8"/>
+    <rect y="13" width="60" height="14" fill="#2D2A4A"/>
+  </svg>
+)}
+
+{lang === "vi" && (
+  <svg class="lang-flag-svg" viewBox="0 0 60 40" aria-hidden="true" focusable="false">
+    <rect width="60" height="40" fill="#DA251D"/>
+    <polygon points="30,9 33,16.3 40.9,16.9 34.8,22 36.7,29.7 30,25.6 23.3,29.7 25.2,22 19.1,16.9 27,16.3" fill="#FFFF00"/>
+  </svg>
+)}
