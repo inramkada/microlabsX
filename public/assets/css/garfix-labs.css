@@ -1,0 +1,46 @@
+
+/* GARFIX · LABS — microLabsX identity layer */
+body[data-site="microlabsx"] .mx-garfix-mark{
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+}
+body[data-site="microlabsx"] .mx-garfix-mark img{ display:none !important; }
+body[data-site="microlabsx"] .mx-garfix-mark::before{
+  content:"X";
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  color:#fff;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-weight:900;
+  letter-spacing:-.08em;
+  text-shadow:
+    0 0 10px rgba(255,255,255,.22),
+    0 0 18px rgba(255,35,35,.40),
+    0 0 34px rgba(255,0,0,.18);
+}
+body[data-site="microlabsx"] .mx-garfix-name strong{
+  letter-spacing:.14em;
+}
+body[data-site="microlabsx"] #mx-garfix-subtitle{
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+body[data-site="microlabsx"] .mx-garfix-launcher > span:not(.mx-garfix-launcher-dot):not(.mx-garfix-launcher-time){
+  letter-spacing:.12em;
+}
+.legal-project-context{
+  margin:0 0 24px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  color:rgba(255,255,255,.52);
+  font-size:9px;
+  line-height:1.6;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
