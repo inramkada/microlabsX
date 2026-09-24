@@ -25,11 +25,32 @@
     ]);
 
 
-  const I18N = window.__mxGarfixI18N;
+  const I18N =
+    window.__mxGarfixI18N &&
+    typeof window.__mxGarfixI18N === "object"
+      ? window.__mxGarfixI18N
+      : {
+          en: {
+            subtitle: "MICROSTUDIOX TECHNOLOGY PREVIEW",
+            open: "Open GARFIX LABS",
+            close: "Close GARFIX LABS",
+            placeholder: "Talk to GARFIX LABS…",
+            send: "Send",
+            welcome: "Hello. I'm GARFIX · LABS, a demonstration of MICROSTUDIOX conversational technology. For now I do not provide or expose MICROLABSX project data. You can talk with me about whatever you need to test the technology.",
+            footnote: "TECHNOLOGY PREVIEW · NO MICROLABSX DATA ACCESS"
+          },
+          es: {
+            subtitle: "DEMOSTRACIÓN TECNOLÓGICA DE MICROSTUDIOX",
+            open: "Abrir GARFIX LABS",
+            close: "Cerrar GARFIX LABS",
+            placeholder: "Habla con GARFIX LABS…",
+            send: "Enviar",
+            welcome: "Hola. Soy GARFIX · LABS, una demostración de la tecnología conversacional de MICROSTUDIOX. Por el momento no proporciono ni expongo datos de MICROLABSX. Puedes hablar conmigo de lo que necesites para probar la tecnología.",
+            footnote: "DEMOSTRACIÓN TECNOLÓGICA · SIN ACCESO A DATOS DE MICROLABSX"
+          }
+        };
 
-  if (!I18N || typeof I18N !== "object") {
-    throw new Error("GARFIX translations unavailable");
-  }
+  window.__mxGarfixI18N ||= I18N;
 
 
   const state = {
