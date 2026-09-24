@@ -15,17 +15,20 @@ microLabsX v2 replaces the original monolithic page with a static Astro shell an
 - no third-party runtime JavaScript
 - Cloudflare-compatible security headers and cache policy
 - source and build-size guardrails in CI
+- reproducible dependency tree enforced by package-lock + npm ci
 
 The untouched v1 source remains under `legacy/` only as migration input. It is never copied into `dist/`.
 
 ## Runtime boundary
 
-The initial document is HTML + CSS + lightweight UI. The Three.js bundle is dynamically imported only after the browser has painted the shell. The 18 MB secondary specimen is not fetched until the existing interaction requests it.
+The initial document is HTML + CSS + lightweight UI. The Three.js bundle is dynamically imported only after the browser has painted the shell. The secondary specimen is not fetched until the existing interaction requests it.
+
+Three core and Three addons are split into independent cacheable chunks.
 
 ## Commands
 
 ```bash
-npm install
+npm ci
 npm run dev
 npm run verify
 ```
