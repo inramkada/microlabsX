@@ -1075,3 +1075,186 @@ html[lang="th"] .headline-text{
   #mx-header .lang-flag-seq-frame,
   #mx-header .lang-flag-seq-frame::after{animation:none!important;transition:none!important;}
 }
+
+/* =========================================================
+   MICRORETAILX EXACT TYPOGRAPHY SYNC
+   Keep the microLabsX WebGL identity; match family typography/chrome.
+   ========================================================= */
+
+html,
+body{
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace !important;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+}
+
+/* microRetailX deliberately uses the sans family only in the top navigation. */
+#mx-header .topbar{
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif !important;
+  background:#000 !important;
+  mix-blend-mode:normal !important;
+}
+
+#mx-header .brand{
+  font-family:inherit !important;
+  color:#fff !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+  mix-blend-mode:normal !important;
+}
+
+#mx-header .brand-x{
+  color:#fff !important;
+  text-shadow:none !important;
+}
+
+/* CONTACT stays a clean text control: no invented visible capsule. */
+#mx-header .navlink,
+#mx-header .nav-contact{
+  font-family:inherit !important;
+  color:#fff !important;
+  font-size:var(--nav-size);
+  font-weight:700;
+  letter-spacing:var(--nav-track);
+  line-height:1;
+  text-transform:uppercase;
+  text-decoration:none;
+  padding:5px 2px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  mix-blend-mode:normal !important;
+}
+
+#mx-header .navlink::after,
+#mx-header .nav-contact::after{
+  content:"";
+  display:block !important;
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:rgba(255,255,255,.22);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform 150ms ease;
+}
+
+#mx-header .navlink:hover::after,
+#mx-header .navlink:focus-visible::after,
+#mx-header .nav-contact:hover::after,
+#mx-header .nav-contact:focus-visible::after{
+  transform:scaleX(1);
+}
+
+#mx-header .navlink:hover,
+#mx-header .navlink:focus-visible,
+#mx-header .nav-contact:hover,
+#mx-header .nav-contact:focus-visible{
+  color:#fff !important;
+  background:transparent !important;
+  border-color:transparent !important;
+  outline:none;
+}
+
+#mx-header .navlink:active,
+#mx-header .nav-contact:active{
+  transform:none !important;
+}
+
+/* Main copy uses the same monospaced DNA as microRetailX body copy. */
+.headline-text{
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace !important;
+  font-weight:400 !important;
+  letter-spacing:.16em;
+}
+
+/* Footer typography mirrors microRetailX instead of the earlier 9px lab variant. */
+.footer-bar{
+  padding:10px var(--px) 12px;
+  background:#000 !important;
+  border-top:1px solid var(--hair);
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+
+.footer-bar .copyright{
+  max-width:min(920px,calc(100vw - 36px));
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace !important;
+  font-size:var(--copy-size) !important;
+  font-weight:400 !important;
+  line-height:1.3 !important;
+  letter-spacing:var(--copy-track) !important;
+  color:#fff !important;
+  opacity:.58 !important;
+  text-align:center;
+  text-transform:none !important;
+  direction:ltr;
+  unicode-bidi:isolate;
+}
+
+.footer-bar .copyright a{
+  color:inherit !important;
+  text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  padding-bottom:1px;
+}
+
+.footer-bar .copyright a:hover,
+.footer-bar .copyright a:focus-visible{
+  color:#fff !important;
+  border-bottom-color:rgba(255,255,255,.55);
+  text-decoration:none;
+}
+
+@media (max-width:640px){
+  #mx-header .navlink,
+  #mx-header .nav-contact{
+    font-size:clamp(10px,2.9vw,13px);
+    padding:5px 2px !important;
+  }
+}
+
+@media (max-width:380px){
+  #mx-header .navlink,
+  #mx-header .nav-contact{
+    font-size:10px;
+    letter-spacing:.16em;
+  }
+}
+
