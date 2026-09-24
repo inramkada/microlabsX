@@ -1,18 +1,18 @@
 window.MX_PAGE = {
   policyVersion: "2026-01-01",
   titleMap: {
-  en: "Global Terms of Use — MICRORETAILX",
-  es: "Términos de uso globales — MICRORETAILX",
-  ca: "Termes d’ús globals — MICRORETAILX",
-  fr: "Conditions d’utilisation globales — MICRORETAILX",
-  ar: "شروط الاستخدام العالمية — MICRORETAILX",
-  ru: "Глобальные условия использования — MICRORETAILX",
-  hi: "वैश्विक उपयोग की शर्तें — MICRORETAILX",
-  zh: "全球使用条款 — MICRORETAILX",
-  eu: "Erabilera baldintza globalak — MICRORETAILX"
+  en: "Global Terms of Use — MICROLABSX",
+  es: "Términos de uso globales — MICROLABSX",
+  ca: "Termes d’ús globals — MICROLABSX",
+  fr: "Conditions d’utilisation globales — MICROLABSX",
+  ar: "شروط الاستخدام العالمية — MICROLABSX",
+  ru: "Глобальные условия использования — MICROLABSX",
+  hi: "वैश्विक उपयोग की शर्तें — MICROLABSX",
+  zh: "全球使用条款 — MICROLABSX",
+  eu: "Erabilera baldintza globalak — MICROLABSX"
       },
   descriptionMap: {
-        en: "MICRORETAILX global terms of use and legal framework.",
+        en: "MICROLABSX global terms of use and legal framework.",
         es: "Términos de uso globales y marco legal de MICRORETAILX.",
         ca: "Termes d’ús globals i marc legal de MICRORETAILX.",
         fr: "Conditions d’utilisation globales et cadre juridique de MICRORETAILX.",
