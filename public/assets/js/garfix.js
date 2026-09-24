@@ -1734,6 +1734,7 @@
       pageContextEnabled
         ? String(
             document.getElementById("mx-main")?.innerText ||
+            document.getElementById("legal-scroll-area")?.innerText ||
             ""
           )
             .replace(/\s+/g, " ")
