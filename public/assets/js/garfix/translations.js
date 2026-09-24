@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  window.__mxMICROLABSX AII18N = {
+  window.__mxGarfixI18N = {
 
     en: {
       subtitle: "BY MICROSTUDIOX",
