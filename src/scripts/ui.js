@@ -214,16 +214,3 @@
       console.assert(railEl.style.getPropertyValue('--rail-shift') !== null, 'Language rail shift variable is available');
     })();
 
-(() => {
-      "use strict";
-      const block = event => {
-        if (!event.target.closest("a")) event.preventDefault();
-      };
-      document.addEventListener("contextmenu", block, { passive: false });
-      document.addEventListener("copy", block, { passive: false });
-      document.addEventListener("cut", block, { passive: false });
-      document.addEventListener("dragstart", block, { passive: false });
-      document.addEventListener("selectstart", event => {
-        if (!event.target.closest("a")) event.preventDefault();
-      }, { passive: false });
-    })();

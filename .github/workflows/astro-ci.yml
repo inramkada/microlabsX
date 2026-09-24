@@ -28,19 +28,26 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: package.json
 
-      - name: Install dependencies
+      - name: Source guardrails
+        run: node scripts/guardrails.mjs
+
+      - name: Install pinned dependencies
         run: npm install --ignore-scripts --no-audit --no-fund
 
       - name: Audit dependencies
         run: npm audit --audit-level=high
 
-      - name: Validate build
+      - name: Verify registry signatures
+        run: npm audit signatures
+
+      - name: Validate production build
         run: npm run build
 
-      - name: Check extracted model sizes
+      - name: Enforce output budgets
+        run: npm run check:dist
+
+      - name: Verify extracted specimen assets
         run: |
           test -s public/assets/models/tardigrade.glb
           test -s public/assets/models/crypto-specimen.glb

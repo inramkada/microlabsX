@@ -5,17 +5,20 @@
   "type": "module",
   "scripts": {
     "prepare:legacy": "node scripts/extract-legacy-models.mjs",
+    "guardrails": "node scripts/guardrails.mjs",
+    "check:dist": "node scripts/check-dist.mjs",
     "dev": "npm run prepare:legacy && astro dev",
     "build": "npm run prepare:legacy && astro check && astro build",
     "check": "astro check",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "verify": "npm run guardrails && npm run build && npm run check:dist"
   },
   "dependencies": {
     "astro": "7.3.4",
     "three": "0.186.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
-    "typescript": "^5.9.0"
+    "@astrojs/check": "0.9.4",
+    "typescript": "5.9.2"
   }
 }

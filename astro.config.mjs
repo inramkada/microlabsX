@@ -8,4 +8,15 @@ export default defineConfig({
     format: 'directory',
     inlineStylesheets: 'never',
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('/node_modules/three/')) return 'three';
+          },
+        },
+      },
+    },
+  },
 });

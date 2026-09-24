@@ -24,8 +24,16 @@ import * as THREE from 'three';
     const camera = new THREE.PerspectiveCamera(32, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0.25, 4.8);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const getPixelRatioCap = () => window.innerWidth <= 768 ? 1.5 : 2;
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+      failIfMajorPerformanceCaveat: false
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, getPixelRatioCap()));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 1);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -650,7 +658,7 @@ import * as THREE from 'three';
           loading.classList.add('hidden');
           if (!animationStarted) {
             animationStarted = true;
-            animate();
+            queueAnimationFrame();
           }
           if (typeof onLoaded === 'function') onLoaded();
         },
@@ -734,23 +742,39 @@ import * as THREE from 'three';
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
       composer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, getPixelRatioCap()));
       bloomPass.resolution.set(window.innerWidth, window.innerHeight);
     });
 
-    document.addEventListener('copy', event => event.preventDefault());
-    document.addEventListener('cut', event => event.preventDefault());
-    document.addEventListener('dragstart', event => event.preventDefault());
-    document.addEventListener('selectstart', event => event.preventDefault());
-
     const clock = new THREE.Clock();
     let hasLoggedFirstFrame = false;
+    let frameHandle = 0;
+    let elapsed = 0;
+
+    function queueAnimationFrame() {
+      if (!document.hidden && frameHandle === 0) {
+        frameHandle = requestAnimationFrame(animate);
+      }
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (frameHandle !== 0) cancelAnimationFrame(frameHandle);
+        frameHandle = 0;
+        return;
+      }
+      if (animationStarted) {
+        clock.getDelta();
+        queueAnimationFrame();
+      }
+    });
 
     function animate() {
-      requestAnimationFrame(animate);
+      frameHandle = 0;
+      if (document.hidden) return;
 
-      const delta = clock.getDelta();
-      const elapsed = clock.elapsedTime;
+      const delta = Math.min(clock.getDelta(), 0.05);
+      elapsed += delta * (reducedMotionQuery.matches ? 0.35 : 1);
       prevScanPhase = scanPhase;
       scanPhase = (elapsed * 0.19) % 1;
       const headlinePhase = (elapsed * 0.92) % 1;
@@ -944,8 +968,10 @@ import * as THREE from 'three';
 
       if (!hasLoggedFirstFrame) {
         hasLoggedFirstFrame = true;
-        console.info('[Depth Scan Hero Embedded X Dots] First frame rendered successfully.');
+        console.info('[microLabsX] first WebGL frame rendered.');
       }
+
+      queueAnimationFrame();
     }
 
     loadModel();

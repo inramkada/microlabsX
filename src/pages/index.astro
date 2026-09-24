@@ -11,6 +11,7 @@ import "../styles/home.css";
   <meta name="author" content="microLabsX" />
   <meta name="referrer" content="no-referrer" />
   <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#000000" />
   <link rel="canonical" href="https://microlabsx.com/" />
 </head>
 <body>
@@ -42,14 +43,17 @@ import "../styles/home.css";
         <a class="navlink" id="contactLink" href="mailto:info@microretailx.com" data-label-en="Contact">Contact</a>
       </div>
     </header>
+
     <div class="hero-copy" aria-hidden="true">
       <div class="headline-wrap">
         <div class="headline-text" id="headlineText" data-text="WE ARE DEVELOPING">WE ARE DEVELOPING</div>
       </div>
     </div>
-    <div class="loading hidden" id="loading" aria-hidden="true"></div>
+
+    <div class="loading hidden" id="loading" aria-live="polite"></div>
     <div class="transition-dim" id="transitionDim"></div>
     <div class="vignette"></div>
+
     <footer class="footer-bar">
       <div class="copyright" id="footerComment">
         © 2023–2026
@@ -59,9 +63,13 @@ import "../styles/home.css";
     </footer>
   </main>
 
+  <noscript>
+    <p class="no-js">microLabsX requires JavaScript for the interactive specimen viewer.</p>
+  </noscript>
+
   <script>
     import "../scripts/ui.js";
-    import "../scripts/lab-hero.js";
+    import "../scripts/bootstrap.js";
   </script>
 </body>
 </html>
