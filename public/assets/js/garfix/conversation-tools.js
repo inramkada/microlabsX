@@ -322,7 +322,7 @@
 <body>
 <header>
   <h1>MICROLABSX AI</h1>
-  <p>${escapeHtml(department?.label || "MICRORETAILX")} · ${escapeHtml(formatDate(startedAt))}</p>
+  <p>${escapeHtml(department?.label || "MICROLABSX")} · ${escapeHtml(formatDate(startedAt))}</p>
 </header>
 ${rows}
 <footer>MICROLABSX AI BY MICROSTUDIOX</footer>
