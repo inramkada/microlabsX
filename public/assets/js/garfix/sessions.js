@@ -63,7 +63,7 @@
     const table = {
       en: {
         choose: "Choose a department",
-        chooseHint: "GARFIX will route the conversation before it starts.",
+        chooseHint: "MICROLABSX AI will route the conversation before it starts.",
         end: "End chat",
         newChat: "New chat",
         saved: "Saved chats",
@@ -74,7 +74,7 @@
       },
       es: {
         choose: "Elige un departamento",
-        chooseHint: "GARFIX encaminará la conversación antes de empezar.",
+        chooseHint: "MICROLABSX AI encaminará la conversación antes de empezar.",
         end: "Finalizar chat",
         newChat: "Nuevo chat",
         saved: "Chats guardados",
@@ -85,7 +85,7 @@
       },
       ar: {
         choose: "اختر القسم",
-        chooseHint: "سيوجّه GARFIX المحادثة إلى القسم المناسب قبل أن تبدأ.",
+        chooseHint: "سيوجّه MICROLABSX AI المحادثة إلى القسم المناسب قبل أن تبدأ.",
         end: "إنهاء المحادثة",
         newChat: "محادثة جديدة",
         saved: "المحادثات المحفوظة",
@@ -96,7 +96,7 @@
       },
       ca: {
         choose: "Tria un departament",
-        chooseHint: "GARFIX dirigirà la conversa abans que comenci.",
+        chooseHint: "MICROLABSX AI dirigirà la conversa abans que comenci.",
         end: "Finalitza el xat",
         newChat: "Xat nou",
         saved: "Xats desats",
@@ -118,7 +118,7 @@
       },
       zh: {
         choose: "选择部门",
-        chooseHint: "GARFIX 会在对话开始前将其分配到合适的部门。",
+        chooseHint: "MICROLABSX AI 会在对话开始前将其分配到合适的部门。",
         end: "结束聊天",
         newChat: "新聊天",
         saved: "已保存的聊天",
@@ -129,7 +129,7 @@
       },
       hi: {
         choose: "एक विभाग चुनें",
-        chooseHint: "GARFIX बातचीत शुरू होने से पहले उसे उचित विभाग में भेजेगा।",
+        chooseHint: "MICROLABSX AI बातचीत शुरू होने से पहले उसे उचित विभाग में भेजेगा।",
         end: "चैट समाप्त करें",
         newChat: "नई चैट",
         saved: "सहेजी गई चैट",
@@ -140,7 +140,7 @@
       },
       ru: {
         choose: "Выберите отдел",
-        chooseHint: "GARFIX направит разговор в нужный отдел до его начала.",
+        chooseHint: "MICROLABSX AI направит разговор в нужный отдел до его начала.",
         end: "Завершить чат",
         newChat: "Новый чат",
         saved: "Сохранённые чаты",
@@ -151,7 +151,7 @@
       },
       fr: {
         choose: "Choisissez un service",
-        chooseHint: "GARFIX orientera la conversation avant son démarrage.",
+        chooseHint: "MICROLABSX AI orientera la conversation avant son démarrage.",
         end: "Terminer le chat",
         newChat: "Nouveau chat",
         saved: "Chats enregistrés",
@@ -162,7 +162,7 @@
       },
       ja: {
         choose: "部門を選択",
-        chooseHint: "GARFIX が会話の開始前に適切な部門へ振り分けます。",
+        chooseHint: "MICROLABSX AI が会話の開始前に適切な部門へ振り分けます。",
         end: "チャットを終了",
         newChat: "新しいチャット",
         saved: "保存済みチャット",
@@ -448,7 +448,7 @@
 
     const department = departments.get(session.department);
     const lines = [
-      "GARFIX AI — MICRORETAILX",
+      "MICROLABSX AI",
       `${department.label}`,
       `${copy("started")}: ${formatDate(session.startedAt)}`,
       session.endedAt ? `${copy("ended")}: ${formatDate(session.endedAt)}` : "",
@@ -457,7 +457,7 @@
 
     for (const message of session.messages || []) {
       const role = message.role === "assistant"
-        ? "GARFIX"
+        ? "MICROLABSX AI"
         : message.role === "user"
           ? "USER"
           : "SYSTEM";
