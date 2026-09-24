@@ -1,0 +1,139 @@
+.gx-legal-sources { display:flex; flex-wrap:wrap; gap:.45rem; margin-block:.6rem; }
+.gx-legal-sources small { flex-basis:100%; opacity:.8; }
+.gx-legal-sources a { color:inherit; font-size:.8rem; border:1px solid currentColor; border-radius:.6rem; padding:.4rem .6rem; text-decoration:none; overflow-wrap:anywhere; }
+.gx-legal-sources a:focus-visible, #gx-legal-controls select:focus-visible { outline:2px solid #9cf2d2; outline-offset:3px; }
+#gx-legal-controls select { max-width:100%; background:#172522; color:#fff; padding:.5rem; border-radius:.5rem; }
+mark.gx-legal-highlight { background:#daf9b3; color:#142211; box-shadow:0 0 0 3px #daf9b3; scroll-margin-block:6rem; }
+#gx-legal-status { padding:.7rem; color:inherit; border:1px solid currentColor; border-radius:.5rem; }
+
+.gx-legal-guide { width:100%; padding:.65rem .8rem; color:inherit; background:transparent; border:1px solid #738d7d; border-radius:.65rem; font:inherit; font-size:.8rem; cursor:pointer; }
+.gx-legal-guide:hover { background:#9cf2d21a; }
+.gx-legal-guide:focus-visible { outline:2px solid #9cf2d2; outline-offset:3px; }
+
+
+/* Settings-only legal controls: keep the legal reader visually aligned with
+   the compact GARFIX settings surface. Chat citation cards above stay unchanged. */
+#gx-legal-controls {
+  display:grid;
+  gap:5px;
+  min-width:0;
+}
+
+#gx-legal-controls .gx-legal-toggle {
+  min-height:46px !important;
+}
+
+#gx-legal-controls .gx-legal-toggle strong {
+  min-width:0;
+  font-size:8.8px !important;
+  line-height:1.25;
+  letter-spacing:.055em !important;
+  text-transform:none;
+}
+
+.gx-legal-jurisdiction {
+  min-height:38px;
+  display:grid;
+  grid-template-columns:78px minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  background:rgba(255,255,255,.018);
+}
+
+.gx-legal-jurisdiction small {
+  min-width:0;
+  color:rgba(255,255,255,.38);
+  font-size:6.9px;
+  line-height:1.25;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+}
+
+#gx-legal-controls .gx-legal-jurisdiction select {
+  width:100%;
+  min-width:0;
+  height:28px;
+  padding:0 27px 0 8px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:8px;
+  background-color:rgba(255,255,255,.035);
+  color:rgba(255,255,255,.82);
+  font:inherit;
+  font-size:7.6px;
+  line-height:1;
+  cursor:pointer;
+}
+
+#gx-legal-controls .gx-legal-jurisdiction select:hover {
+  border-color:rgba(255,255,255,.2);
+  background-color:rgba(255,255,255,.055);
+}
+
+#gx-legal-controls .gx-legal-jurisdiction select:focus-visible {
+  outline:1px solid rgba(255,255,255,.7);
+  outline-offset:2px;
+}
+
+.gx-legal-official {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:5px;
+  padding:2px 9px 1px;
+}
+
+.gx-legal-official small {
+  flex-basis:100%;
+  margin:0 0 1px;
+  color:rgba(255,255,255,.3);
+  font-size:6.7px;
+  line-height:1.35;
+}
+
+.gx-legal-official a {
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
+  padding:4px 7px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:7px;
+  background:rgba(255,255,255,.018);
+  color:rgba(255,255,255,.58);
+  font-size:7px;
+  line-height:1;
+  text-decoration:none;
+}
+
+.gx-legal-official a:hover {
+  color:#fff;
+  border-color:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.04);
+}
+
+.gx-legal-official a:focus-visible {
+  outline:1px solid rgba(255,255,255,.7);
+  outline-offset:2px;
+}
+
+#gx-legal-controls[data-enabled="0"] .gx-legal-jurisdiction,
+#gx-legal-controls[data-enabled="0"] .gx-legal-official {
+  opacity:.42;
+}
+
+[dir="rtl"] .gx-legal-jurisdiction {
+  grid-template-columns:minmax(0,1fr) 78px;
+}
+
+[dir="rtl"] .gx-legal-jurisdiction small {
+  grid-column:2;
+  grid-row:1;
+}
+
+[dir="rtl"] .gx-legal-jurisdiction select {
+  grid-column:1;
+  grid-row:1;
+  padding:0 8px 0 27px;
+}
