@@ -1,18 +1,18 @@
 window.MX_PAGE = {
   policyVersion: "2026-01-01",
   titleMap: {
-  en: "Privacy Policy — MICRORETAILX",
-  es: "Política de privacidad — MICRORETAILX",
-  ca: "Política de privacitat — MICRORETAILX",
-  fr: "Politique de confidentialité — MICRORETAILX",
-  ar: "سياسة الخصوصية — MICRORETAILX",
-  ru: "Политика конфиденциальности — MICRORETAILX",
-  hi: "गोपनीयता नीति — MICRORETAILX",
-  zh: "隐私政策 — MICRORETAILX",
-  eu: "Pribatutasun politika — MICRORETAILX"
+  en: "Privacy Policy — MICROLABSX",
+  es: "Política de privacidad — MICROLABSX",
+  ca: "Política de privacitat — MICROLABSX",
+  fr: "Politique de confidentialité — MICROLABSX",
+  ar: "سياسة الخصوصية — MICROLABSX",
+  ru: "Политика конфиденциальности — MICROLABSX",
+  hi: "गोपनीयता नीति — MICROLABSX",
+  zh: "隐私政策 — MICROLABSX",
+  eu: "Pribatutasun politika — MICROLABSX"
       },
   descriptionMap: {
-  en: "MICRORETAILX global privacy policy and data protection framework.",
+  en: "MICROLABSX global privacy policy and data protection framework.",
   es: "Política de privacidad global y marco de protección de datos de MICRORETAILX.",
   ca: "Política de privacitat global i marc de protecció de dades de MICRORETAILX.",
   fr: "Politique de confidentialité globale et cadre de protection des données de MICRORETAILX.",
@@ -34,7 +34,7 @@ en: {
   "footer.cookies": "Cookies",
   "footer.legal": "Legal",
 
-  "card.terms": `MICRORETAILX — PRIVACY POLICY
+  "card.terms": `MICROLABSX — PRIVACY POLICY
 
 MICRORETAILX LLC (Delaware, United States)
 MICRORETAILX GROUP – Global Operations Framework
@@ -199,7 +199,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "法律",
 
-  "card.terms": `MICRORETAILX — 隐私政策
+  "card.terms": `MICROLABSX — 隐私政策
 
 MICRORETAILX LLC（特拉华州，美国）
 MICRORETAILX GROUP —— 全球运营框架
@@ -365,7 +365,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Legal",
 
-  "card.terms": `MICRORETAILX — POLÍTICA DE PRIVACIDAD
+  "card.terms": `MICROLABSX — POLÍTICA DE PRIVACIDAD
 
 MICRORETAILX LLC (Delaware, Estados Unidos)
 MICRORETAILX GROUP – Marco de Operaciones Globales
@@ -533,7 +533,7 @@ legal@microretailx.com
   "reader.toggle": "Immersiu",
   "card.test": "Hi estem treballant — torna aviat.",
 
-  "card.terms": `MICRORETAILX — POLÍTICA DE PRIVACITAT
+  "card.terms": `MICROLABSX — POLÍTICA DE PRIVACITAT
 
 MICRORETAILX LLC (Delaware, Estats Units)
 MICRORETAILX GROUP – Marc d’Operacions Globals
@@ -698,7 +698,7 @@ legal@microretailx.com
   "footer.cookies": "Cookie-ak",
   "footer.legal": "Lege-oharra",
 
-  "card.terms": `MICRORETAILX — PRIBATUTASUN POLITIKA
+  "card.terms": `MICROLABSX — PRIBATUTASUN POLITIKA
 
 MICRORETAILX LLC (Delaware, Ameriketako Estatu Batuak)
 MICRORETAILX GROUP – Eragiketa Globalen Esparrua
@@ -863,7 +863,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Mentions légales",
 
-  "card.terms": `MICRORETAILX — POLITIQUE DE CONFIDENTIALITÉ
+  "card.terms": `MICROLABSX — POLITIQUE DE CONFIDENTIALITÉ
 
 MICRORETAILX LLC (Delaware, États-Unis)
 MICRORETAILX GROUP – Cadre d’Opérations Globales
@@ -1028,7 +1028,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "قانوني",
 
-  "card.terms": `MICRORETAILX — سياسة الخصوصية
+  "card.terms": `MICROLABSX — سياسة الخصوصية
 
 MICRORETAILX LLC (ديلاوير، الولايات المتحدة الأمريكية)
 MICRORETAILX GROUP – إطار العمليات العالمية
@@ -1193,7 +1193,7 @@ legal@microretailx.com
   "footer.cookies": "Cookies",
   "footer.legal": "Правовая информация",
 
-  "card.terms": `MICRORETAILX — ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ
+  "card.terms": `MICROLABSX — ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ
 
 MICRORETAILX LLC (Делавэр, Соединённые Штаты Америки)
 MICRORETAILX GROUP – Глобальная операционная структура
@@ -1358,7 +1358,7 @@ hi: {
   "footer.cookies": "Cookies",
   "footer.legal": "कानूनी",
 
-  "card.terms": `MICRORETAILX — गोपनीयता नीति
+  "card.terms": `MICROLABSX — गोपनीयता नीति
 
 MICRORETAILX LLC (डेलावेयर, संयुक्त राज्य अमेरिका)
 MICRORETAILX GROUP – वैश्विक संचालन ढांचा
