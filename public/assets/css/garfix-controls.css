@@ -1,0 +1,637 @@
+/* GARFIX — controls, sessions and message tools */
+
+.mx-garfix-head-actions{
+  margin-inline-start:auto;
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.mx-garfix-head-control,
+.mx-garfix-settings-close,
+.mx-garfix-speak,
+.mx-garfix-session-action,
+.mx-garfix-department,
+.mx-garfix-quick-prompts button,
+.mx-garfix-saved-row{
+  appearance:none;
+  font:inherit;
+  cursor:pointer;
+}
+
+.mx-garfix-head-control,
+.mx-garfix-settings-close{
+  border:1px solid transparent;
+  background:transparent;
+  color:rgba(255,255,255,.62);
+}
+
+.mx-garfix-head-control{
+  width:32px;
+  height:32px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border-radius:9px;
+}
+
+.mx-garfix-head-control svg{
+  width:16px;
+  height:16px;
+  display:block;
+}
+
+.mx-garfix-head-control:hover,
+.mx-garfix-settings-close:hover,
+.mx-garfix-speak:hover{
+  color:#fff;
+  background:rgba(255,255,255,.05);
+  border-color:rgba(255,255,255,.09);
+}
+
+.mx-garfix-head-control:focus-visible,
+.mx-garfix-settings-close:focus-visible,
+.mx-garfix-speak:focus-visible,
+.mx-garfix-session-action:focus-visible,
+.mx-garfix-department:focus-visible,
+.mx-garfix-quick-prompts button:focus-visible,
+.mx-garfix-saved-row:focus-visible{
+  outline:1px solid rgba(255,255,255,.68);
+  outline-offset:2px;
+}
+
+.mx-garfix[data-expanded="1"] .mx-garfix-panel{
+  position:fixed;
+  inset:
+    max(18px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    max(18px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
+  width:auto;
+  height:auto;
+  max-width:none;
+  max-height:none;
+  border-radius:22px;
+  transform:none;
+  transform-origin:center;
+}
+
+.mx-garfix[data-expanded="1"][data-open="0"] .mx-garfix-panel{
+  transform:scale(.99);
+}
+
+.mx-garfix[data-expanded="1"] .mx-garfix-launcher{
+  opacity:0;
+  pointer-events:none;
+}
+
+/* Message internals */
+.mx-garfix-message-text{
+  display:block;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.mx-garfix-message-meta{
+  min-height:16px;
+  margin-top:5px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:5px;
+  color:rgba(255,255,255,.32);
+  white-space:normal;
+}
+
+.mx-garfix-message-time{
+  font-size:7.5px;
+  line-height:1;
+  letter-spacing:.03em;
+  font-variant-numeric:tabular-nums;
+}
+
+.mx-garfix-speak{
+  width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:6px;
+  background:transparent;
+  color:rgba(255,255,255,.38);
+}
+
+.mx-garfix-speak svg{
+  width:13px;
+  height:13px;
+}
+
+.mx-garfix-speak.is-speaking{
+  color:#fff;
+  border-color:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+}
+
+/* Routing + lifecycle */
+.mx-garfix-router{
+  padding:3px 0 15px;
+}
+
+.mx-garfix-router[hidden],
+.mx-garfix-sessionbar[hidden]{
+  display:none !important;
+}
+
+.mx-garfix-router-copy{
+  margin-bottom:12px;
+}
+
+.mx-garfix-router-copy strong,
+.mx-garfix-saved-head strong{
+  display:block;
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.mx-garfix-router-copy span{
+  display:block;
+  margin-top:5px;
+  color:var(--gx-muted);
+  font-size:9px;
+  line-height:1.45;
+}
+
+.mx-garfix-departments{
+  display:grid;
+  gap:6px;
+}
+
+.mx-garfix-department{
+  width:100%;
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:12px;
+  align-items:center;
+  padding:11px 12px;
+  text-align:start;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+  color:rgba(255,255,255,.88);
+}
+
+.mx-garfix-department:hover{
+  border-color:rgba(255,255,255,.19);
+  background:rgba(255,255,255,.05);
+}
+
+.mx-garfix-department strong{
+  font-size:9px;
+  letter-spacing:.1em;
+}
+
+.mx-garfix-department span{
+  color:var(--gx-muted);
+  font-size:8.5px;
+  line-height:1.4;
+}
+
+.mx-garfix-sessionbar{
+  margin:-3px 0 12px;
+  padding:9px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:11px;
+  background:rgba(255,255,255,.025);
+}
+
+.mx-garfix-session-meta{
+  min-width:0;
+}
+
+.mx-garfix-session-meta strong{
+  display:block;
+  font-size:9px;
+  letter-spacing:.1em;
+}
+
+.mx-garfix-session-meta span{
+  display:block;
+  margin-top:3px;
+  color:rgba(255,255,255,.38);
+  font-size:7.5px;
+}
+
+.mx-garfix-session-action{
+  flex:0 0 auto;
+  padding:6px 8px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:8px;
+  background:transparent;
+  color:rgba(255,255,255,.66);
+  font-size:8px;
+  letter-spacing:.06em;
+}
+
+.mx-garfix-session-action:hover{
+  color:#fff;
+  border-color:rgba(255,255,255,.2);
+}
+
+.mx-garfix-quick-prompts{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:0 0 13px;
+}
+
+.mx-garfix-quick-prompts:empty{
+  display:none;
+}
+
+.mx-garfix-quick-prompts button{
+  padding:7px 9px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:999px;
+  background:transparent;
+  color:rgba(255,255,255,.52);
+  font-size:8px;
+  line-height:1.25;
+}
+
+.mx-garfix-quick-prompts button:hover{
+  color:rgba(255,255,255,.9);
+  border-color:rgba(255,255,255,.18);
+  background:rgba(255,255,255,.035);
+}
+
+.mx-garfix[data-session-active="0"] .mx-garfix-composer{
+  display:none;
+}
+
+/* Settings */
+.mx-garfix-settings{
+  position:absolute;
+  z-index:5;
+  inset-block-start:64px;
+  inset-inline-end:0;
+  width:min(340px,100%);
+  max-height:calc(100% - 64px);
+  overflow:auto;
+  padding:14px;
+  border-inline-start:1px solid rgba(255,255,255,.09);
+  border-block-end:1px solid rgba(255,255,255,.09);
+  border-end-start-radius:18px;
+  background:rgba(4,4,4,.97);
+  box-shadow:-20px 24px 70px rgba(0,0,0,.42);
+  backdrop-filter:blur(22px) saturate(120%);
+  -webkit-backdrop-filter:blur(22px) saturate(120%);
+}
+
+.mx-garfix-settings[hidden]{display:none !important;}
+
+.mx-garfix-settings-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.mx-garfix-settings-head strong{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.mx-garfix-settings-close{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border-radius:9px;
+  font-size:18px;
+  line-height:1;
+}
+
+.mx-garfix-settings-list{
+  display:grid;
+  gap:6px;
+}
+
+.mx-garfix-setting-row{
+  min-height:62px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:14px;
+  padding:10px 11px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:12px;
+  background:rgba(255,255,255,.024);
+  cursor:pointer;
+}
+
+.mx-garfix-setting-row strong{
+  display:block;
+  color:rgba(255,255,255,.88);
+  font-size:9.5px;
+}
+
+.mx-garfix-setting-row small{
+  display:block;
+  margin-top:4px;
+  color:rgba(255,255,255,.42);
+  font-size:8px;
+  line-height:1.45;
+}
+
+.mx-garfix-setting-row input{
+  appearance:none;
+  width:32px;
+  height:18px;
+  position:relative;
+  margin:0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+}
+
+.mx-garfix-setting-row input::after{
+  content:"";
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:rgba(255,255,255,.56);
+  transition:transform 150ms ease,background 150ms ease;
+}
+
+.mx-garfix-setting-row input:checked{
+  background:rgba(255,255,255,.88);
+  border-color:rgba(255,255,255,.88);
+}
+
+.mx-garfix-setting-row input:checked::after{
+  transform:translateX(14px);
+  background:#000;
+}
+
+[dir="rtl"] .mx-garfix-setting-row input::after{
+  left:auto;
+  right:2px;
+}
+
+[dir="rtl"] .mx-garfix-setting-row input:checked::after{
+  transform:translateX(-14px);
+}
+
+.mx-garfix-settings-privacy{
+  margin:10px 2px 0;
+  color:rgba(255,255,255,.3);
+  font-size:7.5px;
+  line-height:1.5;
+}
+
+/* Saved chats */
+#mx-garfix-session-settings-slot{
+  margin-top:14px;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.mx-garfix-saved-head{
+  margin:0 2px 8px;
+}
+
+.mx-garfix-saved-list{
+  display:grid;
+  gap:5px;
+}
+
+.mx-garfix-saved-empty{
+  margin:0;
+  padding:9px 2px;
+  color:rgba(255,255,255,.34);
+  font-size:8px;
+}
+
+.mx-garfix-saved-row{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  background:rgba(255,255,255,.02);
+  color:rgba(255,255,255,.72);
+  text-align:start;
+}
+
+.mx-garfix-saved-row:hover{
+  border-color:rgba(255,255,255,.16);
+  background:rgba(255,255,255,.04);
+}
+
+.mx-garfix-saved-row strong{
+  display:block;
+  font-size:8.5px;
+  letter-spacing:.08em;
+}
+
+.mx-garfix-saved-row small{
+  display:block;
+  margin-top:3px;
+  color:rgba(255,255,255,.34);
+  font-size:7px;
+}
+
+.mx-garfix-saved-row b{
+  font-size:7.5px;
+  font-weight:600;
+  color:rgba(255,255,255,.45);
+}
+
+@media (max-width:640px){
+  .mx-garfix[data-expanded="1"] .mx-garfix-panel{
+    inset:
+      max(6px, env(safe-area-inset-top))
+      max(6px, env(safe-area-inset-right))
+      max(6px, env(safe-area-inset-bottom))
+      max(6px, env(safe-area-inset-left));
+    border-radius:18px;
+  }
+
+  .mx-garfix-settings{
+    width:100%;
+    border-inline-start:0;
+    border-end-start-radius:0;
+    border-end-end-radius:0;
+  }
+
+  .mx-garfix-department{
+    grid-template-columns:82px minmax(0,1fr);
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .mx-garfix-setting-row input::after{
+    transition:none;
+  }
+}
+
+
+/* GARFIX REFINED CONTROL SURFACE */
+
+.mx-garfix-session-footer{
+  margin:0 0 9px;
+  padding:8px 2px 9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.mx-garfix-session-footer[hidden]{
+  display:none !important;
+}
+
+.mx-garfix-session-footer-time{
+  min-width:0;
+  color:rgba(255,255,255,.34);
+  font-size:7.5px;
+  line-height:1.35;
+  font-variant-numeric:tabular-nums;
+}
+
+.mx-garfix-session-end,
+.mx-garfix-settings-actions button{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.1);
+  background:transparent;
+  color:rgba(255,255,255,.68);
+  font:inherit;
+  cursor:pointer;
+}
+
+.mx-garfix-session-end{
+  flex:0 0 auto;
+  padding:6px 9px;
+  border-radius:8px;
+  font-size:8px;
+  letter-spacing:.04em;
+}
+
+.mx-garfix-session-end:hover{
+  color:#fff;
+  border-color:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.035);
+}
+
+.mx-garfix-settings{
+  width:min(318px,100%);
+}
+
+.mx-garfix-setting-row{
+  min-height:56px;
+}
+
+.mx-garfix-setting-power input:checked{
+  box-shadow:0 0 0 2px rgba(255,255,255,.06);
+}
+
+.mx-garfix-settings-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-top:10px;
+}
+
+.mx-garfix-settings-actions button{
+  min-height:38px;
+  padding:8px 9px;
+  border-radius:10px;
+  font-size:8px;
+  line-height:1.3;
+}
+
+.mx-garfix-settings-actions button:hover:not(:disabled){
+  color:#fff;
+  border-color:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.04);
+}
+
+.mx-garfix-settings-actions button.is-end{
+  border-color:rgba(255,255,255,.14);
+}
+
+.mx-garfix-settings-actions button:disabled{
+  opacity:.28;
+  cursor:not-allowed;
+}
+
+.mx-garfix-security-note{
+  margin:12px 2px 0;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;
+  background:rgba(255,255,255,.018);
+  color:rgba(255,255,255,.43);
+  font-size:7.7px;
+  line-height:1.55;
+}
+
+.mx-garfix-router-copy strong,
+.mx-garfix-router-copy span,
+.mx-garfix-department strong,
+.mx-garfix-department span,
+.mx-garfix-session-meta strong,
+.mx-garfix-session-meta span,
+.mx-garfix-session-footer-time,
+.mx-garfix-quick-prompts button,
+.mx-garfix-saved-row strong,
+.mx-garfix-saved-row small,
+.mx-garfix-saved-row b{
+  unicode-bidi:plaintext;
+  text-align:start;
+}
+
+[dir="rtl"] .mx-garfix-department{
+  grid-template-columns:minmax(0,1fr) 92px;
+}
+
+[dir="rtl"] .mx-garfix-department strong{
+  grid-column:2;
+  grid-row:1;
+}
+
+[dir="rtl"] .mx-garfix-department span{
+  grid-column:1;
+  grid-row:1;
+}
+
+[dir="rtl"] .mx-garfix-settings-actions,
+[dir="rtl"] .mx-garfix-session-footer{
+  direction:rtl;
+}
+
+@media (max-width:640px){
+  [dir="rtl"] .mx-garfix-department{
+    grid-template-columns:minmax(0,1fr) 82px;
+  }
+
+  .mx-garfix-settings-actions{
+    grid-template-columns:1fr;
+  }
+}
