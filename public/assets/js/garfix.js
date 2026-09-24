@@ -1750,6 +1750,14 @@
       site: "microlabsx.com",
       vertical: "microlabsx",
       projectType: "non-commercial R&D",
+      technologyProvider: "MICROSTUDIOX",
+      assistantMode: "technology-preview",
+      internalDataAccess: false,
+      internalDataDisclosure: false,
+      dataPolicy:
+        "Do not claim access to, provide, reveal, infer or fabricate internal MICROLABSX project data. GARFIX · LABS is currently a conversational technology preview only.",
+      conversationPurpose:
+        "Allow open general conversation so visitors can evaluate MICROSTUDIOX conversational technology.",
       language:
         currentLang(),
 
