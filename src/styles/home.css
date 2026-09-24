@@ -1349,10 +1349,11 @@ body[data-page="home"] .mx-home-footer .copyright{
   opacity:.58 !important;
 }
 
-/* GARFIX sits above the legal footer instead of colliding with it. */
+/* GARFIX uses the same footer-edge position as microRetailX. */
 body[data-page="home"] .mx-garfix{
   z-index:9000 !important;
-  bottom:max(78px, calc(66px + env(safe-area-inset-bottom))) !important;
+  inset-inline-end:max(16px, env(safe-area-inset-right)) !important;
+  bottom:max(16px, env(safe-area-inset-bottom)) !important;
   opacity:1 !important;
   visibility:visible !important;
   pointer-events:auto !important;
@@ -1365,7 +1366,8 @@ body[data-page="home"] .mx-garfix{
   }
 
   body[data-page="home"] .mx-garfix{
-    bottom:max(88px, calc(76px + env(safe-area-inset-bottom))) !important;
+    inset-inline-end:max(10px, env(safe-area-inset-right)) !important;
+    bottom:max(10px, env(safe-area-inset-bottom)) !important;
   }
 }
 
