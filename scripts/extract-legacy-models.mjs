@@ -11,7 +11,7 @@ const html = readFileSync(sourcePath, 'utf8');
 
 for (const [constantName, targetPath] of Object.entries(output)) {
   const re = new RegExp(
-    String.raw`const\\s+${constantName}\\s*=\\s*['"]data:model\\/gltf-binary;base64,([^'"]+)['"]`
+    "const\\s+" + constantName + "\\s*=\\s*['\"]data:model\\/gltf-binary;base64,([^'\"]+)['\"]"
   );
   const match = html.match(re);
 
