@@ -1,0 +1,509 @@
+/* Legal documents are a viewport-fitted reader: header and footer stay
+   available while only the document pane scrolls. */
+body[data-page="legal"],
+body[data-page="privacy"],
+body[data-page="cookies"],
+body[data-page="terms"]{
+  --legal-footer-height:clamp(74px, 9vh, 96px);
+  overflow:hidden;
+}
+
+body[data-page="legal"] #app-root,
+body[data-page="privacy"] #app-root,
+body[data-page="cookies"] #app-root,
+body[data-page="terms"] #app-root{
+  height:100dvh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+body[data-page="legal"] #mx-header,
+body[data-page="privacy"] #mx-header,
+body[data-page="cookies"] #mx-header,
+body[data-page="terms"] #mx-header{
+  flex:0 0 auto;
+}
+
+body[data-page="legal"] .legal-main,
+body[data-page="privacy"] .legal-main,
+body[data-page="cookies"] .legal-main,
+body[data-page="terms"] .legal-main{
+  display:block;
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  scroll-behavior:smooth;
+  padding:clamp(38px, 6vh, 76px) 0 clamp(70px, 10vh, 120px);
+}
+
+body[data-page="legal"] .card,
+body[data-page="privacy"] .card,
+body[data-page="cookies"] .card,
+body[data-page="terms"] .card{
+  width:min(1320px, calc(100% - 64px));
+  max-width:100%;
+  margin:0 auto;
+  padding:clamp(26px, 3vw, 42px);
+  text-align:left;
+}
+
+body[data-page="legal"] .legalcopy,
+body[data-page="privacy"] .legalcopy,
+body[data-page="cookies"] .legalcopy,
+body[data-page="terms"] .legalcopy{
+  max-width:none;
+  text-align:left;
+}
+
+body[data-page="legal"] footer,
+body[data-page="privacy"] footer,
+body[data-page="cookies"] footer,
+body[data-page="terms"] footer{
+  flex:0 0 var(--legal-footer-height);
+  box-sizing:border-box;
+  min-height:var(--legal-footer-height);
+  margin:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+body[data-page="legal"] .mx-float-scroll,
+body[data-page="privacy"] .mx-float-scroll,
+body[data-page="cookies"] .mx-float-scroll,
+body[data-page="terms"] .mx-float-scroll{
+  right:14px;
+  top:50%;
+  bottom:auto !important;
+  transform:translateY(-50%) !important;
+  padding:4px;
+  gap:3px !important;
+}
+
+.mx-scroll-rail{
+  --scroll-progress:0%;
+  position:relative;
+  width:34px;
+  height:166px;
+  transition:height 320ms cubic-bezier(.22,1,.36,1);
+}
+
+.mx-float-scroll:hover .mx-scroll-rail,
+.mx-float-scroll:focus-within .mx-scroll-rail,
+.mx-float-scroll.is-proximity .mx-scroll-rail{
+  height:var(--rail-expanded-height, 260px);
+}
+
+.mx-scroll-rail__track{
+  position:absolute;
+  top:8px;
+  bottom:8px;
+  left:50%;
+  width:1px;
+  background:rgba(255,255,255,.14);
+  transform:translateX(-50%);
+}
+
+.mx-scroll-rail__track::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:1px;
+  height:var(--scroll-progress);
+  max-height:100%;
+  background:linear-gradient(to bottom, rgba(255,255,255,.34), #fff);
+  box-shadow:0 0 8px rgba(255,255,255,.22);
+  transition:height 180ms cubic-bezier(.22,1,.36,1);
+}
+
+.mx-scroll-rail__indicator{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  top:clamp(5px, var(--scroll-progress), calc(100% - 5px));
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(255,255,255,.10), 0 0 14px rgba(255,255,255,.52);
+  transform:translate(-50%, -50%);
+  pointer-events:none;
+  transition:top 180ms cubic-bezier(.22,1,.36,1);
+}
+
+.mx-scroll-marker{
+  position:absolute;
+  z-index:3;
+  left:50%;
+  top:var(--section-position);
+  width:30px;
+  height:18px;
+  padding:0;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  opacity:0;
+  transform:translate(-50%, -50%) scale(.55);
+  transition:opacity 180ms ease, transform 220ms cubic-bezier(.22,1,.36,1), top 320ms cubic-bezier(.22,1,.36,1);
+}
+
+.mx-scroll-marker::before{
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:8px;
+  height:8px;
+  border:1px solid rgba(255,255,255,.58);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,.98) 0 11%, rgba(255,255,255,.48) 12% 21%, rgba(120,120,120,.28) 22% 53%, rgba(6,6,6,.94) 75%);
+  box-shadow:inset -1px -1px 2px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.05);
+  transform:translate(-50%, -50%);
+  animation:mxCellFloat 2200ms ease-in-out infinite;
+  animation-delay:var(--orb-delay, 0ms);
+  transition:width 180ms ease, height 180ms ease, box-shadow 180ms ease;
+}
+
+.mx-scroll-marker::after{
+  content:attr(data-number);
+  position:absolute;
+  top:50%;
+  left:calc(100% + 2px);
+  color:rgba(255,255,255,.42);
+  font-size:7px;
+  font-weight:700;
+  letter-spacing:.06em;
+  line-height:1;
+  transform:translateY(-50%);
+  opacity:0;
+  transition:opacity 160ms ease, color 160ms ease;
+}
+
+.mx-scroll-marker__label{
+  position:absolute;
+  top:50%;
+  right:calc(100% + 12px);
+  width:max-content;
+  max-width:190px;
+  padding:5px 7px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:6px;
+  background:rgba(8,8,8,.96);
+  color:#fff;
+  font-size:8px;
+  font-weight:650;
+  letter-spacing:.08em;
+  line-height:1.2;
+  text-align:right;
+  text-transform:uppercase;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-50%) translateX(4px);
+  transition:opacity 140ms ease, transform 160ms ease;
+}
+
+.mx-float-scroll:hover .mx-scroll-marker,
+.mx-float-scroll:focus-within .mx-scroll-marker,
+.mx-float-scroll.is-proximity .mx-scroll-marker{
+  opacity:.86;
+  transform:translate(-50%, -50%) scale(1);
+}
+
+.mx-float-scroll:hover .mx-scroll-marker::after,
+.mx-float-scroll:focus-within .mx-scroll-marker::after,
+.mx-float-scroll.is-proximity .mx-scroll-marker::after{
+  opacity:1;
+}
+
+.mx-scroll-marker:hover,
+.mx-scroll-marker:focus-visible,
+.mx-scroll-marker.is-active{
+  opacity:1 !important;
+}
+
+.mx-scroll-marker:hover::before,
+.mx-scroll-marker:focus-visible::before,
+.mx-scroll-marker.is-active::before{
+  width:13px;
+  height:13px;
+  border-color:#fff;
+  box-shadow:inset -2px -2px 3px rgba(0,0,0,.55), 0 0 15px rgba(255,255,255,.64), 0 0 0 3px rgba(255,255,255,.1);
+}
+
+.mx-scroll-marker:hover::after,
+.mx-scroll-marker:focus-visible::after,
+.mx-scroll-marker.is-active::after{
+  color:#fff;
+}
+
+.mx-scroll-marker:hover .mx-scroll-marker__label,
+.mx-scroll-marker:focus-visible .mx-scroll-marker__label{
+  opacity:1;
+  transform:translateY(-50%) translateX(0);
+}
+
+.mx-scroll-marker:focus-visible{ outline:none; }
+
+@keyframes mxCellFloat{
+  0%,100%{ margin-top:-1px; }
+  50%{ margin-top:1px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .mx-scroll-marker::before{ animation:none; }
+  .mx-scroll-rail,.mx-scroll-marker{ transition:none; }
+}
+
+.mx-float-scroll{
+  overflow:visible;
+  border-radius:22px !important;
+  padding:5px !important;
+}
+
+.mx-float-btn{
+  width:34px !important;
+  height:34px !important;
+}
+
+.mx-float-btn + .mx-float-btn::before{ display:none; }
+
+.legal-section{
+  display:block;
+  margin-top:1.65em;
+  font-weight:700;
+  scroll-margin-top:20px;
+}
+
+.legal-section:first-child{ margin-top:0; }
+/* On a mouse, the reader control rests at the edge and wakes as the
+   pointer approaches. Touch and keyboard users always retain the control. */
+@media (hover:hover) and (pointer:fine){
+  body[data-page="legal"] .mx-float-scroll,
+  body[data-page="privacy"] .mx-float-scroll,
+  body[data-page="cookies"] .mx-float-scroll,
+  body[data-page="terms"] .mx-float-scroll{
+    opacity:.2;
+    transform:translateY(-50%) translateX(15px) scale(.9) !important;
+    transition:opacity 220ms ease, transform 300ms cubic-bezier(.22,1,.36,1), filter 220ms ease;
+  }
+
+  body[data-page="legal"] .mx-float-scroll:hover,
+  body[data-page="privacy"] .mx-float-scroll:hover,
+  body[data-page="cookies"] .mx-float-scroll:hover,
+  body[data-page="terms"] .mx-float-scroll:hover,
+  body[data-page="legal"] .mx-float-scroll:focus-within,
+  body[data-page="privacy"] .mx-float-scroll:focus-within,
+  body[data-page="cookies"] .mx-float-scroll:focus-within,
+  body[data-page="terms"] .mx-float-scroll:focus-within,
+  body[data-page="legal"] .mx-float-scroll.is-proximity,
+  body[data-page="privacy"] .mx-float-scroll.is-proximity,
+  body[data-page="cookies"] .mx-float-scroll.is-proximity,
+  body[data-page="terms"] .mx-float-scroll.is-proximity{
+    opacity:1;
+    filter:none;
+    transform:translateY(-50%) translateX(0) scale(1) !important;
+  }
+}
+
+
+body.mx-cmp-open .mx-float-scroll{
+  opacity:.32 !important;
+  filter:blur(1px) !important;
+  pointer-events:none !important;
+  user-select:none;
+  transform:translateY(-50%) translateX(15px) scale(.9) !important;
+  transition:none !important;
+  animation:none !important;
+}
+
+@media (max-width:700px){
+  body[data-page="legal"],
+  body[data-page="privacy"],
+  body[data-page="cookies"],
+  body[data-page="terms"]{
+    --legal-footer-height:clamp(70px, 10vh, 88px);
+  }
+
+  body[data-page="legal"] .legal-main,
+  body[data-page="privacy"] .legal-main,
+  body[data-page="cookies"] .legal-main,
+  body[data-page="terms"] .legal-main{
+    padding-top:38px;
+  }
+
+  body[data-page="legal"] .card,
+  body[data-page="privacy"] .card,
+  body[data-page="cookies"] .card,
+  body[data-page="terms"] .card{
+    width:calc(100% - 28px);
+    padding:22px 18px;
+  }
+
+  body[data-page="legal"] .mx-float-scroll,
+  body[data-page="privacy"] .mx-float-scroll,
+  body[data-page="cookies"] .mx-float-scroll,
+  body[data-page="terms"] .mx-float-scroll{
+    right:8px;
+    top:50%;
+    bottom:auto !important;
+    transform:translateY(-50%) !important;
+  }
+
+  .mx-scroll-rail{ height:128px; }
+  .mx-float-scroll:hover .mx-scroll-rail,
+  .mx-float-scroll:focus-within .mx-scroll-rail,
+  .mx-float-scroll.is-proximity .mx-scroll-rail{ height:var(--rail-expanded-height, 280px); }
+}
+
+
+/* LIGHT is deliberately scoped to the legal reader card: the public
+   chrome, footer and navigation remain in the native dark interface. */
+body.mx-a11y-lightbg .card{
+  background:#fffdf7 !important;
+  border-color:rgba(0,0,0,.22) !important;
+  box-shadow:0 16px 42px rgba(25,20,12,.16) !important;
+  color:#171717 !important;
+}
+
+body.mx-a11y-lightbg .legalcopy,
+body.mx-a11y-lightbg .legal-head,
+body.mx-a11y-lightbg .legal-body,
+body.mx-a11y-lightbg .legal-section{
+  color:#171717 !important;
+}
+
+body.mx-a11y-lightbg .legal-sep{
+  background:linear-gradient(90deg, transparent, rgba(0,0,0,.24), transparent) !important;
+}
+
+body.mx-a11y-lightbg .tool-pill.is-active{
+  color:#fff !important;
+  border-color:rgba(255,255,255,.72) !important;
+  background:rgba(255,255,255,.16) !important;
+}
+
+body.mx-a11y-high-contrast:not(.mx-a11y-lightbg),
+body.mx-a11y-high-contrast:not(.mx-a11y-lightbg) #app-root,
+body.mx-a11y-high-contrast:not(.mx-a11y-lightbg) .legal-main{
+  background:#000 !important;
+  color:#fff !important;
+}
+
+body.mx-a11y-high-contrast .card{
+  background:inherit !important;
+  border:2px solid currentColor !important;
+  box-shadow:none !important;
+}
+
+body.mx-a11y-high-contrast .legalcopy,
+body.mx-a11y-high-contrast .legal-head,
+body.mx-a11y-high-contrast .legal-body,
+body.mx-a11y-high-contrast .brand,
+body.mx-a11y-high-contrast .navlink,
+body.mx-a11y-high-contrast .footer-links,
+body.mx-a11y-high-contrast .copyright{
+  color:currentColor !important;
+  opacity:1 !important;
+}
+
+body.mx-a11y-lightbg.mx-a11y-high-contrast .card{
+  background:#fff !important;
+  color:#000 !important;
+}
+
+body.mx-a11y-high-contrast #mx-header,
+body.mx-a11y-high-contrast footer{
+  background:inherit !important;
+  border-color:currentColor !important;
+}
+
+.tool-pill.is-active{
+  color:#fff !important;
+  border-color:rgba(255,255,255,.72) !important;
+  background:rgba(255,255,255,.16) !important;
+}
+
+/* The toolbar never inherits the paper reader colours. */
+body.mx-a11y-lightbg #mx-header,
+body.mx-a11y-lightbg #mx-header .tools-trigger,
+body.mx-a11y-lightbg #mx-header .tools-icon,
+body.mx-a11y-lightbg #mx-header .tools-rail,
+body.mx-a11y-lightbg #mx-header .tool-pill,
+body.mx-a11y-lightbg #mx-header .tool-pill svg,
+body.mx-a11y-lightbg #mx-header .navlink,
+body.mx-a11y-lightbg #mx-header .lang-trigger,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tools-trigger,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tools-icon,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tools-rail,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tool-pill,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tool-pill svg,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .navlink,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .lang-trigger{
+  color:rgba(255,255,255,.92) !important;
+}
+
+body.mx-a11y-lightbg #mx-header .tool-pill.is-active,
+body.mx-a11y-lightbg.mx-a11y-high-contrast #mx-header .tool-pill.is-active{
+  color:#fff !important;
+  border-color:rgba(255,255,255,.78) !important;
+  background:rgba(255,255,255,.16) !important;
+}
+
+
+/* GARFIX owns the interaction layer when its panel is open. The legal
+   reader navigator is removed instead of competing with the chat. */
+body.mx-garfix-open .mx-float-scroll{
+  opacity:0 !important;
+  pointer-events:none !important;
+  transform:translateY(-50%) translateX(22px) scale(.82) !important;
+  transition:opacity 160ms ease, transform 180ms cubic-bezier(.22,1,.36,1) !important;
+}
+
+/* Accessibility modes must never dim, hide or recolour the header controls.
+   Explicit values avoid currentColor inheritance when LIGHT and HC coexist. */
+body.mx-a11y-lightbg #mx-header *,
+body.mx-a11y-high-contrast #mx-header *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+
+body.mx-a11y-lightbg #mx-header .tools-rail,
+body.mx-a11y-high-contrast #mx-header .tools-rail{
+  color:#fff !important;
+  background:rgba(4,4,4,.96) !important;
+  border-color:rgba(255,255,255,.16) !important;
+}
+
+body.mx-a11y-lightbg #mx-header .tool-pill[data-action="contrast"],
+body.mx-a11y-lightbg #mx-header .tool-pill[data-action="lightbg"],
+body.mx-a11y-high-contrast #mx-header .tool-pill[data-action="contrast"],
+body.mx-a11y-high-contrast #mx-header .tool-pill[data-action="lightbg"]{
+  display:inline-flex !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  border-color:rgba(255,255,255,.22) !important;
+  background:rgba(8,8,8,.82) !important;
+}
+
+body.mx-a11y-lightbg #mx-header .tool-pill[data-action="contrast"].is-active,
+body.mx-a11y-lightbg #mx-header .tool-pill[data-action="lightbg"].is-active,
+body.mx-a11y-high-contrast #mx-header .tool-pill[data-action="contrast"].is-active,
+body.mx-a11y-high-contrast #mx-header .tool-pill[data-action="lightbg"].is-active{
+  background:rgba(255,255,255,.20) !important;
+  border-color:#fff !important;
+}
+
+body.mx-a11y-lightbg #mx-header .tools-icon,
+body.mx-a11y-high-contrast #mx-header .tools-icon{
+  fill:currentColor !important;
+  opacity:1 !important;
+}
