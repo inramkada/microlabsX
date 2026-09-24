@@ -14,8 +14,14 @@ import LanguageSelector from "../components/LanguageSelector.astro";
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#000000" />
   <link rel="canonical" href="https://microlabsx.com/" />
+
+  <link rel="stylesheet" href="/assets/css/garfix.css" />
+  <link rel="stylesheet" href="/assets/css/garfix-controls.css" />
+  <link rel="stylesheet" href="/assets/css/garfix-simple.css" />
+  <link rel="stylesheet" href="/assets/css/hyperion-visual.css" />
+  <link rel="stylesheet" href="/assets/css/garfix-labs.css" />
 </head>
-<body>
+<body data-page="home" data-site="microlabsx">
   <main id="app" class="page" aria-label="MICROLABSX we are developing">
     <header id="mx-header" class="lab-header">
       <div class="topbar">
@@ -40,18 +46,20 @@ import LanguageSelector from "../components/LanguageSelector.astro";
     <div class="transition-dim" id="transitionDim"></div>
     <div class="vignette"></div>
 
-    <footer class="footer-bar">
-      <div class="footer-links" aria-label="Legal">
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/cookies">Cookies</a>
-        <a href="/legal">Legal</a>
-      </div>
+    <footer class="footer-bar mx-home-footer">
+      <div class="footer-inner">
+        <div class="footer-links" aria-label="Legal">
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/cookies">Cookies</a>
+          <a href="/legal">Legal</a>
+        </div>
 
-      <div class="copyright" id="footerComment">
-        © 2023–2026
-        <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC</a>
-        — MICROLABSX — ALL RIGHTS RESERVED
+        <div class="copyright" id="footerComment">
+          © 2023–2026
+          <a href="https://www.microretailx.com" rel="noopener">MICRORETAILX LLC</a>
+          — MICROLABSX — ALL RIGHTS RESERVED
+        </div>
       </div>
     </footer>
   </main>
@@ -66,5 +74,21 @@ import LanguageSelector from "../components/LanguageSelector.astro";
     import "../scripts/language-flags.js";
     import "../scripts/bootstrap.js";
   </script>
+
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+  <script is:inline src="/assets/js/garfix/translations.js"></script>
+  <script is:inline src="/assets/js/garfix/turnstile.js"></script>
+  <script is:inline src="/assets/js/garfix.js"></script>
+  <script is:inline src="/assets/js/garfix/latency.js"></script>
+  <script is:inline src="/assets/js/garfix/settings.js"></script>
+  <script is:inline src="/assets/js/garfix/memory-client.js"></script>
+  <script is:inline src="/assets/js/garfix/departments.js"></script>
+  <script is:inline src="/assets/js/garfix/sessions.js"></script>
+  <script is:inline src="/assets/js/garfix/voice.js"></script>
+  <script is:inline src="/assets/js/garfix/conversation-tools.js"></script>
+  <script is:inline src="/assets/js/garfix/powers.js"></script>
+  <script is:inline src="/assets/js/garfix/hyperion-visual.js"></script>
+  <script is:inline src="/assets/js/garfix/instant-actions.js"></script>
+  <script is:inline src="/assets/js/garfix-labs-context.js"></script>
 </body>
 </html>
