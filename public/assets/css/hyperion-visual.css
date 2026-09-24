@@ -1,0 +1,53 @@
+#mx-hyperion-visual-overlay{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:0;
+  background:#000;
+  transition:
+    opacity 420ms ease,
+    background-color 520ms cubic-bezier(.22,1,.36,1);
+  will-change:opacity,background-color;
+}
+
+#mx-hyperion-visual-overlay[data-active="1"]{
+  opacity:.74;
+}
+
+#mx-hyperion-visual-overlay[data-theme="pink"]{background:#ff1493}
+#mx-hyperion-visual-overlay[data-theme="fuchsia"]{background:#ff00a8}
+#mx-hyperion-visual-overlay[data-theme="magenta"]{background:#ff00ff}
+#mx-hyperion-visual-overlay[data-theme="red"]{background:#ff2d2d}
+#mx-hyperion-visual-overlay[data-theme="orange"]{background:#ff7a00}
+#mx-hyperion-visual-overlay[data-theme="gold"]{background:#ffd400}
+#mx-hyperion-visual-overlay[data-theme="green"]{background:#21d760}
+#mx-hyperion-visual-overlay[data-theme="blue"]{background:#168cff}
+#mx-hyperion-visual-overlay[data-theme="purple"]{background:#8a2be2}
+#mx-hyperion-visual-overlay[data-theme="violet"]{background:#b84cff}
+#mx-hyperion-visual-overlay[data-theme="white"]{background:#fff}
+#mx-hyperion-visual-overlay[data-theme="black"]{background:#000}
+#mx-hyperion-visual-overlay[data-theme="gray"]{background:#777}
+
+#mx-hyperion-visual-overlay.is-disco{
+  opacity:.82;
+  animation:mxHyperionDisco .62s steps(1,end) infinite;
+}
+
+@keyframes mxHyperionDisco{
+  0%{background:#ff1493}
+  14%{background:#ff2d2d}
+  28%{background:#ff8a00}
+  42%{background:#ffd400}
+  56%{background:#21d760}
+  70%{background:#168cff}
+  84%{background:#8a2be2}
+  100%{background:#ff1493}
+}
+
+@media (prefers-reduced-motion:reduce){
+  #mx-hyperion-visual-overlay.is-disco{
+    animation:none;
+    background:#a22cff;
+  }
+}
