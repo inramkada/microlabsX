@@ -25,7 +25,25 @@ import * as THREE from 'three';
     camera.position.set(0, 0.25, 4.8);
 
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const getPixelRatioCap = () => window.innerWidth <= 768 ? 1.5 : 2;
+
+    // Keep GPU cost predictable. Bloom + a full-screen WebGL canvas makes DPR=2
+    // unnecessarily expensive on high-density displays.
+    const getPixelRatioCap = () => {
+      const cores = navigator.hardwareConcurrency || 8;
+      const memory = navigator.deviceMemory || 8;
+      const constrainedDevice = cores <= 4 || memory <= 4;
+      if (window.innerWidth <= 768) return constrainedDevice ? 1.0 : 1.25;
+      return constrainedDevice ? 1.25 : 1.5;
+    };
+
+    const applyRenderResolution = () => {
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, getPixelRatioCap());
+      renderer.setPixelRatio(pixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      if (typeof composer?.setPixelRatio === 'function') composer.setPixelRatio(pixelRatio);
+      composer?.setSize(window.innerWidth, window.innerHeight);
+      bloomPass?.resolution?.set(window.innerWidth, window.innerHeight);
+    };
 
     const renderer = new THREE.WebGLRenderer({
       antialias: true,
@@ -43,6 +61,7 @@ import * as THREE from 'three';
     composer.addPass(new RenderPass(scene, camera));
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.95, 0.6, 0.15);
     composer.addPass(bloomPass);
+    applyRenderResolution();
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.92);
     scene.add(ambientLight);
@@ -326,6 +345,9 @@ import * as THREE from 'three';
     const pointerCurrent = new THREE.Vector2(0, 0);
     const pointerNdc = new THREE.Vector2(999, 999);
     const raycaster = new THREE.Raycaster();
+    let pointerNeedsRaycast = true;
+    let hoverRaycastCooldown = 0;
+    let isHoveringModel = false;
     headlineEl = document.querySelector('.headline-wrap');
 
     let dragActive = false;
@@ -704,6 +726,7 @@ import * as THREE from 'three';
       pointerTarget.x = (event.clientX / window.innerWidth) * 2 - 1;
       pointerTarget.y = (event.clientY / window.innerHeight) * 2 - 1;
       pointerNdc.copy(pointerTarget);
+      pointerNeedsRaycast = true;
 
       const moveDx = event.clientX - prevX;
       const moveDy = event.clientY - prevY;
@@ -736,16 +759,16 @@ import * as THREE from 'three';
       dragActive = false;
       pointerTarget.set(0, 0);
       pointerNdc.set(999, 999);
+      pointerNeedsRaycast = true;
+      isHoveringModel = false;
       document.body.style.cursor = '';
     });
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      composer.setSize(window.innerWidth, window.innerHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, getPixelRatioCap()));
-      bloomPass.resolution.set(window.innerWidth, window.innerHeight);
+      applyRenderResolution();
+      pointerNeedsRaycast = true;
     });
 
     const clock = new THREE.Clock();
@@ -938,15 +961,25 @@ import * as THREE from 'three';
           modelRoot.scale.z * wireScaleMul
         );
 
-        raycaster.setFromCamera(pointerNdc, camera);
-        const intersects = raycaster.intersectObject(modelRoot, true);
-        const isHoveringModel = intersects.length > 0;
+        // Raycasting a detailed GLB hierarchy every frame is expensive.
+        // Re-check at most 10x/s, and immediately when the pointer moves.
+        hoverRaycastCooldown -= delta;
+        if (pointerNeedsRaycast || hoverRaycastCooldown <= 0) {
+          raycaster.setFromCamera(pointerNdc, camera);
+          isHoveringModel = raycaster.intersectObject(modelRoot, true).length > 0;
+          pointerNeedsRaycast = false;
+          hoverRaycastCooldown = 0.10;
+        }
+
         wireframeTargetOpacity = isHoveringModel ? 0.18 : 0.0;
         wireframeCurrentOpacity = THREE.MathUtils.lerp(wireframeCurrentOpacity, wireframeTargetOpacity + glitchPhase * 0.08, isHoveringModel ? 0.11 : 0.07);
 
         for (const mat of wireframeMaterials) {
           mat.opacity = Math.min(0.22, wireframeCurrentOpacity);
         }
+
+        // Avoid the second full model draw when the wireframe is effectively invisible.
+        wireframeRoot.visible = wireframeCurrentOpacity > 0.002 || isHoveringModel || glitchPhase > 0.01;
       }
 
       creatureUniforms.uHoverBoost.value = THREE.MathUtils.lerp(
